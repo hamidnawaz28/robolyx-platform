@@ -16,30 +16,30 @@ class App extends React.Component {
     return <Router>
     
         <Grid  container spacing={0}>
-          <Grid sm={3} xs={1} md={3} lg={3}>
+          <Grid   xs={12}  sm={2} md={2} lg={2} xl={3}>
             <nav>
               <ul>
                 <li>
                   <Link to="/">Home</Link>
                 </li>
                 <li>
-                  <Link to="/UploadAndMap">Upload And Map</Link>
+                  <Link to="/invoiceuploadandMap">Upload And Map</Link>
                 </li>
                 <li>
-                  <Link to="/users">Users</Link>
+                  <Link to="/taxomyuploadandMap">Taxomy Upload</Link>
                 </li>
               </ul>
             </nav>
           </Grid>
-          <Grid sm={3} xs={1} md={9} lg={9}>
+          <Grid xs={12} sm={10}  md={10} lg={10} xl={9}>
             <Switch>
-              <Route path="/ab">
+              <Route path="/home">
                 
               </Route>
-              <Route path="/UploadAndMap">
+              <Route path="/invoiceuploadandMap">
               <UploadAndMap />
               </Route>
-              <Route path="/">
+              <Route path="/taxomyuploadandMap">
                 
               </Route>
             </Switch>
