@@ -108,11 +108,20 @@ class UploadAndMap extends React.Component {
   addMappingData(e, data) {
     let SelectionLevel= data.mappingTempleteColumnSelected.SelectionLevel;
     let dataType = data.mappingTempleteColumnSelected.dataType;
-    let mappingTempleteColumnSelected = data.mappingTempleteColumnSelected.mappingTempleteColumnSelected;
+    let selectedMappingTempleteColumn = data.mappingTempleteColumnSelected.mappingTempleteColumnSelected;
     let selectedFileColumnForMapping = data.uploadedFileColumnSelectedField.uploadedFileColumnsSelectedField;
+    let indexOfSelectedFileColumn = data.uploadedFileColumns.uploadedFileColumns.indexOf(selectedFileColumnForMapping)
+    let lengthOfAddedFileColumns = data.uploadedFileColumns.uploadedFileColumns.length;
+debugger;
     this.props.uploadedFileColumnsUpdateList(selectedFileColumnForMapping)
-    this.props.mappingTempleteColumnSelectedUpdateList(mappingTempleteColumnSelected,dataType,SelectionLevel)
-    this.props.mappedColumns(SelectionLevel,dataType,mappingTempleteColumnSelected,selectedFileColumnForMapping)
+    this.props.mappingTempleteColumnSelectedUpdateList(selectedMappingTempleteColumn,dataType,SelectionLevel)
+    this.props.mappedColumns(SelectionLevel,dataType,selectedMappingTempleteColumn,selectedFileColumnForMapping)
+    if(lengthOfAddedFileColumns==indexOfSelectedFileColumn){
+      this.props.uploadedFileColumnSelectedField(data.uploadedFileColumns.uploadedFileColumns[0])
+    }
+    else{
+      this.props.uploadedFileColumnSelectedField(data.uploadedFileColumns.uploadedFileColumns[indexOfSelectedFileColumn])
+    }
   }
   handleInputName(e){
     this.props.newtempletename(e.target.value)
@@ -225,7 +234,8 @@ const mapDispatchToProps = (dispatch) => {
     mappedColumns:(SelectionLevel,dataType,mappingTempleteColumnSelected,selectedFileColumnForMapping)=>dispatch(mappedColumns(SelectionLevel,dataType,mappingTempleteColumnSelected,selectedFileColumnForMapping)),
     uploadedFileColumnsUpdateList:(e)=>dispatch(uploadedFileColumnsUpdateList(e)),
     mappingTempleteColumnSelectedUpdateList:(data,dataType,SelectionLevel)=>dispatch(mappingTempleteColumnSelectedUpdateList(data,dataType,SelectionLevel)),
-    newtempletename:(name)=>dispatch(newtempletename(name))
+    newtempletename:(name)=>dispatch(newtempletename(name)),
+    uploadedFileColumnSelectedField:(column)=>dispatch(uploadedFileColumnSelectedField(column))
   }
 }
 export default  connect((state) => ({
