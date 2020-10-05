@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-class AllTempletes(models.Model):
+class InvoiceDefaultTempletes(models.Model):
     templeteName  = models.CharField(max_length =75)
     templeteItems = models.CharField(max_length = 1000)
     # class Meta:
@@ -11,11 +11,11 @@ class AllTempletes(models.Model):
         return self.templeteName
     # def templeteName_preview(self):
     #     return self.templeteName
-class SavedTempletes(models.Model):
+class InvoiceSavedTempletes(models.Model): 
     SavedTempleteName  = models.CharField(max_length =75)
-    SavedTempleteColumns = models.CharField(max_length = 1000)
-    defaultTempleteReference =models.ForeignKey(AllTempletes, on_delete=models.CASCADE)
-class invoiceColumns(models.Model):
+    SavedTempleteColumns = models.CharField(max_length = 1500)
+    defaultTempleteReference =models.ForeignKey(InvoiceDefaultTempletes, on_delete=models.CASCADE)
+class InvoiceDataColumns(models.Model):
     INVOICE_ID = models.CharField(max_length =75, blank=False)
     GL_DATE =models.DateField()
     INV_ORGINE= models.CharField(max_length =75, blank=True)
@@ -39,7 +39,29 @@ class invoiceColumns(models.Model):
     ACCOUNT= models.CharField(max_length =75, blank=True)
     PO_NUMBER= models.CharField(max_length =75, blank=False)
     CREATION_DATE=models.DateField()
-    AllTempletesPK = models.ForeignKey(AllTempletes, on_delete=models.CASCADE)
-    SavedTempletesPK = models.ForeignKey(SavedTempletes, on_delete=models.CASCADE)
+    AllTempletesPK = models.ForeignKey(InvoiceDefaultTempletes, on_delete=models.CASCADE)
+    SavedTempletesPK = models.ForeignKey(InvoiceSavedTempletes, on_delete=models.CASCADE)
+class TaxomyDefaultTempletes(models.Model):
+    taxomyDefaulTempleteName= models.CharField(max_length= 75)
+    taxomyDefaultTempleteItems = models.CharField(max_length=1500)
+class TaxomySavedTempletes(models.Model):
+    taxomySavedTempleteName  = models.CharField(max_length =75)
+    taxomySavedTempleteItems = models.CharField(max_length = 1500)
+    taxomyDefaultTempleteReference =models.ForeignKey(TaxomyDefaultTempletes, on_delete=models.CASCADE)
+class TaxomyDataColumns(models.Model):
+    PRIORITY= models.CharField(max_length=75)
+    MAIN_CATAGORY = models.CharField(max_length=250)
+    CATAGORY_LEVEL_ONE = models.CharField(max_length=75)
+    CATAGORY_LEVEL_TWO = models.CharField(max_length=75)
+    CATAGORY_LEVEL_THREE = models.CharField(max_length=75)
+    CATAGORY_LEVEL_FOUR = models.CharField(max_length=75)
+    CATAGORY_LEVEL_FIVE = models.CharField(max_length=75)
+    SCOPE= models.CharField(max_length=75)
+    TaxomyDefaultTempletesPK= models.ForeignKey(TaxomyDefaultTempletes, on_delete=models.CASCADE)
+    TaxomySavedTempletesPK = models.ForeignKey(TaxomySavedTempletes, on_delete=models.CASCADE)
+
+
+
+
 
     

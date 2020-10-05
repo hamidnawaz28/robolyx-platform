@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import UploadAndMap from '../src/Uploadandmap/uploadandmap';
+import TaxonomyUpload from '../src/Taxonomy/taxonomyUpload';
 import {
   BrowserRouter as Router,
   Switch,
@@ -40,7 +41,7 @@ class App extends React.Component {
               <UploadAndMap />
               </Route>
               <Route path="/taxomyuploadandMap">
-                
+                <TaxonomyUpload/>
               </Route>
             </Switch>
           </Grid>

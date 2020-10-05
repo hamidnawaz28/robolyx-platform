@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from mapping.models import AllTempletes,SavedTempletes,invoiceColumns
+from mapping.models import InvoiceDefaultTempletes,InvoiceSavedTempletes,InvoiceDataColumns
 from django.http import HttpResponse
 from django.http import JsonResponse
 # from rest_framework import serializers
@@ -8,19 +8,16 @@ from django.core import serializers
 import pdb
 import json
 # from .mappingserielizer import TodoSerializer
-def GivenColumns(request):
-    # pdb.set_trace()
+def InvoiceDefaultTempletesView(request):
     if(request.method=="GET"):
-        allData = AllTempletes.objects.all()
+        allData = InvoiceDefaultTempletes.objects.all()
         savedColmnsJsonData = serializers.serialize("json",allData)
         return HttpResponse(savedColmnsJsonData, content_type="text/json-comment-filtered")
-def SavedColumns(request):
+def InvoiceSavedTempletesView(request): 
     if(request.method=="GET"):
         defaultTempleteReferenceKey = request.GET.get("pk")
-        defaultSelectedTempleteRef  = AllTempletes.objects.get(pk=defaultTempleteReferenceKey)
-        # pdb.set_trace()
-        mySavedTempletesDefaultData = SavedTempletes.objects.filter(defaultTempleteReference=defaultSelectedTempleteRef)
-        # savedColumnsGet = SavedTempletes.objects.all()
+        defaultSelectedTempleteRef  = InvoiceDefaultTempletes.objects.get(pk=defaultTempleteReferenceKey)
+        mySavedTempletesDefaultData = InvoiceSavedTempletes.objects.filter(defaultTempleteReference=defaultSelectedTempleteRef)
         mySavedTempletesDefaultDataJSON = serializers.serialize("json",mySavedTempletesDefaultData)
         return HttpResponse(mySavedTempletesDefaultDataJSON, content_type="text/json-comment-filtered")
     if(request.method=="POST"):
@@ -28,11 +25,11 @@ def SavedColumns(request):
         NewTempleteName             =  requestBodyParameters["SavedTempleteName"]
         NewTempleteColumns          =  requestBodyParameters["SavedTempleteColumns"] 
         NewTempleteRef              = requestBodyParameters["pk"]
-        defaultSelectedTempleteRef  = AllTempletes.objects.get(pk=NewTempleteRef)
-        getTempleteOfDefaultGroup   = SavedTempletes(SavedTempleteName=NewTempleteName, SavedTempleteColumns=NewTempleteColumns,defaultTempleteReference=defaultSelectedTempleteRef)
+        defaultSelectedTempleteRef  = InvoiceDefaultTempletes.objects.get(pk=NewTempleteRef)
+        getTempleteOfDefaultGroup   = InvoiceSavedTempletes(SavedTempleteName=NewTempleteName, SavedTempleteColumns=NewTempleteColumns,defaultTempleteReference=defaultSelectedTempleteRef)
         getTempleteOfDefaultGroup.save()
         return HttpResponse("Success Fully Added New Templete", content_type="text/json-comment-filtered")
-def InvoiceDataColumns(request):
+def InvoiceDataColumnsView(request):
     if(request.method=="POST"):
         INVOICE_ID=""
         GL_DATE ='2020-02-28'
@@ -62,8 +59,8 @@ def InvoiceDataColumns(request):
         ColumnsData         =requestBodyParameters["ColumnsData"]
         DefaultTempleteRef   =requestBodyParameters["DefaultTempletePK"]
         SelectedSavedTempleteRef =requestBodyParameters["SelectedSavedTempleteRef"]
-        SavedtempleteRef = SavedTempletes.objects.get(pk=SelectedSavedTempleteRef)
-        DefaultTempletePK  = AllTempletes.objects.get(pk=DefaultTempleteRef)
+        SavedtempleteRef = InvoiceSavedTempletes.objects.get(pk=SelectedSavedTempleteRef)
+        DefaultTempletePK  = InvoiceDefaultTempletes.objects.get(pk=DefaultTempleteRef)
         for dataIndex in range(len(ColumnsData[0])):
             for columnIndex in range(len(ColumnNames)):
                 if(ColumnNames[columnIndex]=="INVOICE_ID"):
@@ -115,10 +112,10 @@ def InvoiceDataColumns(request):
                 else :
                     pass
             #print("INVOICE_ID="+INVOICE_ID + "GL_DATE ="+GL_DATE + "INV_ORGINE= "+INV_ORGINE+ "INV_DATE="+INV_DATE+ "INV_SOURCE= "+INV_SOURCE+ "INV_NUMBER=" +INV_NUMBER+ "VENDOR_NUMBER=" +VENDOR_NUMBER+ "VENDOR_NAME=" +VENDOR_NAME+ "VENDOR_TYPE=" +VENDOR_TYPE+ "INV_TERMS=" +INV_TERMS+ "LINE_NUMBER=" +LINE_NUMBER+ "LINE_TYPE=" +LINE_TYPE+ "LINE_DESCRIPTION=" +LINE_DESCRIPTION+ "LINE_QUANTITY= "+LINE_QUANTITY+ "LINE_UNIT_PRICE ="+str(LINE_UNIT_PRICE)+ "LINE_UNIT_OF_MEASURE=" +LINE_UNIT_OF_MEASURE+ "LINE_AMOUNT="+str(LINE_AMOUNT)+ "GENERAL_LEDGER=" +GENERAL_LEDGER+ "LOCATION=" +LOCATION+ "DEPARTMENT="+DEPARTMENT+ "ACCOUNT="+ ACCOUNT+ "PO_NUMBER="+ PO_NUMBER+" CREATION_DATE="+CREATION_DATE+ "AllTempletesPK =")
-            newInvoice = invoiceColumns(INVOICE_ID=INVOICE_ID, GL_DATE =GL_DATE, INV_ORGINE= INV_ORGINE, INV_DATE=INV_DATE, INV_SOURCE= INV_SOURCE, INV_NUMBER= INV_NUMBER, VENDOR_NUMBER= VENDOR_NUMBER, VENDOR_NAME= VENDOR_NAME, VENDOR_TYPE= VENDOR_TYPE, INV_TERMS= INV_TERMS, LINE_NUMBER= LINE_NUMBER, LINE_TYPE= LINE_TYPE, LINE_DESCRIPTION= LINE_DESCRIPTION, LINE_QUANTITY= LINE_QUANTITY, LINE_UNIT_PRICE =LINE_UNIT_PRICE, LINE_UNIT_OF_MEASURE= LINE_UNIT_OF_MEASURE, LINE_AMOUNT=LINE_AMOUNT, GENERAL_LEDGER= GENERAL_LEDGER, LOCATION= LOCATION, DEPARTMENT=DEPARTMENT, ACCOUNT= ACCOUNT, PO_NUMBER= PO_NUMBER, CREATION_DATE=CREATION_DATE, AllTempletesPK = DefaultTempletePK, SavedTempletesPK =SavedtempleteRef)
+            newInvoice = InvoiceDataColumns(INVOICE_ID=INVOICE_ID, GL_DATE =GL_DATE, INV_ORGINE= INV_ORGINE, INV_DATE=INV_DATE, INV_SOURCE= INV_SOURCE, INV_NUMBER= INV_NUMBER, VENDOR_NUMBER= VENDOR_NUMBER, VENDOR_NAME= VENDOR_NAME, VENDOR_TYPE= VENDOR_TYPE, INV_TERMS= INV_TERMS, LINE_NUMBER= LINE_NUMBER, LINE_TYPE= LINE_TYPE, LINE_DESCRIPTION= LINE_DESCRIPTION, LINE_QUANTITY= LINE_QUANTITY, LINE_UNIT_PRICE =LINE_UNIT_PRICE, LINE_UNIT_OF_MEASURE= LINE_UNIT_OF_MEASURE, LINE_AMOUNT=LINE_AMOUNT, GENERAL_LEDGER= GENERAL_LEDGER, LOCATION= LOCATION, DEPARTMENT=DEPARTMENT, ACCOUNT= ACCOUNT, PO_NUMBER= PO_NUMBER, CREATION_DATE=CREATION_DATE, AllTempletesPK = DefaultTempletePK, SavedTempletesPK =SavedtempleteRef)
             newInvoice.save()
         return HttpResponse("Success Fully Added"+str(len(ColumnsData[0]))+"Lines", content_type="text/json-comment-filtered")
     if(request.method=="GET"):
-        invoiceGetData = invoiceColumns.objects.all()
+        invoiceGetData = InvoiceDataColumns.objects.all()
         invoiceJsonData = serializers.serialize("json",invoiceGetData)
         return HttpResponse(invoiceJsonData, content_type="text/json-comment-filtered")
