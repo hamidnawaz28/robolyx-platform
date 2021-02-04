@@ -1,0 +1,6 @@
+export const TABLE_DATA = 'TABLE_DATA'
+export const PER_PAGE =  'PER_PAGE'
+export const CURRENT_PAGE = 'CURRENT_PAGE'
+export const TOTAL_ROWS = 'TOTAL_ROWS'
+export const IS_ALL_SELECTED = 'IS_ALL_SELECTED'
+export const FORM_QUERY = 'FORM_QUERY'
