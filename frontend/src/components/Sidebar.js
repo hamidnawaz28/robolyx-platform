@@ -309,14 +309,19 @@ function Sidebar({ classes, staticContext, location, ...rest }) {
     // Toggle selected element
     setOpenRoutes(openRoutes => Object.assign({}, openRoutes, {[index]: !openRoutes[index]}));
   }
-  const currentUserName = localStorage.get('user') && localStorage.get('user').name;
-  const currentUserRole = localStorage.get('user') && localStorage.get('user').rolePermissions;
-  const currentUserProject = localStorage.get('user') && localStorage.get('user').userProjectName
+  const {
+    name : currentUserName, 
+    rolePermissions : currentUserRole,
+    userProjectName: currentUserProject,
+    image: currentUserImage
+  } = localStorage.get('user') && localStorage.get('user')
   return (
     
     <Drawer variant="permanent" {...rest}>
       <Brand>
-        <BrandIcon /> <Box ml={1}>{currentUserProject} <BrandChip label="PRO" /></Box> 
+        {/* <BrandIcon /> */}
+        {/* <Avatar alt={ currentUserName } src={"data:image;base64, " +currentUserImage} /> */}
+         <Box ml={1}>{currentUserProject} <BrandChip label="PRO" /></Box> 
       </Brand>
       <Scrollbar>
         <List disablePadding>
@@ -382,7 +387,7 @@ function Sidebar({ classes, staticContext, location, ...rest }) {
               }}
               variant="dot"
             >
-              <Avatar alt="Lucy Lavender" src="/static/img/avatars/avatar-1.jpg" />
+              <Avatar alt={ currentUserName } src={"data:image;base64, " +currentUserImage} />
             </StyledBadge>
           </Grid>
           <Grid item>

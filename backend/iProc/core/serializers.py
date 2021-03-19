@@ -2,6 +2,8 @@ from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
 from django.contrib.auth.models import User
 from main.models import UserData
+import pdb
+import base64
 
 #
 # class UserDataSerializer(serializers.ModelSerializer):
@@ -24,12 +26,17 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_user_data(self, obj):
         user_data = UserData.objects.get(User=obj.id)
+        my_string = ''
+        if user_data.Image.name:
+            with open(user_data.Image.path, "rb") as img_file:
+                my_string = base64.b64encode(img_file.read())
         return {
             "userDataRef": user_data.pk,
             "email": user_data.Email,
-            "name" : user_data.Name,
+            "name": user_data.Name,
             "organization": user_data.Organization,
             "roleValidity": user_data.RoleValidity,
+            "image": my_string,
             "roleReference": user_data.RoleReference.pk,
             "rolePermissions": user_data.RoleReference.Permissions,
             "userProjectReference": user_data.UserProjectReference.pk,

@@ -48,10 +48,10 @@ function FormPopUp(props){
     const { perPage, currentPage } = tableStates
     const { actionType, formData, formState, formCloseEvent, updateDataFunction, apiLink } = props
     const { 
-        defaultTemplates, 
-        attachFileName, 
-        selectedDefaultTemplate, 
-        selectedDefaultTemplateData, 
+        defaultTemplates,
+        attachFileName,
+        selectedDefaultTemplate,
+        selectedDefaultTemplateData,
         attachFileHeader,
         newMappingName
     } = mapData

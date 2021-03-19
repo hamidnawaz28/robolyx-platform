@@ -8,10 +8,11 @@ import sessionStorage from '../../../common/storage/sessionStorage';
 import history from '../../../common/History';
 
 const userSignIn = credentials => (dispatch) => {
+  
   dispatch(action.userSignInRequest());
   return api({
     method: 'post',
-    url: 'http://localhost:8090/auth/token-auth/',
+    url: 'api/auth/token-auth/',
     data: credentials  })
     .then((response) => {
       const { data, headers } = response;
@@ -19,6 +20,7 @@ const userSignIn = credentials => (dispatch) => {
       //   setAuthorization: get(headers, 'access_token')
       // };
       // user = merge({}, user, data);
+
       let user = {  access_token : data.token,
             userId : data.user.id,
             userName : data.user.username,
@@ -26,7 +28,6 @@ const userSignIn = credentials => (dispatch) => {
       }
       dispatch(action.userSignInSuccess(user));
       localStorage.set('user', user);
-      debugger
       // if (!isEmpty(sessionStorage.get('verificationToken'))) {
       //   sessionStorage.remove('verificationToken');
       // }

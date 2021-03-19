@@ -1,24 +1,23 @@
-export const SERVER_URL = 'http://127.0.0.1:8090/'
+export const SERVER_URL = '/api/'
 export const USER_DATA = 'user-data'
-export const DEFAULT_TEMPLETES = 'default-templates'
-export const SAVED_TEMPLETES = 'saved-templates'
-export const FILE_IMPORT = 'file-import'
-export const DATA_COLUMNS = 'XXX-XXX'
-export const UTILS = "utils"
-export const RULE_ENGINE ='rule-engine';
-export const RULE_ENGINE_TEST ='rule-engine-test'
-export const TEST_AND_IMPLEMENT_RULE = 'test-and-implement-rule'
-export const RULE_ENGINE_DATA = 'rule-engine-data'
-export const INVOICE_BY_RULE = 'invoice-by-rule'
-export const OVERWRITTEN_RULES='overwritten-rules'
-export const STATISTICAL_SUMMARY = 'statistical-summary'
-export const VERIFY_USER = 'find-email-or-user-name'
-export const TAXONOMY_DATA = 'taxonomy-data'
-export const INVOICE_DATA = 'invoice-data'
-export const CONTRACT_DATA = 'contract-data'
-export const GL_DATA = 'gl-data'
-export const PO_DATA = 'po-data'
-export const MANAGE_TEMPLATES = 'manage-templates'
+
+export const FILE_IMPORT = 'main/file-import'
+export const UTILS = "main/utils"
+export const RULE_ENGINE ='main/rule-engine';
+export const TEST_AND_IMPLEMENT_RULE = 'main/test-and-implement-rule'
+export const RULE_ENGINE_DATA = 'main/rule-engine-data'
+export const INVOICE_BY_RULE = 'main/invoice-by-rule'
+export const OVERWRITTEN_RULES='main/overwritten-rules'
+export const STATISTICAL_SUMMARY = 'main/statistical-summary'
+export const TAXONOMY_DATA = 'main/taxonomy-data'
+export const INVOICE_DATA = 'main/invoice-data'
+export const CONTRACT_DATA = 'main/contract-data'
+export const GL_DATA = 'main/gl-data'
+export const PO_DATA = 'main/po-data'
+export const MANAGE_TEMPLATES = 'main/manage-templates'
+export const DEFAULT_TEMPLETES = 'main/default-templates'
+export const SAVED_TEMPLETES = 'main/saved-templates'
+export const VERIFY_USER = 'main/find-email-or-user-name'
 export const TEMPLATES_COLUMNS = {
     "MappingName" : "MappingName",
     "DATE_ENTERED" : "DATE_ENTERED",
@@ -318,7 +317,7 @@ export const ADMIN_COLUMN = {
     Organization : "Organization",
     RoleReference :"RoleReference"
 }
-export const ADMIN_DATA = 'admin-data'
+export const ADMIN_DATA = 'main/admin-data'
 // User Groups
 export const ADMIN = 'UGAdmin'
 export const SENIOR_MANAGER = 'UGSeniorManager'

@@ -29,6 +29,7 @@ import { Button, Box, Grid } from '@material-ui/core'
 import { DeleteOutline, Add, Edit} from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles';
 import { queryData, deleteData, implementRule } from "./table.actions"
+import { resetStates } from './table.actionCreators'
 const useStyles = makeStyles({
     actionButtons : {
         "paddingTop" : "5px",
@@ -196,7 +197,12 @@ function TableData(props) {
         fetchApiData['currentPage'] = 0
         dispatch(queryData( apiLink, fetchApiData ))
     }
-    useEffect( () => { dispatch( queryData( apiLink, fetchApiData ))},[])
+    useEffect( () => { 
+        dispatch( queryData( apiLink, fetchApiData ))
+        return ()=>{
+            dispatch(resetStates())
+        }
+    },[])
     const variant = 'contained'
     const color = 'primary'
     return (

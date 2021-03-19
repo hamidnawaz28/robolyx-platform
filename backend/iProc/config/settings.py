@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
-
+import os
+import pdb
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,7 +26,7 @@ SECRET_KEY = 'nv+5xrvb=%$dpk+we#ja4a%mvb_90-cr0m1iz=5l1o1zz05@f1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+
 
 
 # Application definition
@@ -78,10 +79,11 @@ MIDDLEWARE = [
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'core.utils.my_jwt_response_handler'
 }
+ALLOWED_HOSTS = ['12.233.146.103','localhost', '3.26.44.105']
 CORS_ORIGIN_ALLOW_ALL = False
+
 CORS_ORIGIN_WHITELIST = (
        'http://localhost:3000',
-       'http://localhost:3001',
 )
 CORS_ALLOW_METHODS = (
     'DELETE',
@@ -107,7 +109,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'build')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -183,4 +185,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# pdb.set_trace()
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static_cdn'),
+    os.path.join(BASE_DIR, 'build', 'static'),
+]
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000

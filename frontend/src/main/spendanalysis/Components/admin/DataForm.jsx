@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { connect, useDispatch, useSelector } from 'react-redux'
 import {
-    Grid,
     Box,
-    Typography,
+    Grid,
     Button,
-    TextField,
     Dialog,
+    TextField,
+    IconButton,
+    Typography,
     DialogActions,
     DialogContent,
     DialogTitle,
-    InputAdornment,
-    IconButton 
+    InputAdornment
 } from '@material-ui/core'
 import {
     Done
@@ -40,7 +40,7 @@ function FormPopUp(props) {
         RoleValidity: ""
     }
     const [popupFormData, setPopupFormData] = useState(initialState)
-    const [isEmailedVerfied, setEmailVerification]= useState(false)
+    const [isEmailVerfied, setEmailVerification]= useState(false)
     const [roleName, setRoleName]= useState('')
     const [pk, setPk ]= useState('')
     const dispatch = useDispatch()
@@ -78,6 +78,7 @@ function FormPopUp(props) {
             Object.keys(initialState).map((element) => {
                 updatedData[element] = formDataEdit.fields[element]
             })
+            setEmailVerification(true)
             setPopupFormData(updatedData)
         }
         dispatch(updateRolesList())
@@ -122,7 +123,7 @@ function FormPopUp(props) {
                             InputProps={{
                                 endAdornment: (
                                   <InputAdornment>
-                                    { isEmailedVerfied &&
+                                    { isEmailVerfied &&
                                         <IconButton>
                                         <Done color="primary"/>
                                         </IconButton>
@@ -155,7 +156,7 @@ function FormPopUp(props) {
                 </DialogContent>
                 <Grid container justify="center">
                     <DialogActions position="centre">
-                        {   isEmailedVerfied && popupFormData.RoleReference && popupFormData.RoleValidity &&
+                        {   isEmailVerfied && popupFormData.RoleReference && popupFormData.RoleValidity &&
                             <Button onClick={() => handleSave()} variant="contained" color="primary">
                                 {actionType == "Edit" ? "Update" : "Save"}
                             </Button>

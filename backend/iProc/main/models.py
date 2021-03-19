@@ -63,7 +63,6 @@ class RuleEngine(models.Model):
     DATE_ENTERED = models.DateField(auto_now_add=True)
 
 
-
 class RuleEngineHistory(models.Model):
     PRIORITY = models.CharField(max_length=75, blank=True, null=True)
     CATEGORIES_LEVELS = models.IntegerField(blank=True, null=True)

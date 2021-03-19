@@ -39,6 +39,10 @@ export const tableStates =(state = initialState, action)=> {
         ...state,
         query : action.payload
     }
+    case Types.RESET_STATES:
+    return {
+        ...initialState
+    }
     default:
       return state;
   }

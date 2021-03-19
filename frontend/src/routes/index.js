@@ -288,7 +288,6 @@ const user = [
 
 const layoutRoutes = () => {
   const roleBasedRoutes = localStorage.get('user') && localStorage.get('user').rolePermissions;
-  debugger
   switch (roleBasedRoutes) {
     case ADMIN:
     case SENIOR_MANAGER:

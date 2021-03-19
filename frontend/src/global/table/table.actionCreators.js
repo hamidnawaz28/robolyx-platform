@@ -35,3 +35,7 @@ export const selectAll=(data)=>(
         payload: data
     }
 );
+export const resetStates=(data)=>({
+    type :type.RESET_STATES,
+    payload:''
+})

@@ -7,9 +7,10 @@ import localStorage from './storage/localStorage';
 import sessionStorage from './storage/sessionStorage';
 import appEnv from '../.env';
 
-axios.defaults.baseURL = appEnv.apiUrl;
-
+// axios.defaults.baseURL = appEnv.apiUrl;
+axios.defaults.baseURL = "http://localhost:8090/";
 const getHeaders = (config) => {
+  
   const user = localStorage.get('user');
   const verificationToken = sessionStorage.get('verificationToken');
   const bearerToken = () => {
@@ -23,6 +24,7 @@ const getHeaders = (config) => {
 };
 
 const getOptions = (config) => {
+  const ap = appEnv
   const hasAuthenticated = !isEmpty(localStorage.get('user')) || !isEmpty(sessionStorage.get('verificationToken'));
   if (hasAuthenticated) {
     return getHeaders(config);
