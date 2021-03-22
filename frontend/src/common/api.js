@@ -8,7 +8,7 @@ import sessionStorage from './storage/sessionStorage';
 import appEnv from '../.env';
 
 // axios.defaults.baseURL = appEnv.apiUrl;
-axios.defaults.baseURL = "http://localhost:8090/";
+axios.defaults.baseURL = "/";
 const getHeaders = (config) => {
   
   const user = localStorage.get('user');

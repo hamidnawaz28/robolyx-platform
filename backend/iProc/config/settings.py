@@ -26,9 +26,6 @@ SECRET_KEY = 'nv+5xrvb=%$dpk+we#ja4a%mvb_90-cr0m1iz=5l1o1zz05@f1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -62,7 +59,7 @@ REST_FRAMEWORK = {
 }
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware', 
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -79,11 +76,13 @@ MIDDLEWARE = [
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'core.utils.my_jwt_response_handler'
 }
-ALLOWED_HOSTS = ['12.233.146.103','localhost', '3.26.44.105']
-CORS_ORIGIN_ALLOW_ALL = False
+ALLOWED_HOSTS = ['+','localhost' ,'127.0.0.1','3.26.44.105','ec2-54-253-85-203.ap-southeast-2.compute.amazonaws.com','54.253.85.203', "ec2-3-26-44-105.ap-southeast-2.compute.amazonaws.com",'ec2-3-26-44-105.ap-southeast-2.compute.amazonaws.com:8600', 'http://localhost:8090','robolyx.com', '127.0.0.1']
+CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = (
+       'http://localhost:8090',
        'http://localhost:3000',
+       'http://localhost:3001',
 )
 CORS_ALLOW_METHODS = (
     'DELETE',
@@ -127,15 +126,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-
 DATABASES = {
     'default': {
         "ENGINE": 'django.db.backends.postgresql_psycopg2',
@@ -146,6 +136,25 @@ DATABASES = {
         "PORT": '5432'
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+FILE_UPLOAD_PERMISSIONS = 0o644
+
+# DATABASES = {
+#     'default': {
+#         "ENGINE": 'django.db.backends.postgresql_psycopg2',
+#         "NAME": 'postgres',
+#         "USER": 'postgres',
+#         "PASSWORD": 'adminadmin',
+#         "HOST": 'db-postgresql.cndoiqbntk4p.ap-southeast-2.rds.amazonaws.com',
+#         "PORT": '5432'
+#     }
+# }
 
 
 # Password validation
