@@ -1,0 +1,15 @@
+GLOrg
+
+{ "Mandatory": { "String": { "LEDGER": "", "LEDGER_DESC": "", "STATE": "", "REGION": "", "DIVISION": "" } }, "Optional": { "String": { "BUSINESS": "" } } }
+
+taxonomy
+
+{ "Mandatory": { "String": { "CATEGORY_LEVEL_ONE": "" } }, "Optional": { "String": { "CATEGORY_LEVEL_TWO": "", "CATEGORY_LEVEL_THREE": "", "CATEGORY_LEVEL_FOUR": "", "CATEGORY_LEVEL_FIVE": "" } } }
+
+invoice
+
+{ "Mandatory": { "String": { "INVOICE_ID": "", "INV_SOURCE": "", "INV_NUMBER": "", "VENDOR_NUMBER": "", "VENDOR_NAME": "", "LINE_DESCRIPTION": "", "LINE_QUANTITY": "", "GENERAL_LEDGER": "", "PO_NUMBER": "" }, "Date": { "GL_DATE": "", "CREATION_DATE": "", "INV_DATE": "" }, "Float": { "LINE_AMOUNT": "" } }, "Optional": { "String": { "INV_ORIGIN": "", "VENDOR_TYPE": "", "INV_TERMS": "", "LINE_NUMBER": "", "LINE_TYPE": "", "LINE_UNIT_OF_MEASURE": "", "LOCATION": "", "DEPARTMENT": "", "ACCOUNT": "" }, "Float": { "LINE_UNIT_PRICE": "" } } }
+
+
+
+UGAdmin

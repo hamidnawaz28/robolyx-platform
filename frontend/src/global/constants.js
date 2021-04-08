@@ -1,4 +1,4 @@
-export const SERVER_URL = '/api/'
+export const SERVER_URL = 'http://localhost:8090/api/'
 export const USER_DATA = 'user-data'
 
 export const FILE_IMPORT = 'main/file-import'

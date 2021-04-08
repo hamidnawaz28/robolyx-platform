@@ -1,4 +1,33 @@
 import * as type from './table.actionTypes'
+
+export const addTableData=(data)=>(
+    {
+        type: type.TABLE_DATA_POST,
+        payload: data
+    }
+);
+
+export const deleteTableData=(data)=>(
+    {
+        type: type.TABLE_DATA_DELETE,
+        payload: data
+    }
+);
+
+export const editTableData=(data)=>(
+    {
+        type: type.TABLE_DATA_EDIT,
+        payload: data
+    }
+);
+
+export const fetchTableData=(data)=>(
+    {
+        type: type.TABLE_DATA_QUERY,
+        payload: data
+    }
+);
+
 export const updateTableData=(data)=>(
     {
         type: type.TABLE_DATA,

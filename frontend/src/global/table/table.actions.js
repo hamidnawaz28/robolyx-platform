@@ -2,15 +2,73 @@ import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import {
     SERVER_URL,
-    TEST_AND_IMPLEMENT_RULE
+    TEST_AND_IMPLEMENT_RULE,  
 } from '../constants'
 import { 
     updateTableData, 
-    updateTotalRows, 
+    updateTotalRows,
+    fetchTableData, 
     updatePerPage, 
     updateCurrentPage, 
-    selectAll 
+    selectAll,
+    addTableData 
 } from './table.actionCreators'
+
+import * as type from './table.actionTypes';
+import { takeEvery, takeLatest, put, call } from 'redux-saga/effects';
+
+//Add saga
+export function* addData(action) {
+    console.log('action from saga', action)
+	try {
+        const {credentials , postApiData, fetchApiData} = action.payload
+
+		console.log('running add start saga', credentials , postApiData, fetchApiData);
+		const res = yield axios.post(`${SERVER_URL}${credentials}`, { params : postApiData })
+        
+        alert(res.data)
+
+		console.log(res);
+		yield put(fetchTableData( {apiLink: credentials, fetchApiData} ));
+		//yield put(fetchSitesStart());
+	} catch (error) {
+		alert(error)
+        //yield put(addSitesFailure(error.response && error.response.data.message ? error.response.data.message : error.message));
+	}
+}
+
+export function* onAddStart() {
+	yield takeLatest(type.TABLE_DATA_POST, addData);
+}
+
+//Fetch table data saga
+export function* queryTableData(action) {
+    console.log('action from fetch saga', action)
+	try {
+        const {apiLink, fetchApiData } = action.payload
+
+		console.log('running fetch start saga', apiLink, fetchApiData);
+		const res = yield axios.get(`${SERVER_URL}${apiLink}`, { params : fetchApiData })        
+        console.log('Data',res.data)
+        let serviceData = JSON.parse(res.data.queryData);
+        let data = []
+            serviceData.forEach(element => {
+                    element["IsChecked"] = false
+                    data.push(element)
+            });
+
+		yield put(updateTableData(data));
+		yield put(updateTotalRows(res.data.count));
+	} catch (error) {
+		alert(error)
+        //yield put(addSitesFailure(error.response && error.response.data.message ? error.response.data.message : error.message));
+	}
+}
+
+export function* onQueryStart() {
+	yield takeLatest(type.TABLE_DATA_QUERY, queryTableData);
+}
+
 const queryData = (credentials, apiData ) => {
         return dispatch => {
             axios
@@ -34,20 +92,61 @@ const queryData = (credentials, apiData ) => {
         }
 }
 
-const deleteData = (credentials, delApiData, fetchApiData) =>{
-        return dispatch => {
-            axios
-                .delete(`${SERVER_URL}${credentials}`, { params : delApiData })
-                .then((res)=>{
-                    alert(res.data)
-                    dispatch( queryData( credentials, fetchApiData ))
-                    //  dispatch(IsUpdating(false))
-                })
-                .catch((error)=>{
-                    alert(error)
-                })
-        }
+//Delete Table Data Saga
+export function* deleteTableData(action) {
+    console.log('action from delete saga', action)
+    
+	try {
+        const {apiLink, deleteApiData, fetchApiData} = action.payload
+
+		console.log('running add start saga', apiLink, deleteApiData, fetchApiData);
+		const res = yield axios.delete(`${SERVER_URL}${apiLink}`, { params : deleteApiData })
+        
+        alert(res.data)
+
+		console.log(res);
+
+		yield put(fetchTableData( {apiLink, fetchApiData} ));
+		//yield put(fetchSitesStart());
+	} catch (error) {
+		alert(error)
+        //yield put(addSitesFailure(error.response && error.response.data.message ? error.response.data.message : error.message));
+	}
 }
+
+export function* onDeleteDataStart() {
+	yield takeLatest(type.TABLE_DATA_DELETE, deleteTableData);
+}
+
+
+//Edit Table Data Saga
+export function* editTableData(action) {
+    console.log('action from edit saga', action)
+    
+	try {
+        const {apiLink, updateApidata, fetchApiData} = action.payload
+
+		console.log('running add start saga', apiLink, updateApidata, fetchApiData);
+		const res = yield axios.put(`${SERVER_URL}${apiLink}`, { params : updateApidata })
+        
+        alert(res.data)
+
+		console.log(res);
+
+		yield put(fetchTableData( {apiLink, fetchApiData} ));
+		//yield put(fetchSitesStart());
+	} catch (error) {
+		alert(error)
+        //yield put(addSitesFailure(error.response && error.response.data.message ? error.response.data.message : error.message));
+	}
+}
+
+export function* onEditDataStart() {
+	yield takeLatest(type.TABLE_DATA_EDIT, editTableData);
+}
+
+
+
 const updateData = ( credentials , updateApiData , fetchApiData ) =>{
     return dispatch => {
         axios
@@ -88,4 +187,4 @@ const implementRule = (credentials, postApiData, fetchApiData)=>{
         })
     }
 }
-export { deleteData, queryData, updateData, postData, implementRule }
+export { queryData, updateData, postData, implementRule }

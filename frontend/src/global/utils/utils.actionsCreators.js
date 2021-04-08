@@ -1,5 +1,11 @@
 import * as type from './utils.actionTypes'
 
+export const requestTaxonomyCategories=()=>(
+    {
+        type: type.START_TAXONOMY_CATEGORIES,
+    }
+);
+
 export const getTaxonomyCategories=(data)=>(
     {
         type: type.GET_TAXONOMY_CATEGORIES,
