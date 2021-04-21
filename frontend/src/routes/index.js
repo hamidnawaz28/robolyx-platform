@@ -8,17 +8,14 @@ import {
   MANAGER,
   SPECILIST,
   VIEWER,
-  USER
+  USER,
 } from "../global/constants";
 
-import {
-  Sliders,
-  Users
-} from "react-feather";
-import ReceiptIcon from '@material-ui/icons/Receipt';
-import StorageIcon from '@material-ui/icons/Storage';
-import CardTravelIcon from '@material-ui/icons/CardTravel';
-import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import { Sliders, Users } from "react-feather";
+import ReceiptIcon from "@material-ui/icons/Receipt";
+import StorageIcon from "@material-ui/icons/Storage";
+import CardTravelIcon from "@material-ui/icons/CardTravel";
+import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 
 import localStorage from "../common/storage/localStorage";
 
@@ -35,20 +32,52 @@ const Payment = async(() => import("../main/payment/Payment.container"));
 // const InvoiceData  = async(() => import("../main/spendanalysis/Components/InvoiceData"));
 // const TaxonomyData  = async(() => import("../main/spendanalysis/Components/TaxonomyData"));
 
-const Taxonomy  = async(() => import("../main/spendanalysis/Components/taxonomy/Taxonomy.jsx"));
-const Invoice  = async(() => import("../main/spendanalysis/Components/invoice/Invoice.jsx"));
-const Po  = async(() => import("../main/spendanalysis/Components/po/Po.jsx"));
-const Gl  = async(() => import("../main/spendanalysis/Components/gl/Gl.jsx"));
-const Contract  = async(() => import("../main/spendanalysis/Components/contract/Contract.jsx"));
-const UploadAndMap  = async(() => import("../main/spendanalysis/Components/uploadandmap/UploadAndMap.jsx"));
+const Taxonomy = async(() =>
+  import("../main/spendanalysis/Components/taxonomy/Taxonomy.jsx")
+);
+const Invoice = async(() =>
+  import("../main/spendanalysis/Components/invoice/Invoice.jsx")
+);
+const Po = async(() => import("../main/spendanalysis/Components/po/Po.jsx"));
+const Gl = async(() => import("../main/spendanalysis/Components/gl/Gl.jsx"));
+const Contract = async(() =>
+  import("../main/spendanalysis/Components/contract/Contract.jsx")
+);
+const UploadAndMap = async(() =>
+  import("../main/spendanalysis/Components/uploadandmap/UploadAndMap.jsx")
+);
 // Rule Engine
-const RuleEngine  = async(() => import("../main/spendanalysis/Components/ruleengine/managerules/ManageRules"));
-const InvoiceByRules  = async(() => import("../main/spendanalysis/Components/ruleengine/invoicebyrule/InvoiceByRule"));
-const OverwrittenRules  = async(() => import("../main/spendanalysis/Components/ruleengine/overwrittenrules/OverwrittenRules"));
-const RulesSummary  = async(() => import("../main/spendanalysis/Components/ruleengine/statisticalsummary/StatisticalSummary"));
+const RuleEngine = async(() =>
+  import("../main/spendanalysis/Components/ruleengine/managerules/ManageRules")
+);
+const InvoiceByRules = async(() =>
+  import(
+    "../main/spendanalysis/Components/ruleengine/invoicebyrule/InvoiceByRule"
+  )
+);
+const OverwrittenRules = async(() =>
+  import(
+    "../main/spendanalysis/Components/ruleengine/overwrittenrules/OverwrittenRules"
+  )
+);
+const RulesSummary = async(() =>
+  import(
+    "../main/spendanalysis/Components/ruleengine/statisticalsummary/StatisticalSummary"
+  )
+);
 
-const AdminPanel = async(() => import("../main/spendanalysis/Components/admin/Admin"));
-
+const AdminPanel = async(() =>
+  import("../main/spendanalysis/Components/admin/Admin")
+);
+const SupplierRequest = async(() =>
+  import("../main/vendorManagement/supplierrequest/RequestForm")
+);
+const CreateVendor = async(() =>
+  import("../main/vendorManagement/createvendor/CreateVendorForm")
+);
+const OnBoarding = async(() =>
+  import("../main/vendorManagement/onboarding/BoardingForm")
+);
 // Dashboards components
 const Default = async(() => import("../pages/dashboards/Default"));
 const Analytics = async(() => import("../pages/dashboards/Analytics"));
@@ -59,7 +88,7 @@ const dashboardsRoutes = {
   icon: <Sliders />,
   containsHome: true,
   children: null,
-  component: Default
+  component: Default,
 };
 
 const paymentRoutes = {
@@ -67,21 +96,21 @@ const paymentRoutes = {
   path: "/payment",
   icon: <ReceiptIcon />,
   children: null,
-  component: Payment
+  component: Payment,
 };
 const taxonomy = {
   id: "Taxonomy",
   path: "/taxonomy",
   icon: <ReceiptIcon />,
   children: null,
-  component: Taxonomy
+  component: Taxonomy,
 };
 const invoice = {
   id: "Invoice",
   path: "/invoice",
   icon: <ReceiptIcon />,
   children: null,
-  component: Invoice
+  component: Invoice,
 };
 
 const gl = {
@@ -89,36 +118,36 @@ const gl = {
   path: "/gl",
   icon: <ReceiptIcon />,
   children: null,
-  component: Gl
+  component: Gl,
 };
 const po = {
   id: "POData",
   path: "/po",
   icon: <ReceiptIcon />,
   children: null,
-  component: Po
+  component: Po,
 };
 const contract = {
   id: "Contract",
   path: "/contract",
   icon: <ReceiptIcon />,
   children: null,
-  component: Contract
+  component: Contract,
 };
 const uploadandmap = {
   id: "Upload And Map",
   path: "/uploadandmap",
   icon: <ReceiptIcon />,
   children: null,
-  component: UploadAndMap
-}
+  component: UploadAndMap,
+};
 const adminPanelRoutes = {
   id: "Admin Panel",
   path: "/admin-panel",
   icon: <SupervisorAccountIcon />,
   children: null,
-  component: AdminPanel
-}
+  component: AdminPanel,
+};
 
 // const taxonomyRoutes = {
 //   id: "TaxonomyR",
@@ -159,6 +188,36 @@ const adminPanelRoutes = {
 //   component: null
 // };
 
+// const supplierRequest = {
+//   id: "Supplier Request",
+//   path: "/supplier-request",
+//   icon: <SupervisorAccountIcon />,
+//   children: null,
+//   component: SupplierRequest,
+// };
+const vendorManagement = {
+  id: "Vendor Management",
+  path: "/vendor-management",
+  icon: <CardTravelIcon />,
+  children: [
+    {
+      path: "/vendor-management/create-vendor",
+      name: "Create Vendor",
+      component: CreateVendor,
+    },
+    {
+      path: "/vendor-management/supplier-request",
+      name: "Supplier Request",
+      component: SupplierRequest,
+    },
+    {
+      path: "/vendor-management/on-boarding",
+      name: "On Boarding",
+      component: OnBoarding,
+    },
+  ],
+  component: null,
+};
 const ruleEngineData = {
   id: "Rule Engine",
   path: "/rule-engine",
@@ -167,26 +226,25 @@ const ruleEngineData = {
     {
       path: "/rule-engine/manage-rules",
       name: "Manage Rules",
-      component: RuleEngine
+      component: RuleEngine,
     },
     {
       path: "/rule-engine/invoice-by-rules",
       name: "Invoice By Rule ID",
-      component: InvoiceByRules
+      component: InvoiceByRules,
     },
     {
       path: "/rule-engine/overwritten-rules",
       name: "Overwritten Rules",
-      component: OverwrittenRules 
+      component: OverwrittenRules,
     },
     {
       path: "/rule-engine/summary",
       name: "Statistical Summary",
-      component: RulesSummary
-    }
-
+      component: RulesSummary,
+    },
   ],
-  component: null
+  component: null,
 };
 
 const authRoutes = {
@@ -197,33 +255,34 @@ const authRoutes = {
     {
       path: "/auth/sign-in",
       name: "Sign In",
-      component: SignIn
+      component: SignIn,
     },
     {
       path: "/auth/sign-up",
       name: "Sign Up",
-      component: SignUp
+      component: SignUp,
     },
     {
       path: "/auth/reset-password",
       name: "Reset Password",
-      component: ResetPassword
+      component: ResetPassword,
     },
     {
       path: "/auth/404",
       name: "404 Page",
-      component: Page404
+      component: Page404,
     },
     {
       path: "/auth/500",
       name: "500 Page",
-      component: Page500
-    }
+      component: Page500,
+    },
   ],
-  component: null
+  component: null,
 };
 
 const adminAndSeniorManager = [
+  vendorManagement,
   dashboardsRoutes,
   paymentRoutes,
   taxonomy,
@@ -259,7 +318,7 @@ const specialist = [
   gl,
   po,
   uploadandmap,
-  contract
+  contract,
   //savings
 ];
 
@@ -272,7 +331,7 @@ const viewer = [
   po,
   contract,
   uploadandmap,
-  ruleEngineData
+  ruleEngineData,
 ];
 
 const user = [
@@ -283,11 +342,12 @@ const user = [
   gl,
   po,
   contract,
-  uploadandmap
+  uploadandmap,
 ];
 
 const layoutRoutes = () => {
-  const roleBasedRoutes = localStorage.get('user') && localStorage.get('user').rolePermissions;
+  const roleBasedRoutes =
+    localStorage.get("user") && localStorage.get("user").rolePermissions;
   switch (roleBasedRoutes) {
     case ADMIN:
     case SENIOR_MANAGER:
@@ -305,8 +365,8 @@ const layoutRoutes = () => {
     default:
       return user;
       break;
-  } 
-}
+  }
+};
 
 // Routes using the Dashboard layout
 export const dashboardLayoutRoutes = layoutRoutes();

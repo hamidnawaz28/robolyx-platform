@@ -1,4 +1,4 @@
-export const SERVER_URL = '/api/'
+export const SERVER_URL = 'http://localhost:8090/api/'
 export const USER_DATA = 'user-data'
 
 export const FILE_IMPORT = 'main/file-import'
@@ -18,25 +18,103 @@ export const MANAGE_TEMPLATES = 'main/manage-templates'
 export const DEFAULT_TEMPLETES = 'main/default-templates'
 export const SAVED_TEMPLETES = 'main/saved-templates'
 export const VERIFY_USER = 'main/find-email-or-user-name'
+export const ADMIN_DATA = 'main/admin-data'
+
+
+export const SIGN_UP = 'core/users/' 
+export const CURRENT_USER = 'core/current_user/'
+
+
+export const SIGN_IN = 'auth/token-auth/'
+
+
 export const TEMPLATES_COLUMNS = {
     "MappingName" : "MappingName",
     "DATE_ENTERED" : "DATE_ENTERED",
     "DataTableReference" : "DataTableReference",
     "MappedItems" : "MappedItems"
 }
+
+
 export const RULE_ENGINE_OPERATORS = {
     date : ["=",">", ">=", "<", "<="],
     number : ["=", ">", ">=", "<", "<="],
     string : ["EQUALS", "STARTS WITH", "ENDS WITH", "CONTAINS", "MISSING"]
 } 
-export const PRIORITY_LIST = ["Medium", "High", "Low"]
-export const DATA_ATTRIBUTES_WITH_TYPE = { "string": [ "INVOICE_ID", "INV_SOURCE", "INV_NUMBER", "VENDOR_NUMBER", "VENDOR_NAME", "LINE_DESCRIPTION", "LINE_QUANTITY", "GENERAL_LEDGER", "PO_NUMBER", "INV_ORGINE", "VENDOR_TYPE", "INV_TERMS", "LINE_NUMBER", "LINE_TYPE", "LINE_UNIT_OF_MEASURE", "LOCATION", "DEPARTMENT", "ACCOUNT" ], "date": [ "GL_DATE", "CREATION_DATE", "INV_DATE" ], "number": [ "LINE_AMOUNT", "LINE_UNIT_PRICE" ] }
 
-export const DATA_ATTRIBUTES = ["INVOICE_ID", "GL_DATE", "INV_ORGINE", "INV_DATE", "INV_SOURCE", "INV_NUMBER", "VENDOR_NUMBER", "VENDOR_NAME", "VENDOR_TYPE", "INV_TERMS", "LINE_NUMBER", "LINE_TYPE", "LINE_DESCRIPTION", "LINE_QUANTITY", "LINE_UNIT_PRICE", "LINE_UNIT_OF_MEASURE", "LINE_AMOUNT", "GENERAL_LEDGER", "LOCATION", "DEPARTMENT", "ACCOUNT", "PO_NUMBER", "CREATION_DATE"]
+
+export const PRIORITY_LIST = ["Medium", "High", "Low"]
+
+
+export const DATA_ATTRIBUTES_WITH_TYPE = { 
+    "string": 
+        [   
+            "INVOICE_ID",
+            "INV_SOURCE", 
+            "INV_NUMBER", 
+            "VENDOR_NUMBER", 
+            "VENDOR_NAME", 
+            "LINE_DESCRIPTION", 
+            "LINE_QUANTITY", 
+            "GENERAL_LEDGER", 
+            "PO_NUMBER", 
+            "INV_ORGINE", 
+            "VENDOR_TYPE", 
+            "INV_TERMS", 
+            "LINE_NUMBER", 
+            "LINE_TYPE", 
+            "LINE_UNIT_OF_MEASURE", 
+            "LOCATION", 
+            "DEPARTMENT", 
+            "ACCOUNT" 
+        ], 
+    "date": 
+        [ 
+            "GL_DATE", 
+            "CREATION_DATE", 
+            "INV_DATE" 
+        ], 
+    "number": 
+        [ 
+            "LINE_AMOUNT", 
+            "LINE_UNIT_PRICE" 
+        ] 
+}
+
+
+export const DATA_ATTRIBUTES = [
+    "INVOICE_ID", 
+    "GL_DATE", 
+    "INV_ORGINE", 
+    "INV_DATE", 
+    "INV_SOURCE", 
+    "INV_NUMBER", 
+    "VENDOR_NUMBER", 
+    "VENDOR_NAME", 
+    "VENDOR_TYPE", 
+    "INV_TERMS", 
+    "LINE_NUMBER", 
+    "LINE_TYPE", 
+    "LINE_DESCRIPTION", 
+    "LINE_QUANTITY", 
+    "LINE_UNIT_PRICE", 
+    "LINE_UNIT_OF_MEASURE", 
+    "LINE_AMOUNT", 
+    "GENERAL_LEDGER", 
+    "LOCATION", 
+    "DEPARTMENT", 
+    "ACCOUNT", 
+    "PO_NUMBER", 
+    "CREATION_DATE"
+]
+
+
 export const STATISTICAL_SUMMARY_COLUMNS ={
     "Invoices Impacted":"invoice_impacted",
     // "Rules Overwritten":"rulesOverwritten"
 }
+
+
 export const DATA_ATTRIBUTES_FOR_RULE_ENGINE =  {
     "CATAGORIES": "CATAGORIES",
     "PRIORITY": "PRIORITY",
@@ -50,6 +128,7 @@ export const DATA_ATTRIBUTES_FOR_RULE_ENGINE =  {
     "OPERATOR_3": "OPERATOR_3",
     "VALUE_3": "VALUE_3"
   }
+
 
 export const DATA_ATTRIBUTES_FOR_COLUMNS = {
     "INVOICE_ID":"INVOICE_ID",
@@ -76,6 +155,8 @@ export const DATA_ATTRIBUTES_FOR_COLUMNS = {
      "PO_NUMBER":"PO_NUMBER", 
      "CREATION_DATE":"CREATION_DATE"
 }
+
+
 export const TAXONOMY_ATTRIBUTES = {
     "CATEGORY_LEVEL_ONE" : "CATEGORY_LEVEL_ONE",
     "CATEGORY_LEVEL_TWO" : "CATEGORY_LEVEL_TWO",
@@ -83,6 +164,8 @@ export const TAXONOMY_ATTRIBUTES = {
     "CATEGORY_LEVEL_FOUR" : "CATEGORY_LEVEL_FOUR",
     "CATEGORY_LEVEL_FIVE" : "CATEGORY_LEVEL_FIVE"
 }
+
+
 export const CONTRACT_COLUMNS = {
 	"CONTRACT_EXPIRY_DATE" : "CONTRACT_EXPIRY_DATE",
 	"DATE_SIGNED" : "DATE_SIGNED",
@@ -129,6 +212,8 @@ export const CONTRACT_COLUMNS = {
 	"MODIFIED_BY" : "MODIFIED_BY",
 	"INSURANCE_TYPE" : "INSURANCE_TYPE"
 }
+
+
 export const GL_COLUMNS = {
     "LEDGER" : "LEDGER",
 	"LEDGER_DESC" : "LEDGER_DESC", 
@@ -137,6 +222,8 @@ export const GL_COLUMNS = {
     "DIVISION" : "DIVISION",
     "BUSINESS" : "BUSINESS"
 }
+
+
 export const PO_COLUMNS = {
     "PO_CREATION_DATE" : "PO_CREATION_DATE",
     "REQ_APPROVED_DATE" : "REQ_APPROVED_DATE",
@@ -236,6 +323,8 @@ export const PO_COLUMNS = {
     "DEL_LOCATION_DESC" : "DEL_LOCATION_DESC",
     "NOTE_TO_VENDOR" : "NOTE_TO_VENDOR"
 }
+
+
 const ROLES_MAPPING = {
     "UGAdmin": {
         "user" : {"edit": true,"view" :true},
@@ -309,7 +398,9 @@ const ROLES_MAPPING = {
         "dashboards" : {"edit": false,"view" :true}, 
         "savings" : {"edit": true,"view" :true}
     }
-  }
+}
+
+
 export const ADMIN_COLUMN = {
     Name :"Name",
     RoleValidity : "RoleValidity",
@@ -317,7 +408,8 @@ export const ADMIN_COLUMN = {
     Organization : "Organization",
     RoleReference :"RoleReference"
 }
-export const ADMIN_DATA = 'main/admin-data'
+
+
 // User Groups
 export const ADMIN = 'UGAdmin'
 export const SENIOR_MANAGER = 'UGSeniorManager'

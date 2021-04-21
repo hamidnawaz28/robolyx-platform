@@ -36,12 +36,12 @@ class UserSerializer(serializers.ModelSerializer):
             "name": user_data.Name,
             "organization": user_data.Organization,
             "roleValidity": user_data.RoleValidity,
-            "image": my_string,
             "roleReference": user_data.RoleReference.pk,
             "rolePermissions": user_data.RoleReference.Permissions,
             "userProjectReference": user_data.UserProjectReference.pk,
             "userProjectName": user_data.UserProjectReference.Name,
-            "userProjectValidity": user_data.UserProjectReference.ValidityDate
+            "userProjectValidity": user_data.UserProjectReference.ValidityDate,
+            "image": my_string
         }
 
     class Meta:
@@ -50,7 +50,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserSerializerWithToken(serializers.ModelSerializer):
-
     token = serializers.SerializerMethodField()
     password = serializers.CharField(write_only=True)
 
@@ -63,6 +62,7 @@ class UserSerializerWithToken(serializers.ModelSerializer):
         return token
 
     def create(self, validated_data):
+
         password = validated_data.pop('password', None)
         instance = self.Meta.model(**validated_data)
         if password is not None:

@@ -76,13 +76,11 @@ MIDDLEWARE = [
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'core.utils.my_jwt_response_handler'
 }
-ALLOWED_HOSTS = ['+','localhost' ,'127.0.0.1','3.26.44.105','ec2-54-253-85-203.ap-southeast-2.compute.amazonaws.com','54.253.85.203', "ec2-3-26-44-105.ap-southeast-2.compute.amazonaws.com",'ec2-3-26-44-105.ap-southeast-2.compute.amazonaws.com:8600', 'http://localhost:8090','robolyx.com', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '3.26.44.105', 'ec2-54-253-85-203.ap-southeast-2.compute.amazonaws.com','54.253.85.203', "ec2-3-26-44-105.ap-southeast-2.compute.amazonaws.com",'ec2-3-26-44-105.ap-southeast-2.compute.amazonaws.com:8600','robolyx.com']
 CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = (
-       'http://localhost:8090',
        'http://localhost:3000',
-       'http://localhost:3001',
 )
 CORS_ALLOW_METHODS = (
     'DELETE',
