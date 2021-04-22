@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { NavLink as RouterNavLink } from "react-router-dom";
 
-import Helmet from 'react-helmet';
+import Helmet from "react-helmet";
 
 import {
   Avatar,
@@ -16,10 +16,10 @@ import {
   Divider as MuiDivider,
   Grid,
   Link,
-  Typography as MuiTypography
+  Typography as MuiTypography,
 } from "@material-ui/core";
 
-import { AvatarGroup as MuiAvatarGroup } from '@material-ui/lab';
+import { AvatarGroup as MuiAvatarGroup } from "@material-ui/lab";
 
 import { red, green, orange } from "@material-ui/core/colors";
 
@@ -34,7 +34,7 @@ const Breadcrumbs = styled(MuiBreadcrumbs)(spacing);
 const Card = styled(MuiCard)(spacing);
 
 const CardContent = styled(MuiCardContent)`
-  border-bottom: 1px solid ${props => props.theme.palette.grey[300]};
+  border-bottom: 1px solid ${(props) => props.theme.palette.grey[300]};
 `;
 
 const CardMedia = styled(MuiCardMedia)`
@@ -49,14 +49,14 @@ const Chip = styled(MuiChip)`
   height: 20px;
   padding: 4px 0;
   font-size: 85%;
-  background-color: ${props => props.rgbcolor};
-  color: ${props => props.theme.palette.common.white};
-  margin-bottom: ${props => props.theme.spacing(4)}px;
+  background-color: ${(props) => props.rgbcolor};
+  color: ${(props) => props.theme.palette.common.white};
+  margin-bottom: ${(props) => props.theme.spacing(4)}px;
 `;
 
 const AvatarGroup = styled(MuiAvatarGroup)`
-  margin-left: ${props => props.theme.spacing(2)}px;
-`
+  margin-left: ${(props) => props.theme.spacing(2)}px;
+`;
 
 function Project({ image, title, description, chip }) {
   return (
@@ -95,7 +95,7 @@ function Projects() {
   return (
     <React.Fragment>
       <Helmet title="Projects" />
-      
+
       <Typography variant="h3" gutterBottom display="inline">
         Projects
       </Typography>

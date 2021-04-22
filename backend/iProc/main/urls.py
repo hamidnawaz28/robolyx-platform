@@ -1,5 +1,12 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework import routers
 from main import views
+
+
+router=routers.DefaultRouter()
+router.register("userlist", views.UserList, basename='Userlists')
+
+
 urlpatterns = [
     path('admin-data', views.admin_data, name='Admin Data'),
     # -------------------------------------UtilsUrls-------------------------------------------------
@@ -21,5 +28,6 @@ urlpatterns = [
     path('rule-engine-data', views.rule_engine_data, name='Rule Engine Data'),
     path('invoice-by-rule', views.invoice_by_rule, name='Invoice By Rule'),
     path('overwritten-rules', views.over_written_rules, name="Overwritten Rules"),
-    path('statistical-summary', views.statistical_summary, name="Statistical Summary")
+    path('statistical-summary', views.statistical_summary, name="Statistical Summary"),
+    path('', include(router.urls)),
 ]

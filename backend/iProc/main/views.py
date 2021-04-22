@@ -13,6 +13,8 @@ from rest_framework import serializers as ser
 # from .utils import get_data_range
 from rest_framework.renderers import JSONRenderer
 from django.contrib.auth.models import User
+from rest_framework import viewsets
+from rest_framework.response import Response
 # ---------------UtilsFunctions----------------------
 
 
@@ -695,3 +697,22 @@ def admin_data(request):
         return HttpResponse("Updated Successfully!", content_type="text/json-comment-filtered")
     else:
         return HttpResponse("NoMatch", content_type="text/json-comment-filtered")
+
+
+
+from django.contrib.auth import get_user_model
+from .serializers import userListSerializer
+
+class UserList(viewsets.ViewSet):
+    #authentication_classes = [JWTAuthentication]
+    #permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        User = get_user_model()
+        users = User.objects.all()
+        serializer = userListSerializer(
+            users, many=True, context={"request": request})
+        serializer.data.password='' 
+      
+        response_dict = {"data": serializer.data}
+        return Response(response_dict)

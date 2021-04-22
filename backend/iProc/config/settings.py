@@ -39,7 +39,11 @@ INSTALLED_APPS = [
     'corsheaders',
     'main',
     'core.apps.CoreConfig',
-    'config'
+    'config',
+    'tickets',
+    'import_export',
+    'basic_config',
+    'vendor_management',
 ]
 
 # REST_FRAMEWORK = {
@@ -49,7 +53,7 @@ INSTALLED_APPS = [
 # }
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
@@ -76,11 +80,13 @@ MIDDLEWARE = [
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'core.utils.my_jwt_response_handler'
 }
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '3.26.44.105', 'ec2-54-253-85-203.ap-southeast-2.compute.amazonaws.com','54.253.85.203', "ec2-3-26-44-105.ap-southeast-2.compute.amazonaws.com",'ec2-3-26-44-105.ap-southeast-2.compute.amazonaws.com:8600','robolyx.com']
+ALLOWED_HOSTS = ['+','localhost' ,'127.0.0.1','3.26.44.105','192.168.0.100','ec2-54-253-85-203.ap-southeast-2.compute.amazonaws.com','54.253.85.203', "ec2-3-26-44-105.ap-southeast-2.compute.amazonaws.com",'ec2-3-26-44-105.ap-southeast-2.compute.amazonaws.com:8600', 'http://localhost:8090','robolyx.com', '127.0.0.1']
 CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = (
+       'http://localhost:8090',
        'http://localhost:3000',
+       'http://localhost:3001',
 )
 CORS_ALLOW_METHODS = (
     'DELETE',
@@ -90,6 +96,7 @@ CORS_ALLOW_METHODS = (
     'POST',
     'PUT',
 )
+
 CORS_ALLOW_HEADERS = (
     'accept',
     'accept-encoding',
@@ -120,27 +127,33 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = "smtp.mail.yahoo.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "hamid.nawaz28@yahoo.com"
+EMAIL_HOST_PASSWORD = "mmzynfpzxcaiedft"
+EMAIL_USE_TLS = True
 
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-DATABASES = {
-    'default': {
-        "ENGINE": 'django.db.backends.postgresql_psycopg2',
-        "NAME": 'iproc20',
-        "USER": 'postgres',
-        "PASSWORD": 'admin',
-        "HOST": '127.0.0.1',
-        "PORT": '5432'
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+#         "ENGINE": 'django.db.backends.postgresql_psycopg2',
+#         "NAME": 'iproc',
+#         "USER": 'postgres',
+#         "PASSWORD": 'admin',
+#         "HOST": '127.0.0.1',
+#         "PORT": '5432'
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 FILE_UPLOAD_PERMISSIONS = 0o644
 
 # DATABASES = {
@@ -192,10 +205,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # pdb.set_trace()
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static_cdn'),
-    os.path.join(BASE_DIR, 'build', 'static'),
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static_cdn'),
+#     os.path.join(BASE_DIR, 'build', 'static'),
+# ]
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000

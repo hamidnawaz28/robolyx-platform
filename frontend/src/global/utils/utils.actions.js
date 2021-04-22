@@ -5,7 +5,38 @@ import {
     SERVER_URL,
     UTILS
 } from '../constants'
+import * as type from './utils.actionTypes';
+import { takeEvery, takeLatest, put, call } from 'redux-saga/effects';
+
 const projectKey = '1'
+
+//Fetch table data saga
+export function* fetchTaxonomyCat(action) {
+    
+	try {
+		console.log('running fetch taxonomy start saga');
+		const res = yield axios.get(
+            `${SERVER_URL}${UTILS}`,
+            {
+                params:{
+                    type: "TaxonomyCategories",
+                    project: projectKey
+                }
+            }
+        ) 
+
+		yield put(getTaxonomyCategories(res.data));
+		//yield put(updateTotalRows(res.data.count));
+	} catch (error) {
+		alert(error)
+        //yield put(addSitesFailure(error.response && error.response.data.message ? error.response.data.message : error.message));
+	}
+}
+
+export function* onFetchTaxonomyStart() {
+	yield takeLatest(type.START_TAXONOMY_CATEGORIES, fetchTaxonomyCat);
+}
+
 const updateTaxonomyCategories = () => {
     return dispatch => {
         axios

@@ -11,11 +11,12 @@ const userSignUp = credentials => (dispatch) => {
   dispatch(action.userSignUpRequest());
   return api({
     method: 'post',
-    url: 'api/core/users/',
+    url: 'v1/users/signUp',
     data: credentials
   })
     .then((response) => {
       const { data, headers } = response;
+
       let user = {
         setAuthorization: get(headers, 'access_token')
       };

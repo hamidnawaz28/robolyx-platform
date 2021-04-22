@@ -1,0 +1,17 @@
+
+
+pipenv install django-cors-headers==3.7.0
+
+pipenv install django-import-export==2.5.0
+
+django==3.1.7
+
+pipenv install djangorestframework-jwt==1.11.0
+
+pipenv install djangorestframework==3.12.4
+
+pipenv install pillow==8.1.2
+
+pipenv install psycopg2==2.8.6
+
+

@@ -8,3 +8,4 @@ psycopg2==2.8.6
 PyJWT==1.7.1
 pytz==2021.1
 sqlparse==0.4.1
+django-import-export==2.5.0
