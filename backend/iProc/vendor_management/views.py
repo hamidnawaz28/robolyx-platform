@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from .models import VendorRequest
 from .serializers import VendorRequestSerializer
+import json
 import pdb
 from rest_framework.generics import get_object_or_404
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -12,7 +13,6 @@ from rest_framework import status
 from django.core.mail import send_mail
 
 
-import json
 
 # Create your views here.
 class VendorRequestViewSet(viewsets.ViewSet):
@@ -54,9 +54,9 @@ class VendorRequestViewSet(viewsets.ViewSet):
             email = request.data["email"]
             send_mail(
                 'Vendor Request',
-                'Hi Robolyx is inviting you',
+                json.dumps(request.data),
                 'hamid.nawaz28@yahoo.com',
-                [email, 'hamid.nawaz28@yahoo.com'],
+                [email],
                 fail_silently=False,
             )
             dict_response = {"error": False,

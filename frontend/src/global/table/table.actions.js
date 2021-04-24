@@ -50,17 +50,20 @@ export function* queryTableData(action) {
   console.log("action from fetch saga", action);
   try {
     const { apiLink, fetchApiData } = action.payload;
-
     console.log("running fetch start saga", apiLink, fetchApiData);
-    const res = yield axios.get(`${SERVER_URL}${apiLink}`, {
-      params: fetchApiData,
-    });
+    const { currentPage, perPage, query } = fetchApiData;
+    const q = query ? JSON.stringify(query) : "{}";
+    const res = yield axios.get(
+      `${SERVER_URL}${apiLink}?q=${
+        q && q
+      }&currentPage=${currentPage}&perPage=${perPage}`
+    );
     console.log("Data", res.data);
-    let serviceData = JSON.parse(res.data.queryData);
+    let serviceData = res.data.data;
     console.log("Data", serviceData);
     let data = [];
     serviceData.forEach((element) => {
-      element["IsChecked"] = false;
+      element["isChecked"] = false;
       data.push(element);
     });
 
@@ -84,7 +87,7 @@ const queryData = (credentials, apiData) => {
         let serviceData = JSON.parse(res.data.queryData);
         let data = [];
         serviceData.forEach((element) => {
-          element["IsChecked"] = false;
+          element["isChecked"] = false;
           data.push(element);
         });
         dispatch(updateTableData(data));

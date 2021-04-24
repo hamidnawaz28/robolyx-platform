@@ -1,6 +1,6 @@
 export const SERVER_URL = "http://localhost:8090/api/";
 export const USER_DATA = "user-data";
-
+export const VENDOR_REQUEST = "vendor_management/vendor-req";
 export const FILE_IMPORT = "main/file-import";
 export const UTILS = "main/utils";
 export const RULE_ENGINE = "main/rule-engine";
@@ -99,7 +99,11 @@ export const DATA_ATTRIBUTES_FOR_RULE_ENGINE = {
   OPERATOR_3: "OPERATOR_3",
   VALUE_3: "VALUE_3",
 };
-
+export const VENDOR_REQUEST_COLUMNS = {
+  "Company Name": "company_name",
+  "Request Status": "request_status",
+  "Created At": "created_at",
+};
 export const DATA_ATTRIBUTES_FOR_COLUMNS = {
   INVOICE_ID: "INVOICE_ID",
   GL_DATE: "GL_DATE",

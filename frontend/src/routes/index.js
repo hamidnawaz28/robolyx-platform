@@ -307,6 +307,9 @@ const CreateVendor = async(() =>
 const OnBoarding = async(() =>
   import("../main/pages/vendorManagement/onboarding/BoardingForm")
 );
+const SupplierRequests = async(() =>
+  import("../main/pages/vendorManagement/supplierrequest/allrequests/SupplierData")
+);
 const vendorManagement = {
   id: "Vendor Management",
   path: "/vendor-management",
@@ -327,6 +330,11 @@ const vendorManagement = {
       name: "On Boarding",
       component: OnBoarding,
     },
+     {
+      name: "Supplier Requests",
+      path: "/vendor-management/supplier-requests",
+      component: SupplierRequests,
+    }
   ],
   component: null,
 };

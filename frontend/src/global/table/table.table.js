@@ -107,7 +107,7 @@ const ActionsGrid = styled(Grid)`
 const selRowsArr = (rowsData) => {
   let outArray = [];
   for (let index in rowsData) {
-    if (rowsData[index]["IsChecked"] == true) {
+    if (rowsData[index]["isChecked"] == true) {
       outArray.push(rowsData[index]);
     }
   }
@@ -123,7 +123,7 @@ function TableData(props) {
     totalRows,
     perPage,
     currentPage,
-    IsAllSelected,
+    isAllSelected,
     query,
   } = tableStates;
   const {
@@ -144,30 +144,33 @@ function TableData(props) {
     let updatedData = [];
     for (let index in tableDataPrev) {
       let item = { ...tableDataPrev[index] };
-      item["IsChecked"] = checkedStatus;
+      item["isChecked"] = checkedStatus;
       updatedData.push(item);
     }
     dispatch(updateTableData(updatedData));
   };
   const singleSelectHandle = (e) => {
-    debugger;
-    let pk = e.target.parentElement.parentElement.getAttribute("pk");
-    if (pk == null) {
-      pk = e.target.parentElement.getAttribute("pk");
+    let id = e.target.parentElement.parentElement.getAttribute("id");
+    if (id == null) {
+      id = e.target.parentElement.getAttribute("id");
     }
     let tableDataPrev = data;
     let updatedData = [];
     for (let index in tableDataPrev) {
       let item = { ...tableDataPrev[index] };
-      if (item["pk"] == pk) {
-        item["IsChecked"] = !item["IsChecked"];
+      if (item["id"] == id) {
+        item["isChecked"] = !item["isChecked"];
       }
       updatedData.push(item);
     }
     dispatch(updateTableData(updatedData));
   };
+  const objectFilter = (obj, predicate) =>
+  Object.keys(obj)
+    .filter((key) => predicate(obj[key]))
+    .reduce((res, key) => ((res[key] = obj[key]), res), {});
   let fetchApiData = {
-    query: JSON.stringify(query),
+    query: objectFilter(query, (item) => item != ""),
     currentPage: currentPage,
     perPage: perPage,
     project: "1",
@@ -180,23 +183,23 @@ function TableData(props) {
   };
   let payloadForFetch = { apiLink, fetchApiData };
   const deleteDataHandle = () => {
-    let pkArray = [];
+    let idArray = [];
     for (let index in data) {
-      if (data[index]["IsChecked"] == true) {
-        pkArray.push(data[index]["pk"]);
+      if (data[index]["isChecked"] == true) {
+        idArray.push(data[index]["id"]);
       }
     }
-    deleteApiData["pkArray"] = JSON.stringify(pkArray);
+    deleteApiData["idArray"] = JSON.stringify(idArray);
 
     let payload = { apiLink, deleteApiData, fetchApiData };
-    pkArray.length > 0
+    idArray.length > 0
       ? dispatch(deleteTableData(payload))
       : alert("Select Data");
   };
   const editData = () => {
     let outArray = [];
     for (let index in data) {
-      if (data[index]["IsChecked"] == true) {
+      if (data[index]["isChecked"] == true) {
         outArray.push(data[index]);
       }
     }
@@ -205,15 +208,15 @@ function TableData(props) {
       : editDataHandle(outArray[0]);
   };
   const implementRuleHandle = () => {
-    let pkArray = [];
+    let idArray = [];
     for (let index in data) {
-      if (data[index]["IsChecked"] == true) {
-        pkArray.push(data[index]["pk"]);
+      if (data[index]["isChecked"] == true) {
+        idArray.push(data[index]["id"]);
       }
     }
-    implementApiData["pkArray"] = JSON.stringify(pkArray);
+    implementApiData["idArray"] = JSON.stringify(idArray);
     fetchApiData["STATUS"] = "draft";
-    pkArray.length > 0
+    idArray.length > 0
       ? dispatch(implementRule(apiLink, implementApiData, fetchApiData))
       : alert("Select Data");
   };
@@ -301,7 +304,7 @@ function TableData(props) {
                 <TableCell className={classes.headCells}>
                   <Checkbox
                     className={classes.headcheck}
-                    checked={IsAllSelected}
+                    checked={isAllSelected}
                     onClick={selectAllHandle}
                   />
                 </TableCell>
@@ -321,22 +324,22 @@ function TableData(props) {
                   className={classes.bodyRows}
                   hover={true}
                   onClick={selectOption && singleSelectHandle}
-                  pk={row.pk}
-                  checked={row.IsChecked}
+                  id={row.id}
+                  checked={row.isChecked}
                 >
                   {selectOption && (
                     <TableCell>
                       <Checkbox
                         color={color}
-                        pk={row.pk}
-                        checked={row.IsChecked}
+                        id={row.isAllSelected}
+                        checked={row.isChecked}
                       />
                     </TableCell>
                   )}
-                  {row?.pk && <TableCell>{row.pk}</TableCell>}
+                  {row?.id && <TableCell>{row.id}</TableCell>}
                   {Object.keys(tableHeaders).map((key) => (
                     <TableCell className={classes.bodyCells}>
-                      {row.fields[tableHeaders[key]]}
+                      {row[tableHeaders[key]]}
                     </TableCell>
                   ))}
                 </TableRow>
