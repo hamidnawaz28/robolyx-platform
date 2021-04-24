@@ -481,3 +481,80 @@ class SitesViewSet(viewsets.ViewSet):
             dict_response = {'error': True,
                              'message': "Error During Deleting Site"}
         return Response(dict_response)
+
+class PaymentTermViewSet(viewsets.ViewSet):
+    #authentication_classes = [JWTAuthentication]
+    #permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        query_filter = json.loads(self.request.query_params.get("searchQuery"))
+        current_page = int(self.request.query_params.get("currentPage"))
+        per_page = int(self.request.query_params.get("perPage"))
+        start = per_page * current_page
+        end = per_page * current_page + per_page
+        print('START END', start, end)
+        
+        all_objs = PaymentTerm.objects.all()
+        print('QUERY FILTER', query_filter, current_page, per_page)
+        #query_filter = ast.literal_eval(query_filter)
+        response_dict = {}
+        if query_filter is not None:
+            pay_terms = all_objs.filter(**query_filter)[start:end]
+            count = all_objs.count()
+        else:
+            pay_terms = all_objs[start:end]
+            count = all_objs.count()
+
+        serializer = PaymentTermSerializer(
+            pay_terms, many=True, context={"request": request})
+
+        response_dict = {'data': serializer.data,
+                             'count': count}
+
+        return Response(response_dict)        
+
+    def create(self, request):
+        try:
+            serializer = PaymentTermSerializer(
+                data=request.data, context={"request": request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            dict_response = {"error": False,
+                             "message": "Payment Term saved successfully"}
+        except:
+            dict_response = {'error': True,
+                             'message': "Error During Saving Payment Term"}
+        return Response(dict_response)
+
+    def update(self, request, pk=id):
+        try:
+            queryset = PaymentTerm.objects.all()
+            pay_term = get_object_or_404(queryset, pk=pk)
+            serializer = PaymentTermSerializer(
+                pay_term, data=request.data, context={"request": request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            dict_response = {"error": False,
+                             "message": "Successfully Updated Payment Term"}
+        except:
+            dict_response = {'error': True,
+                             'message': "Error During Updating Payment Term"}
+        return Response(dict_response)
+
+    def retrieve(self, request, pk=id):
+        queryset = PaymentTerm.objects.all()
+        pay_term = get_object_or_404(queryset, pk=pk)
+        serializer = PaymentTermSerializer(pay_term, context={"request": request})
+        return Response({'error': False, 'message': "Single Data Fetch", "data": serializer.data})
+
+    def destroy(self, request, pk=id):
+        try:
+            queryset = PaymentTerm.objects.all()
+            pay_term = get_object_or_404(queryset, pk=pk)
+            pay_term.delete()
+            dict_response = {"error": False,
+                             "message": "Successfully Deleted Payment Term"}
+        except:
+            dict_response = {'error': True,
+                             'message': "Error During Deleting Payment Term"}
+        return Response(dict_response)

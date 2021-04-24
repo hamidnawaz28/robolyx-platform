@@ -1,12 +1,11 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from .models import BusinessUnit, Department, Regions, Divisions, Sites, Tags
+from .models import BusinessUnit, Department, Regions, Divisions, Sites, Tags, PaymentTerm
 
 
 @admin.register(Sites)
 class SitesAdmin(ImportExportModelAdmin):
     list_display = [f.name for f in  Sites._meta.fields]
-
 
 @admin.register(BusinessUnit)
 class BUAdmin(ImportExportModelAdmin):
@@ -27,3 +26,7 @@ class DivAdmin(ImportExportModelAdmin):
 @admin.register(Tags)
 class TagsAdmin(ImportExportModelAdmin):
     list_display = [f.name for f in  Tags._meta.fields]
+
+@admin.register(PaymentTerm)
+class PaymentTermAdmin(ImportExportModelAdmin):
+    list_display = [f.name for f in  PaymentTerm._meta.fields]

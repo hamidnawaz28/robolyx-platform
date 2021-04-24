@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import BusinessUnit, Department, Regions, Divisions, Sites, Tags
+from .models import BusinessUnit, Department, Regions, Divisions, Sites, Tags, PaymentTerm
 
 class BusinessUnitSerializer(serializers.ModelSerializer):
 
@@ -38,3 +38,9 @@ class TagsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tags
         fields = '__all__'
+
+class PaymentTermSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PaymentTerm
+        fields = '__all__'
+
