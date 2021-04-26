@@ -27,7 +27,7 @@ class VendorRequestViewSet(viewsets.ViewSet):
     #permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        query_filter = json.loads(self.request.query_params.get("searchQuery"))
+        query_filter = json.loads(self.request.query_params.get("q"))
         current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
         start = per_page * current_page
@@ -111,7 +111,7 @@ class VendorTagsViewSet(viewsets.ViewSet):
     #permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        query_filter = json.loads(self.request.query_params.get("searchQuery"))
+        query_filter = json.loads(self.request.query_params.get("q"))
         current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
         start = per_page * current_page
@@ -450,19 +450,16 @@ class VendorBasicViewSet(viewsets.ViewSet):
             vendor_data = request.data
             print(' ADDED DATA')
             print('vendor_data',vendor_data)
-            print(vendor_data['trades'][0])
-            
-            serializer = VendorBasicSerializer(
-                data=request.data, context={"request": request})
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
+            new_vendor = VendorBasicInfo.objects.create(vendor_name=vendor_data['vendor_name'], contact_name=vendor_data['contact_name'],contact_email=vendor_data['contact_email'], contact_phone=vendor_data['contact_phone'], designation=vendor_data['designation'], department=vendor_data['department'], created_by=User.objects.get(id=vendor_data['created_by']),  )
+            new_vendor.save()
 
+            serializer = VendorBasicSerializer(new_vendor)
             print('Vendor Serializer', serializer.data['id'])
 
             new_history = VendorHistory.objects.create(vendor_id=VendorBasicInfo.objects.get(id=serializer.data['id']), modified_by=User.objects.get(id=vendor_data['created_by']), change_type='create', model_changed='Vendor Basic')
             new_history.save()
             dict_response = {"error": False,
-                             "message": "Vendor Basic Information saved successfully"}
+                             "message": "Vendor Basic Information saved successfully",}
         except:
             dict_response = {'error': True,
                              'message': "Error During Saving Vendor Basic Information"}

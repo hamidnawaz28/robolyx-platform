@@ -20,6 +20,8 @@ export const MANAGE_TEMPLATES = "main/manage-templates";
 export const DEFAULT_TEMPLETES = "main/default-templates";
 export const SAVED_TEMPLETES = "main/saved-templates";
 export const VERIFY_USER = "main/find-email-or-user-name";
+export const VENDOR_TAGS_API_LINK = "vendor_management/vendor-tag";
+
 export const TEMPLATES_COLUMNS = {
   MappingName: "MappingName",
   DATE_ENTERED: "DATE_ENTERED",
@@ -210,6 +212,13 @@ export const ARC_TICKETS_COLUMNS = {
   Responsible_Person: "responsible_person",
   Due_Date: "due_date",
   Status: "status",
+};
+
+export const VENDOR_TAGS_COLUMNS = {
+  Name: "name",
+  "Created By": "created_by",
+  Created_at: "created_at",
+  Last_modified_date: "last_modified_date",
 };
 
 export const PO_COLUMNS = {

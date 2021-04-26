@@ -149,7 +149,9 @@ function TableData(props) {
     }
     dispatch(updateTableData(updatedData));
   };
-  const singleSelectHandle = (e) => {
+
+  const singleSelectHandle = (row) => (e) => {
+    console.log(row);
     let id = e.target.parentElement.parentElement.getAttribute("id");
     if (id == null) {
       id = e.target.parentElement.getAttribute("id");
@@ -166,9 +168,9 @@ function TableData(props) {
     dispatch(updateTableData(updatedData));
   };
   const objectFilter = (obj, predicate) =>
-  Object.keys(obj)
-    .filter((key) => predicate(obj[key]))
-    .reduce((res, key) => ((res[key] = obj[key]), res), {});
+    Object.keys(obj)
+      .filter((key) => predicate(obj[key]))
+      .reduce((res, key) => ((res[key] = obj[key]), res), {});
   let fetchApiData = {
     query: objectFilter(query, (item) => item != ""),
     currentPage: currentPage,
@@ -323,7 +325,7 @@ function TableData(props) {
                 <TableRow
                   className={classes.bodyRows}
                   hover={true}
-                  onClick={selectOption && singleSelectHandle}
+                  onClick={selectOption && singleSelectHandle(row)}
                   id={row.id}
                   checked={row.isChecked}
                 >

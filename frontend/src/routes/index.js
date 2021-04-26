@@ -127,26 +127,31 @@ const GeneralConfigurations = async(() =>
 );
 
 // Supplier Management
-const InviteSupplier = async(() =>
-  import("../main/pages/supplier_management/InviteSupplier")
+const VendorAdmin = async(() =>
+  import("../main/pages/vendor_management/vendor_admin/VendorAdmin.main.page")
 );
-const SupplierNetwork = async(() =>
-  import("../main/pages/supplier_management/Supplier_Network")
+const VendorConfigurations = async(() =>
+  import(
+    "../main/pages/vendor_management/vendor_configurations/VendorConfigs.main.page"
+  )
 );
-const SupplierDetail = async(() =>
-  import("../main/pages/supplier_management/SupplierDetails")
+const AddVendor = async(() =>
+  import("../main/pages/vendor_management/add_vendor/AddVendor.main.page")
 );
-const SupplierAnalytics = async(() =>
-  import("../main/pages/supplier_management/SupplierAnalytics")
+const VendorNetworks = async(() =>
+  import(
+    "../main/pages/vendor_management/vendor_networks/VendorNetworks.main.page"
+  )
 );
-const PreferredSupplierManagement = async(() =>
-  import("../main/pages/supplier_management/PrefSupplierManagement")
+const VendorHomepage = async(() =>
+  import(
+    "../main/pages/vendor_management/vendor_homepage/VendorHomepage.main.page"
+  )
 );
-const SupplierConfigurations = async(() =>
-  import("../main/pages/supplier_management/SupplierConfiguration")
-);
-const SupplierGrouping = async(() =>
-  import("../main/pages/supplier_management/SupplierGrouping")
+const VendorAnalytics = async(() =>
+  import(
+    "../main/pages/vendor_management/vendor_analytics/VendorAnalytics.main.page"
+  )
 );
 
 // Contract Management
@@ -283,24 +288,10 @@ const PublicDashboards = async(() =>
   import("../main/pages/spend_analytics/PublicDashboards")
 );
 
-// Supplier Login
-const SupplierProfile = async(() =>
-  import("../main/pages/supplier_login/SupplierProfile")
-);
-const SupplierContracts = async(() =>
-  import("../main/pages/supplier_login/SupplierContracts")
-);
-const SupplierTasks = async(() =>
-  import("../main/pages/supplier_login/SupplierTasks")
-);
-
 // User
 const UserProfile = async(() => import("../main/pages/user/UserProfile"));
 const UserHistory = async(() => import("../main/pages/user/UserHistory"));
 const UserTasks = async(() => import("../main/pages/user/UserTasks"));
-const SupplierRequest = async(() =>
-  import("../main/pages/vendorManagement/supplierrequest/RequestForm")
-);
 const CreateVendor = async(() =>
   import("../main/pages/vendorManagement/createvendor/CreateVendorForm")
 );
@@ -308,9 +299,11 @@ const OnBoarding = async(() =>
   import("../main/pages/vendorManagement/onboarding/BoardingForm")
 );
 const SupplierRequests = async(() =>
-  import("../main/pages/vendorManagement/supplierrequest/allrequests/SupplierData")
+  import(
+    "../main/pages/vendorManagement/supplierrequest/allrequests/SupplierData"
+  )
 );
-const vendorManagement = {
+const supplierManagement = {
   id: "Vendor Management",
   path: "/vendor-management",
   icon: <CardTravelIcon />,
@@ -321,20 +314,15 @@ const vendorManagement = {
       component: CreateVendor,
     },
     {
-      path: "/vendor-management/supplier-request",
-      name: "Supplier Request",
-      component: SupplierRequest,
-    },
-    {
       path: "/vendor-management/on-boarding",
       name: "On Boarding",
       component: OnBoarding,
     },
-     {
+    {
       name: "Supplier Requests",
       path: "/vendor-management/supplier-requests",
       component: SupplierRequests,
-    }
+    },
   ],
   component: null,
 };
@@ -536,45 +524,40 @@ const DataManagement = {
   component: null,
 };
 
-const SupplierManagement = {
-  id: "Supplier Management",
-  path: "/supplier-management",
-  icon: <PeopleAltIcon />,
+const VendorManagement = {
+  id: "Vendor Management",
+  path: "/vendor-management",
+  icon: <SupervisedUserCircleIcon />,
   children: [
     {
-      path: "/supplier-management/invite-supplier",
-      name: "Invite a New Supplier",
-      component: InviteSupplier,
+      path: "/vendor-management/vendor-homepage",
+      name: "Vendor Homepage",
+      component: VendorHomepage,
     },
     {
-      path: "/supplier-management/supplier-network",
-      name: "Supplier Network",
-      component: SupplierNetwork,
+      path: "/vendor-management/add-vendor",
+      name: "Add Vendor",
+      component: AddVendor,
     },
     {
-      path: "/supplier-management/supplier_detail",
-      name: "Supplier Detail",
-      component: SupplierDetail,
+      path: "/vendor-management/vendor-networks",
+      name: "Vendor Networks",
+      component: VendorNetworks,
     },
     {
-      path: "/supplier-management/supplier-analytics",
-      name: "Supplier Analytics",
-      component: SupplierAnalytics,
+      path: "/vendor-management/vendor-analytics",
+      name: "Vendor Analytics",
+      component: VendorAnalytics,
     },
     {
-      path: "/supplier-management/supplier-grouping",
-      name: "Supplier Grouping",
-      component: SupplierGrouping,
+      path: "/vendor-management/invite-vendor",
+      name: "Vendor Admin",
+      component: VendorAdmin,
     },
     {
-      path: "/supplier-management/preferred-supplier",
-      name: "Preferred Supplier Management",
-      component: PreferredSupplierManagement,
-    },
-    {
-      path: "/supplier-management/supplier-configurations",
-      name: "Supplier Configurations",
-      component: SupplierConfigurations,
+      path: "/vendor-management/vendor-configs",
+      name: "Vendor Configurations",
+      component: VendorConfigurations,
     },
   ],
   component: null,
@@ -929,38 +912,14 @@ const User = {
   component: null,
 };
 
-const SupplierLogin = {
-  id: "Supplier Login",
-  path: "/supplier-login",
-  icon: <SupervisedUserCircleIcon />,
-  children: [
-    {
-      path: "/supplier-login/supplier-profile",
-      name: "Supplier Profile",
-      component: SupplierProfile,
-    },
-    {
-      path: "/supplier-login/supplier-contracts",
-      name: "Supplier Contracts",
-      component: SupplierContracts,
-    },
-    {
-      path: "/supplier-login/supplier-tasks",
-      name: "Supplier Tasks",
-      component: SupplierTasks,
-    },
-  ],
-  component: null,
-};
-
 const adminAndSeniorManager = [
-  vendorManagement,
+  supplierManagement,
   dashboardsRoutes,
   taxonomy,
   ruleEngineData,
   procureToPay,
   DataManagement,
-  SupplierManagement,
+  VendorManagement,
   ContractManagement,
   Tickets,
   Products,
@@ -971,7 +930,6 @@ const adminAndSeniorManager = [
   ProjectManagement,
   SpendAnalytics,
   User,
-  SupplierLogin,
   taxonomy,
   //savings
 ];

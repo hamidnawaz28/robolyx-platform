@@ -42,18 +42,25 @@ class DiversityClassification(models.Model):
         return self.name
 
 class VendorBasicInfo(models.Model):
+
+    approval_options = (
+        ('approved', 'approved'),
+        ('rejected', 'rejected'),
+        ('pending', 'pending'),
+    )
+
     vendor_name = models.CharField(max_length=255)
     contact_name = models.CharField(max_length=255)
     contact_email = models.EmailField(max_length=255)
     contact_phone = models.CharField(max_length=255, blank=True, null=True)
     designation = models.CharField(max_length=255, blank=True, null=True)
     department = models.CharField(max_length=255, blank=True, null=True)
-    category = models.ManyToManyField(Categories, related_name="vendorbasic_cats_rev")
-    tags = models.ManyToManyField(VendorTags, related_name="vendorbasic_tag_rev")
-    trades = models.ManyToManyField(Trades, related_name="vendorbasic_trade")
-    diversity = models.ForeignKey(DiversityClassification, on_delete=models.CASCADE, related_name="vendorbasic_diversity_rev")
-    payment_term = models.ForeignKey(PaymentTerm, on_delete=models.CASCADE, related_name="vendorbasic_payterm_rev")
-    approval_status = models.CharField(max_length=255, blank=True, null=True)
+    category = models.ManyToManyField(Categories, related_name="vendorbasic_cats_rev", )
+    tags = models.ManyToManyField(VendorTags, related_name="vendorbasic_tag_rev", )
+    trades = models.ManyToManyField(Trades, related_name="vendorbasic_trade", )
+    diversity = models.ForeignKey(DiversityClassification, on_delete=models.CASCADE, related_name="vendorbasic_diversity_rev", blank=True, null=True)
+    payment_term = models.ForeignKey(PaymentTerm, on_delete=models.CASCADE, related_name="vendorbasic_payterm_rev", blank=True, null=True)
+    approval_status = models.CharField(max_length=50, choices=approval_options, default="pending", blank=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="vendorbasic_created_rev")
     created_at = models.DateField(default=timezone.now)
 
