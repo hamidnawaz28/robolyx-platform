@@ -115,7 +115,7 @@ function FormPopUp(props) {
                   <TextField
                     id="outlined-basic"
                     variant="outlined"
-                    style={{ width: "100%" }}
+                    fullWidth
                     label="Name"
                     value={popupFormData.name}
                     onChange={(e) =>

@@ -26,11 +26,17 @@ export function* addData(action) {
       postApiData,
       fetchApiData
     );
-    const res = yield axios.post(`${SERVER_URL}${credentials}`, {
-      params: postApiData,
-    });
+    const res = yield axios.post(
+      `${SERVER_URL}${credentials}`,
+      postApiData.payload,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-    alert(res.data);
+    alert("New data added successfully");
 
     console.log(res);
     yield put(fetchTableData({ apiLink: credentials, fetchApiData }));
@@ -109,14 +115,12 @@ export function* deleteTableData(action) {
   try {
     const { apiLink, deleteApiData, fetchApiData } = action.payload;
 
-    console.log("running add start saga", apiLink, deleteApiData, fetchApiData);
-    const res = yield axios.delete(`${SERVER_URL}${apiLink}`, {
-      params: deleteApiData,
-    });
-
-    alert(res.data);
-
-    console.log(res);
+    console.log("running delete saga", apiLink, deleteApiData, fetchApiData);
+    let idArray = deleteApiData.idArray;
+    for (let x in idArray) {
+      let id = idArray[x];
+      const res = yield axios.delete(`${SERVER_URL}${apiLink}${id}/`);
+    }
 
     yield put(fetchTableData({ apiLink, fetchApiData }));
     //yield put(fetchSitesStart());
@@ -137,12 +141,22 @@ export function* editTableData(action) {
   try {
     const { apiLink, updateApidata, fetchApiData } = action.payload;
 
-    console.log("running add start saga", apiLink, updateApidata, fetchApiData);
-    const res = yield axios.put(`${SERVER_URL}${apiLink}`, {
-      params: updateApidata,
-    });
-
-    alert(res.data);
+    console.log(
+      "running edit start saga",
+      apiLink,
+      updateApidata,
+      fetchApiData
+    );
+    let id = updateApidata.id;
+    const res = yield axios.put(
+      `${SERVER_URL}${apiLink}${id}/`,
+      updateApidata.payload,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     console.log(res);
 
@@ -163,7 +177,7 @@ const updateData = (credentials, updateApiData, fetchApiData) => {
     axios
       .put(`${SERVER_URL}${credentials}`, { params: updateApiData })
       .then((res) => {
-        alert(res.data);
+        //alert(res.data);
         dispatch(queryData(credentials, fetchApiData));
         //  dispatch(IsUpdating(false))
       })

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import Table from "../../../../../../global/table/table.table";
 import {
-  VENDOR_TAGS_API_LINK,
-  VENDOR_TAGS_COLUMNS,
+  VENDOR_TRADES_API_LINK,
+  VENDOR_TRADES_COLUMNS,
 } from "../../../../../../global/constants";
-import TagsDataForm from "./TagsDataForm";
-import TagsQueryForm from "./TagsQueryForm";
+import TradesDataForm from "./TradesDataForm";
+import TradesQueryForm from "./TradesQueryForm";
 import { Typography, Grid } from "@material-ui/core";
 import tagIcon from "../../../../../../assets/tag.png";
 import { makeStyles } from "@material-ui/core/styles";
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function VendorTags() {
+function VendorTrades() {
   const [selectedRow, setSelectedRow] = useState("");
   const [actionType, setActionType] = useState("");
   const [formState, setFormState] = useState(false);
@@ -48,28 +48,28 @@ function VendorTags() {
             </Grid>
             <Grid item>
               <Typography variant={matches ? "h4" : "h3"}>
-                Vendor Tags
+                Vendor Trades
               </Typography>
             </Grid>
           </Grid>
         </Grid>
         <Grid item>
-          <TagsQueryForm apiLink={VENDOR_TAGS_API_LINK} />
+          <TradesQueryForm apiLink={VENDOR_TRADES_API_LINK} />
         </Grid>
       </Grid>
 
       <Table
-        tableHeaders={VENDOR_TAGS_COLUMNS}
+        tableHeaders={VENDOR_TRADES_COLUMNS}
         selectOption={true}
         paginationOption={true}
-        apiLink={VENDOR_TAGS_API_LINK}
+        apiLink={VENDOR_TRADES_API_LINK}
         addNewDataHandle={addNewDataHandle}
         editDataHandle={editDataHandle}
       />
       {formState && (
-        <TagsDataForm
-          apiLink={VENDOR_TAGS_API_LINK}
-          table={"Tags"}
+        <TradesDataForm
+          apiLink={VENDOR_TRADES_API_LINK}
+          table={"Trades"}
           actionType={actionType}
           formState={formState}
           formData={selectedRow}
@@ -80,4 +80,4 @@ function VendorTags() {
   );
 }
 
-export default VendorTags;
+export default VendorTrades;

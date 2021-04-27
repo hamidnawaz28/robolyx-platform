@@ -28,8 +28,11 @@ import { Add, Edit } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import { implementRule } from "./table.actions";
 import { resetStates } from "./table.actionCreators";
-import { deleteTableData, fetchTableData } from "./table.actionCreators";
+import { fetchTableData } from "./table.actionCreators";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
+import DialogBody from "./delete.dialog.delete";
+import Dialog from "@material-ui/core/Dialog";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 const useStyles = makeStyles({
   actionButtons: {
@@ -37,10 +40,22 @@ const useStyles = makeStyles({
     paddingBottom: "1em",
     paddingLeft: "22px",
   },
+  actionButtonsMobile: {
+    paddingTop: "0.3em",
+    paddingBottom: "0.3em",
+    paddingLeft: "22px",
+  },
   actionButtonsMargin: {
     marginRight: "10px",
     color: "#fff",
     width: "8em",
+  },
+  actionIconEdit: {
+    marginRight: "5px",
+    color: "#1976d2",
+    "&:hover": {
+      color: "#1976d2",
+    },
   },
   actionButtonDelete: {
     marginRight: "10px",
@@ -49,6 +64,23 @@ const useStyles = makeStyles({
     width: "8em",
     "&:hover": {
       background: "#99063a",
+    },
+  },
+  actionIconDelete: {
+    marginRight: "5px",
+    color: "#dc004e",
+    "&:hover": {
+      color: "#99063a",
+      cursor: "pointer",
+    },
+  },
+
+  actionIconAdd: {
+    marginRight: "5px",
+    color: "#388e3c",
+    "&:hover": {
+      color: "#307a33",
+      cursor: "pointer",
     },
   },
   actionButtonAdd: {
@@ -115,6 +147,7 @@ const selRowsArr = (rowsData) => {
 };
 function TableData(props) {
   const classes = useStyles();
+  const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const dispatch = useDispatch();
   const tableStates = useSelector((state) => state.tableStates);
   console.log("tableStates", tableStates);
@@ -126,6 +159,8 @@ function TableData(props) {
     isAllSelected,
     query,
   } = tableStates;
+
+  console.log("DATA", data);
   const {
     tableHeaders,
     selectOption,
@@ -136,6 +171,18 @@ function TableData(props) {
     isActionsEnabled,
     ruleImpEnabled,
   } = props;
+
+  console.log("TABLE HEADERS", tableHeaders);
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const selectAllHandle = (e) => {
     const checkedStatus = e.target.checked;
@@ -150,14 +197,16 @@ function TableData(props) {
     dispatch(updateTableData(updatedData));
   };
 
-  const singleSelectHandle = (row) => (e) => {
-    console.log(row);
-    let id = e.target.parentElement.parentElement.getAttribute("id");
+  const singleSelectHandle = (e) => {
+    console.log(e.target.getAttribute("id"));
+    console.log(e.target.parentNode);
+    let id = e.target.getAttribute("id");
     if (id == null) {
       id = e.target.parentElement.getAttribute("id");
     }
     let tableDataPrev = data;
     let updatedData = [];
+
     for (let index in tableDataPrev) {
       let item = { ...tableDataPrev[index] };
       if (item["id"] == id) {
@@ -177,26 +226,26 @@ function TableData(props) {
     perPage: perPage,
     project: "1",
   };
-  let deleteApiData = {
-    project: "1",
-  };
+  let deleteApiData = {};
   let implementApiData = {
     project: "1",
   };
   let payloadForFetch = { apiLink, fetchApiData };
-  const deleteDataHandle = () => {
+  const [payloadForDelete, setPayloadForDelete] = React.useState({});
+
+  const handleDelete = () => {
     let idArray = [];
     for (let index in data) {
       if (data[index]["isChecked"] == true) {
         idArray.push(data[index]["id"]);
       }
     }
-    deleteApiData["idArray"] = JSON.stringify(idArray);
+    deleteApiData["idArray"] = idArray;
 
     let payload = { apiLink, deleteApiData, fetchApiData };
-    idArray.length > 0
-      ? dispatch(deleteTableData(payload))
-      : alert("Select Data");
+    setPayloadForDelete(payload);
+
+    idArray.length > 0 ? handleClickOpen() : alert("Select Data");
   };
   const editData = () => {
     let outArray = [];
@@ -205,6 +254,7 @@ function TableData(props) {
         outArray.push(data[index]);
       }
     }
+    console.log("rowData", outArray[0]);
     outArray.length > 1 || outArray.length == 0
       ? alert("Select A single Row")
       : editDataHandle(outArray[0]);
@@ -250,7 +300,11 @@ function TableData(props) {
   return (
     <Paper>
       {selectOption && (
-        <div className={classes.actionButtons}>
+        <div
+          className={
+            matches ? classes.actionButtonsMobile : classes.actionButtons
+          }
+        >
           <Box m={1}>
             {ruleImpEnabled && (
               <Button
@@ -263,32 +317,71 @@ function TableData(props) {
                 Implement
               </Button>
             )}
-            <Button
-              color={color}
-              variant={variant}
-              startIcon={<AddCircleIcon />}
-              onClick={() => addNewDataHandle()}
-              className={classes.actionButtonAdd}
+            {matches ? (
+              <AddCircleIcon
+                onClick={() => addNewDataHandle()}
+                className={classes.actionIconAdd}
+              />
+            ) : (
+              <Button
+                color={color}
+                variant={variant}
+                startIcon={<AddCircleIcon />}
+                onClick={() => addNewDataHandle()}
+                className={classes.actionButtonAdd}
+                size="small"
+              >
+                Add
+              </Button>
+            )}
+
+            {matches ? (
+              <Edit
+                onClick={() => editData()}
+                className={classes.actionIconEdit}
+              />
+            ) : (
+              <Button
+                color={color}
+                variant={variant}
+                startIcon={<Edit />}
+                onClick={() => editData()}
+                className={classes.actionButtonsMargin}
+                size="small"
+              >
+                Edit
+              </Button>
+            )}
+
+            {matches ? (
+              <DeleteIcon
+                onClick={() => handleDelete()}
+                className={classes.actionIconDelete}
+              />
+            ) : (
+              <Button
+                variant={variant}
+                startIcon={<DeleteIcon />}
+                onClick={() => handleDelete()}
+                className={classes.actionButtonDelete}
+                size="small"
+              >
+                Delete
+              </Button>
+            )}
+
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
             >
-              Add
-            </Button>
-            <Button
-              color={color}
-              variant={variant}
-              startIcon={<Edit />}
-              onClick={() => editData()}
-              className={classes.actionButtonsMargin}
-            >
-              Edit
-            </Button>
-            <Button
-              variant={variant}
-              startIcon={<DeleteIcon />}
-              onClick={() => deleteDataHandle()}
-              className={classes.actionButtonDelete}
-            >
-              Delete
-            </Button>
+              <DialogBody
+                payload={payloadForDelete}
+                handleClose={handleClose}
+                setOpen={setOpen}
+              />
+            </Dialog>
           </Box>
         </div>
       )}
@@ -325,7 +418,7 @@ function TableData(props) {
                 <TableRow
                   className={classes.bodyRows}
                   hover={true}
-                  onClick={selectOption && singleSelectHandle(row)}
+                  onClick={selectOption && singleSelectHandle}
                   id={row.id}
                   checked={row.isChecked}
                 >
@@ -333,7 +426,7 @@ function TableData(props) {
                     <TableCell>
                       <Checkbox
                         color={color}
-                        id={row.isAllSelected}
+                        id={row.id}
                         checked={row.isChecked}
                       />
                     </TableCell>

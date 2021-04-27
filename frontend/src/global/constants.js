@@ -20,7 +20,10 @@ export const MANAGE_TEMPLATES = "main/manage-templates";
 export const DEFAULT_TEMPLETES = "main/default-templates";
 export const SAVED_TEMPLETES = "main/saved-templates";
 export const VERIFY_USER = "main/find-email-or-user-name";
-export const VENDOR_TAGS_API_LINK = "vendor_management/vendor-tag";
+export const VENDOR_TAGS_API_LINK = "vendor_management/vendor-tag/";
+export const VENDOR_TRADES_API_LINK = "vendor_management/vendor-trade/";
+export const VENDOR_CATEGORIES_API_LINK = "vendor_management/vendor-cat/";
+export const VENDOR_DIVERSITY_API_LINK = "vendor_management/diversity-class/";
 
 export const TEMPLATES_COLUMNS = {
   MappingName: "MappingName",
@@ -219,6 +222,27 @@ export const VENDOR_TAGS_COLUMNS = {
   "Created By": "created_by",
   Created_at: "created_at",
   Last_modified_date: "last_modified_date",
+};
+
+export const VENDOR_TRADES_COLUMNS = {
+  Name: "name",
+  "Created By": "created_by",
+  "Created at": "created_at",
+  "Last Modified Date": "last_modified_date",
+};
+
+export const VENDOR_CATEGORIES_COLUMNS = {
+  Name: "name",
+  "Created By": "created_by",
+  "Created at": "created_at",
+  "Last Modified Date": "last_modified_date",
+};
+
+export const VENDOR_DIVERSITY_COLUMNS = {
+  Name: "name",
+  "Created By": "created_by",
+  "Created at": "created_at",
+  "Last Modified Date": "last_modified_date",
 };
 
 export const PO_COLUMNS = {

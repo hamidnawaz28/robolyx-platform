@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function TagsQueryForm(props) {
+function CategoriesQueryForm(props) {
   const dispatch = useDispatch();
   const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const tableStates = useSelector((state) => state.tableStates);
@@ -66,7 +66,7 @@ function TagsQueryForm(props) {
             id="outlined-basic"
             variant="outlined"
             style={{ width: "100%" }}
-            label="Tag Name"
+            label="Category Name"
             value={formData.name__icontains}
             size="small"
             onChange={(e) =>
@@ -110,4 +110,4 @@ function TagsQueryForm(props) {
     </BorderWrapper>
   );
 }
-export default TagsQueryForm;
+export default CategoriesQueryForm;

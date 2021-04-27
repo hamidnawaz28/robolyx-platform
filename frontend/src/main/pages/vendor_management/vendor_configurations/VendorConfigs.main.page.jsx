@@ -9,6 +9,7 @@ import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import AddVendorIcon from "../../../../assets/supply-chain.png";
 import Configurations from "./configurations/Configurations.main.page";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -49,13 +50,14 @@ const useStyles = makeStyles((theme) => ({
     width: "79vw",
     backgroundColor: theme.palette.background.paper,
     [theme.breakpoints.down("sm")]: {
-      width: "90vw",
+      width: "91vw",
     },
   },
 }));
 
 export default function VendorConfigurations() {
   const classes = useStyles();
+  const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -69,11 +71,13 @@ export default function VendorConfigurations() {
           <img
             src={AddVendorIcon}
             alt="add vendor logo"
-            style={{ width: "3em" }}
+            style={{ width: matches ? "2em" : "3em" }}
           />
         </Grid>
         <Grid item>
-          <Typography variant="h2">Vendor Configurations</Typography>
+          <Typography variant={matches ? "h4" : "h2"}>
+            Vendor Configurations
+          </Typography>
         </Grid>
       </Grid>
       <div className={classes.root}>
