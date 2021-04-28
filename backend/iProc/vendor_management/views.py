@@ -27,7 +27,7 @@ class VendorRequestViewSet(viewsets.ViewSet):
     #permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        query_filter = json.loads(self.request.query_params.get("searchQuery"))
+        query_filter = json.loads(self.request.query_params.get("query"))
         current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
         start = per_page * current_page
@@ -50,7 +50,7 @@ class VendorRequestViewSet(viewsets.ViewSet):
         response_dict = {'data': serializer.data,
                              'count': count}
 
-        return Response(response_dict)        
+        return Response(response_dict)
 
     def create(self, request):
         try:
@@ -111,13 +111,13 @@ class VendorTagsViewSet(viewsets.ViewSet):
     #permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        query_filter = json.loads(self.request.query_params.get("searchQuery"))
+        query_filter = json.loads(self.request.query_params.get("query"))
         current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
         start = per_page * current_page
         end = per_page * current_page + per_page
         print('START END', start, end)
-        
+
         all_vendor_cats = VendorTags.objects.all()
         print('QUERY FILTER', query_filter, current_page, per_page)
         #query_filter = ast.literal_eval(query_filter)
@@ -135,7 +135,7 @@ class VendorTagsViewSet(viewsets.ViewSet):
         response_dict = {'data': serializer.data,
                              'count': count}
 
-        return Response(response_dict)        
+        return Response(response_dict)
 
     def create(self, request):
         try:
@@ -194,7 +194,7 @@ class CategoriesViewSet(viewsets.ViewSet):
         start = per_page * current_page
         end = per_page * current_page + per_page
         print('START END', start, end)
-        
+
         all_vendor_cats = Categories.objects.all()
         print('QUERY FILTER', query_filter, current_page, per_page)
         #query_filter = ast.literal_eval(query_filter)
@@ -212,7 +212,7 @@ class CategoriesViewSet(viewsets.ViewSet):
         response_dict = {'data': serializer.data,
                              'count': count}
 
-        return Response(response_dict)        
+        return Response(response_dict)
 
     def create(self, request):
         try:
@@ -271,7 +271,7 @@ class TradesViewSet(viewsets.ViewSet):
         start = per_page * current_page
         end = per_page * current_page + per_page
         print('START END', start, end)
-        
+
         all_trades = Trades.objects.all()
         print('QUERY FILTER', query_filter, current_page, per_page)
         #query_filter = ast.literal_eval(query_filter)
@@ -289,7 +289,7 @@ class TradesViewSet(viewsets.ViewSet):
         response_dict = {'data': serializer.data,
                              'count': count}
 
-        return Response(response_dict)        
+        return Response(response_dict)
 
     def create(self, request):
         try:
@@ -348,10 +348,10 @@ class DiversityClassificationViewSet(viewsets.ViewSet):
         start = per_page * current_page
         end = per_page * current_page + per_page
         print('START END', start, end)
-        
+
         all_objs = DiversityClassification.objects.all()
         print('QUERY FILTER', query_filter, current_page, per_page)
-        
+
         response_dict = {}
         if query_filter is not None:
             diversity = all_objs.filter(**query_filter)[start:end]
@@ -366,7 +366,7 @@ class DiversityClassificationViewSet(viewsets.ViewSet):
         response_dict = {'data': serializer.data,
                              'count': count}
 
-        return Response(response_dict)        
+        return Response(response_dict)
 
     def create(self, request):
         try:
@@ -425,10 +425,10 @@ class VendorBasicViewSet(viewsets.ViewSet):
         start = per_page * current_page
         end = per_page * current_page + per_page
         print('START END', start, end)
-        
+
         all_objs = VendorBasicInfo.objects.all()
         print('QUERY FILTER', query_filter, current_page, per_page)
-        
+
         response_dict = {}
         if query_filter is not None:
             vendor_basic = all_objs.filter(**query_filter)[start:end]
@@ -443,26 +443,23 @@ class VendorBasicViewSet(viewsets.ViewSet):
         response_dict = {'data': serializer.data,
                              'count': count}
 
-        return Response(response_dict)        
+        return Response(response_dict)
 
     def create(self, request):
         try:
             vendor_data = request.data
             print(' ADDED DATA')
             print('vendor_data',vendor_data)
-            print(vendor_data['trades'][0])
-            
-            serializer = VendorBasicSerializer(
-                data=request.data, context={"request": request})
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
+            new_vendor = VendorBasicInfo.objects.create(vendor_name=vendor_data['vendor_name'], contact_name=vendor_data['contact_name'],contact_email=vendor_data['contact_email'], contact_phone=vendor_data['contact_phone'], designation=vendor_data['designation'], department=vendor_data['department'], created_by=User.objects.get(id=vendor_data['created_by']),  )
+            new_vendor.save()
 
+            serializer = VendorBasicSerializer(new_vendor)
             print('Vendor Serializer', serializer.data['id'])
 
             new_history = VendorHistory.objects.create(vendor_id=VendorBasicInfo.objects.get(id=serializer.data['id']), modified_by=User.objects.get(id=vendor_data['created_by']), change_type='create', model_changed='Vendor Basic')
             new_history.save()
             dict_response = {"error": False,
-                             "message": "Vendor Basic Information saved successfully"}
+                             "message": "Vendor Basic Information saved successfully",}
         except:
             dict_response = {'error': True,
                              'message': "Error During Saving Vendor Basic Information"}
@@ -507,7 +504,7 @@ class VendorBasicViewSet(viewsets.ViewSet):
             vendor_basic = get_object_or_404(queryset, pk=pk)
 
             vendor_basic1 = VendorBasicSerializer(vendor_basic)
-            
+
             queryset1 = VendorHistory.objects.filter(vendor_id__id = vendor_basic1.data['id'])
             #history = ContentHistory.objects.all()
             serializer = VendorHistorySerializer(
@@ -532,10 +529,10 @@ class CertificatesAndLisencesViewSet(viewsets.ViewSet):
         start = per_page * current_page
         end = per_page * current_page + per_page
         print('START END', start, end)
-        
+
         all_objs = CertificatesAndLisences.objects.all()
         print('QUERY FILTER', query_filter, current_page, per_page)
-        
+
         response_dict = {}
         if query_filter is not None:
             cert_n_lisc = all_objs.filter(**query_filter)[start:end]
@@ -550,7 +547,7 @@ class CertificatesAndLisencesViewSet(viewsets.ViewSet):
         response_dict = {'data': serializer.data,
                              'count': count}
 
-        return Response(response_dict)        
+        return Response(response_dict)
 
     def create(self, request):
         try:
@@ -558,7 +555,7 @@ class CertificatesAndLisencesViewSet(viewsets.ViewSet):
             print(' ADDED DATA')
             print('cert_data',cert_data)
             #print(vendor_data['trades'][0])
-            
+
             serializer = CertAndLisencesSerializer(
                 data=request.data, context={"request": request})
             serializer.is_valid(raise_exception=True)
@@ -630,10 +627,10 @@ class VendorAddressViewSet(viewsets.ViewSet):
         start = per_page * current_page
         end = per_page * current_page + per_page
         print('START END', start, end)
-        
+
         all_objs = VendorAddress.objects.all()
         print('QUERY FILTER', query_filter, current_page, per_page)
-        
+
         response_dict = {}
         if query_filter is not None:
             vendor_add = all_objs.filter(**query_filter)[start:end]
@@ -648,7 +645,7 @@ class VendorAddressViewSet(viewsets.ViewSet):
         response_dict = {'data': serializer.data,
                              'count': count}
 
-        return Response(response_dict)        
+        return Response(response_dict)
 
     def create(self, request):
         try:
@@ -659,7 +656,6 @@ class VendorAddressViewSet(viewsets.ViewSet):
             new_address.save()
 
             serializer = VendorAddressSerializer(new_address)
-            #print('uff', serializer.data)
 
             new_history = VendorHistory.objects.create(vendor_id=VendorBasicInfo.objects.get(id=ven_address_data['vendor_id']), modified_by=User.objects.get(id=ven_address_data['created_by']), change_type='create', model_changed= 'Vendor Address', )
             new_history.save()
@@ -723,7 +719,7 @@ class VendorUploadView(APIView):
     def get(self, request,):
         vendor_id = self.request.query_params.get('vendor_id')
         print('REQ DATA',vendor_id)
-        
+
         uploads = VendorFileUpload.objects.filter(vendor_id=int(vendor_id))
         print("PRINT UPLOADS", uploads)
 
@@ -769,7 +765,7 @@ class VendorUploadDetail(APIView):
                 print(x, "has changed")
                 new_history = VendorHistory.objects.create(vendor_id=VendorBasicInfo.objects.get(id=new_data['vendor_id']), modified_by=User.objects.get(id=new_data['uploaded_by']), change_type='modified',pre_value=upload1.data[x] , post_value=new_data[x],item_changed=x, model_changed='Vendor File Upload',)
                 new_history.save()
-        
+
         serializer = VendorFileUploadSerializer(upload, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -792,10 +788,10 @@ class NotesViewSet(viewsets.ViewSet):
         start = per_page * current_page
         end = per_page * current_page + per_page
         print('START END', start, end)
-        
+
         all_objs = Notes.objects.all()
         print('QUERY FILTER', query_filter, current_page, per_page)
-        
+
         response_dict = {}
         if query_filter is not None:
             vendor_notes = all_objs.filter(**query_filter)[start:end]
@@ -810,7 +806,7 @@ class NotesViewSet(viewsets.ViewSet):
         response_dict = {'data': serializer.data,
                              'count': count}
 
-        return Response(response_dict)        
+        return Response(response_dict)
 
     def create(self, request):
         try:
@@ -818,7 +814,7 @@ class NotesViewSet(viewsets.ViewSet):
             print(' ADDED DATA')
             print('notes_data',notes_data)
             #print(vendor_data['trades'][0])
-            
+
             serializer = NotesSerializer(
                 data=request.data, context={"request": request})
             serializer.is_valid(raise_exception=True)
@@ -889,7 +885,7 @@ class VendorHistoryViewSet(viewsets.ViewSet):
         print('REQ DATA',vendor_id)
         history = VendorHistory.objects.filter(vendor_id=int(vendor_id))
 
-        
+
         serializer = VendorHistorySerializer(
             history, many=True, context={"request": request})
         print("DATA", serializer.data)
@@ -955,7 +951,7 @@ class ReviewTemplateViewSet(viewsets.ViewSet):
         start = per_page * current_page
         end = per_page * current_page + per_page
         print('START END', start, end)
-        
+
         all_objs = ReviewTemplate.objects.all()
         print('QUERY FILTER', query_filter, current_page, per_page)
         #query_filter = ast.literal_eval(query_filter)
@@ -973,7 +969,7 @@ class ReviewTemplateViewSet(viewsets.ViewSet):
         response_dict = {'data': serializer.data,
                              'count': count}
 
-        return Response(response_dict)        
+        return Response(response_dict)
 
     def create(self, request):
         try:
@@ -1033,7 +1029,7 @@ class ReviewResponseViewSet(viewsets.ViewSet):
         start = per_page * current_page
         end = per_page * current_page + per_page
         print('START END', start, end)
-        
+
         all_objs = ReviewResponse.objects.all()
         print('QUERY FILTER', query_filter, current_page, per_page)
         #query_filter = ast.literal_eval(query_filter)
@@ -1051,7 +1047,7 @@ class ReviewResponseViewSet(viewsets.ViewSet):
         response_dict = {'data': serializer.data,
                              'count': count}
 
-        return Response(response_dict)        
+        return Response(response_dict)
 
     def create(self, request):
         try:
@@ -1111,7 +1107,7 @@ class ReviewResponseStatusViewSet(viewsets.ViewSet):
         start = per_page * current_page
         end = per_page * current_page + per_page
         print('START END', start, end)
-        
+
         all_objs = ReviewResponseStatus.objects.all()
         print('QUERY FILTER', query_filter, current_page, per_page)
         #query_filter = ast.literal_eval(query_filter)
@@ -1129,7 +1125,7 @@ class ReviewResponseStatusViewSet(viewsets.ViewSet):
         response_dict = {'data': serializer.data,
                              'count': count}
 
-        return Response(response_dict)        
+        return Response(response_dict)
 
     def create(self, request):
         try:
@@ -1188,7 +1184,7 @@ class ComplianceVendorTaskViewSet(viewsets.ViewSet):
         start = per_page * current_page
         end = per_page * current_page + per_page
         print('START END', start, end)
-        
+
         all_objs = ComplianceVendorTask.objects.all()
         print('QUERY FILTER', query_filter, current_page, per_page)
         #query_filter = ast.literal_eval(query_filter)
@@ -1206,7 +1202,7 @@ class ComplianceVendorTaskViewSet(viewsets.ViewSet):
         response_dict = {'data': serializer.data,
                              'count': count}
 
-        return Response(response_dict)        
+        return Response(response_dict)
 
     def create(self, request):
         try:
@@ -1265,7 +1261,7 @@ class ComplianceVendorResponseViewSet(viewsets.ViewSet):
         start = per_page * current_page
         end = per_page * current_page + per_page
         print('START END', start, end)
-        
+
         all_objs = ComplianceVendorResponse.objects.all()
         print('QUERY FILTER', query_filter, current_page, per_page)
         #query_filter = ast.literal_eval(query_filter)
@@ -1283,7 +1279,7 @@ class ComplianceVendorResponseViewSet(viewsets.ViewSet):
         response_dict = {'data': serializer.data,
                              'count': count}
 
-        return Response(response_dict)        
+        return Response(response_dict)
 
     def create(self, request):
         try:
@@ -1342,7 +1338,7 @@ class ComplianceTaskCriteriaViewSet(viewsets.ViewSet):
         start = per_page * current_page
         end = per_page * current_page + per_page
         print('START END', start, end)
-        
+
         all_objs = ComplianceTaskCriteria.objects.all()
         print('QUERY FILTER', query_filter, current_page, per_page)
         #query_filter = ast.literal_eval(query_filter)
@@ -1360,7 +1356,7 @@ class ComplianceTaskCriteriaViewSet(viewsets.ViewSet):
         response_dict = {'data': serializer.data,
                              'count': count}
 
-        return Response(response_dict)        
+        return Response(response_dict)
 
     def create(self, request):
         try:
@@ -1419,7 +1415,7 @@ class VendorComplianceStatusViewSet(viewsets.ViewSet):
         start = per_page * current_page
         end = per_page * current_page + per_page
         print('START END', start, end)
-        
+
         all_objs = VendorComplianceStatus.objects.all()
         print('QUERY FILTER', query_filter, current_page, per_page)
         #query_filter = ast.literal_eval(query_filter)
@@ -1437,7 +1433,7 @@ class VendorComplianceStatusViewSet(viewsets.ViewSet):
         response_dict = {'data': serializer.data,
                              'count': count}
 
-        return Response(response_dict)        
+        return Response(response_dict)
 
     def create(self, request):
         try:
@@ -1497,7 +1493,7 @@ class VendorComplianceHistoryViewSet(viewsets.ViewSet):
         start = per_page * current_page
         end = per_page * current_page + per_page
         print('START END', start, end)
-        
+
         all_objs = VendorComplianceHistory.objects.all()
         print('QUERY FILTER', query_filter, current_page, per_page)
         #query_filter = ast.literal_eval(query_filter)
@@ -1515,7 +1511,7 @@ class VendorComplianceHistoryViewSet(viewsets.ViewSet):
         response_dict = {'data': serializer.data,
                              'count': count}
 
-        return Response(response_dict)        
+        return Response(response_dict)
 
     def create(self, request):
         try:
