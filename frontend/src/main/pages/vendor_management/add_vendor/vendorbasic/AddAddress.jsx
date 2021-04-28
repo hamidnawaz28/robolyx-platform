@@ -1,15 +1,15 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import Input from "../../../../components/Input";
+import Input from "../../../../../components/Input";
 import { Grid, Button } from "@material-ui/core";
 // import Button from '@material-ui/core/Button';
 import { vendorAddressSchema } from "../formvalidations/Schemas";
 import { VendorAddressInitialValues } from "../formvalidations/InitialValues";
-import { gr1, gr2, gr3, gr4, gr6 } from "../../../../components/Theme";
+import { gr1, gr2, gr3, gr4, gr6 } from "../../../../../components/Theme";
 
-import GridInput from "../../../../components/GridInput";
+import GridInput from "../../../../../components/GridInput";
 // import MailTemplate from "./MailTemplate";
-import { postVendorBasicData } from "../../../../services/VendorManagement";
+import { postVendorBasicData } from "../../../../../services/VendorManagement";
 
 const RequestForm = ({handleSubmit}) => (
   <div>

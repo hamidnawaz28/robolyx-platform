@@ -9,7 +9,7 @@ import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import AddVendorIcon from "../../../../assets/supply-chain.png";
 import SupplierRequest from "./supplierrequest/RequestForm";
-
+import VendorBasicData from "./vendorbasic/VendorBasicData";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -95,7 +95,7 @@ export default function AddVendor() {
           <SupplierRequest />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          Item Two
+          <VendorBasicData/>
         </TabPanel>
       </div>
     </React.Fragment>
