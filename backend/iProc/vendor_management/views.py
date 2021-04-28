@@ -27,7 +27,7 @@ class VendorRequestViewSet(viewsets.ViewSet):
     #permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        query_filter = json.loads(self.request.query_params.get("query"))
+        query_filter = json.loads(self.request.query_params.get("q"))
         current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
         start = per_page * current_page
@@ -111,7 +111,7 @@ class VendorTagsViewSet(viewsets.ViewSet):
     #permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        query_filter = json.loads(self.request.query_params.get("query"))
+        query_filter = json.loads(self.request.query_params.get("q"))
         current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
         start = per_page * current_page
@@ -121,6 +121,7 @@ class VendorTagsViewSet(viewsets.ViewSet):
         all_vendor_cats = VendorTags.objects.all()
         print('QUERY FILTER', query_filter, current_page, per_page)
         #query_filter = ast.literal_eval(query_filter)
+         
         response_dict = {}
         if query_filter is not None:
             ven_tags = all_vendor_cats.filter(**query_filter)[start:end]
@@ -138,6 +139,7 @@ class VendorTagsViewSet(viewsets.ViewSet):
         return Response(response_dict)
 
     def create(self, request):
+        print("REQUEST DATA", request.data)
         try:
             serializer = VendorTagsSerializer(
                 data=request.data, context={"request": request})
@@ -188,7 +190,7 @@ class CategoriesViewSet(viewsets.ViewSet):
     #permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        query_filter = json.loads(self.request.query_params.get("searchQuery"))
+        query_filter = json.loads(self.request.query_params.get("q"))
         current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
         start = per_page * current_page
@@ -265,7 +267,7 @@ class TradesViewSet(viewsets.ViewSet):
     #permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        query_filter = json.loads(self.request.query_params.get("searchQuery"))
+        query_filter = json.loads(self.request.query_params.get("q"))
         current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
         start = per_page * current_page
@@ -342,7 +344,7 @@ class DiversityClassificationViewSet(viewsets.ViewSet):
     #permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        query_filter = json.loads(self.request.query_params.get("searchQuery"))
+        query_filter = json.loads(self.request.query_params.get("q"))
         current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
         start = per_page * current_page

@@ -38,7 +38,7 @@ class VendorBasicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = VendorBasicInfo
-        fields = '__all__'
+        fields = ['id', 'vendor_name', 'contact_name', 'contact_email', 'contact_phone', 'designation', 'department', 'created_by',]
 
 class CertAndLisencesSerializer(serializers.ModelSerializer):
 
