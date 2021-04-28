@@ -23,13 +23,7 @@ const RequestForm = ({handleSubmit}) => (
           <Grid container>
             <Grid {...gr1}>
               <Grid container spacing={3}>
-                <GridInput
-                  sp="2"
-                  label="Vendor Id"
-                  placeholder="Enter a vendor id"
-                  type="text"
-                  name="vendor_id"
-                />
+                
                 <GridInput
                   sp="2"
                   label="Address Type"
@@ -101,20 +95,8 @@ const RequestForm = ({handleSubmit}) => (
                   type="text"
                   name="lattitude"
                 />
-                <GridInput
-                  sp="2"
-                  label="Created By"
-                  placeholder="Created by"
-                  type="text"
-                  name="created_by"
-                />
-                <GridInput
-                  sp="2"
-                  label="Created At"
-                  placeholder="Created At"
-                  type="text"
-                  name="created_at"
-                />
+                
+               
 
               </Grid>
 

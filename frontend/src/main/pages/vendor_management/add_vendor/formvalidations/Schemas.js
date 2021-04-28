@@ -22,12 +22,11 @@ export const vendorBasicSchema = Yup.object().shape({
   contact_phone:stringRequired,
   designation:stringRequired,
   department:stringRequired,
-  created_by:stringRequired,
+ 
 
 
 });
 export const vendorAddressSchema = Yup.object().shape({
-  vendor_id:stringRequired,
   address_type:stringRequired,
   street_address:stringRequired, 
   postal_code:stringRequired,
@@ -38,8 +37,7 @@ export const vendorAddressSchema = Yup.object().shape({
   billing_status:stringRequired,
   longitude:stringRequired,
   lattitude:stringRequired,
-  created_by:stringRequired,
-  created_at:stringRequired,
+  
 
 
 });

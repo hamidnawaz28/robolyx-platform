@@ -29,8 +29,6 @@ const RequestForm = () => {
   "City": "city",
   "State": "state",
   "Country": "country",
-  "Created At": "created_at",
-  "Created By": "created_by",
   "Lattitude": "lattitude",
   "Longitude": "longitude"
  
@@ -108,13 +106,7 @@ const RequestForm = () => {
                       type="text"
                       name="department"
                     />
-                    <GridInput
-                      sp="2"
-                      label="Created By"
-                      placeholder="Created by"
-                      type="text"
-                      name="created_by"
-                    />
+                    
     
     
                   </Grid>

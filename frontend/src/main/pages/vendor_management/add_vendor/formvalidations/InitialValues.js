@@ -19,11 +19,11 @@ export const vendorBasicInitalValues = {
   contact_phone: "",
   designation:"",
   department:"",
-  created_by:"",
+ 
 };
 
 export const VendorAddressInitialValues = {
-  vendor_id: "",
+
   address_type: "",
   street_address: "", 
   postal_code: "",
@@ -34,9 +34,7 @@ export const VendorAddressInitialValues = {
   billing_status: "",
   longitude: "",
   lattitude: "",
-  created_by: "",
-  created_at: "",
-
+  
 };
 
 
