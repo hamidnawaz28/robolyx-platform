@@ -303,10 +303,7 @@ const SupplierRequests = async(() =>
     "../main/pages/vendorManagement/supplierrequest/allrequests/SupplierData"
   )
 );
-const VendorBasic= async(() =>
-  import("../main/pages/vendorManagement/vendorbasic/VendorBasicData")
-);
-const vendorManagement = {
+const supplierManagement = {
   id: "Vendor Management",
   path: "/vendor-management",
   icon: <CardTravelIcon />,
@@ -326,12 +323,6 @@ const vendorManagement = {
       path: "/vendor-management/supplier-requests",
       component: SupplierRequests,
     },
-    {
-      name: "Vendor Basic",
-      path: "/vendor-management/vendor-basic",
-      component: VendorBasic,
-    }
-
   ],
   component: null,
 };
