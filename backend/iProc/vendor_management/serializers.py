@@ -28,6 +28,13 @@ class TradesSerializer(serializers.ModelSerializer):
         model = Trades
         fields = '__all__'
 
+class TradesSerializerWithDepth(serializers.ModelSerializer):
+
+    class Meta:
+        model = Trades
+        fields = '__all__'
+        depth = 1
+
 class DiversityClassificationSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -38,7 +45,13 @@ class VendorBasicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = VendorBasicInfo
-        fields = ['id', 'vendor_name', 'contact_name', 'contact_email', 'contact_phone', 'designation', 'department', 'created_by',]
+        fields = ['id', 'vendor_name', 'contact_name', 'contact_email', 'contact_phone', 'designation', 'department', 'created_by','approval_status',]
+
+class PendingVendorBasicSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = VendorBasicInfo
+        fields = [ 'approval_status',]
 
 class CertAndLisencesSerializer(serializers.ModelSerializer):
 

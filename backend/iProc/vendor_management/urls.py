@@ -3,7 +3,8 @@ from rest_framework import routers
 from .views import VendorRequestViewSet, VendorTagsViewSet, CategoriesViewSet, TradesViewSet, DiversityClassificationViewSet, \
 VendorBasicViewSet, CertificatesAndLisencesViewSet, VendorAddressViewSet, VendorUploadView, VendorUploadDetail, NotesViewSet, \
 VendorHistoryViewSet, ReviewTemplateViewSet, ReviewResponseViewSet, ReviewResponseStatusViewSet, ComplianceVendorTaskViewSet, \
-ComplianceVendorResponseViewSet, ComplianceTaskCriteriaViewSet, VendorComplianceStatusViewSet, VendorComplianceHistoryViewSet
+ComplianceVendorResponseViewSet, ComplianceTaskCriteriaViewSet, VendorComplianceStatusViewSet, VendorComplianceHistoryViewSet, \
+ApprovedVendorsViewSet, PendingVendorsViewSet
 
 router=routers.DefaultRouter()
 router.register("vendor-req", VendorRequestViewSet, basename='vendor-req')
@@ -24,6 +25,9 @@ router.register("comp-vendor-response", ComplianceVendorResponseViewSet, basenam
 router.register("comp-task-criteria", ComplianceTaskCriteriaViewSet, basename='comp-task-criteria')
 router.register("vendor_compliance-status", VendorComplianceStatusViewSet, basename='vendor_compliance-status')
 router.register("review-response-history", VendorComplianceHistoryViewSet, basename='review-response-history')
+router.register("approved-vendors", ApprovedVendorsViewSet, basename='approved-vendors')
+router.register("pending-vendors", PendingVendorsViewSet, basename='pending-vendors')
+
 
 urlpatterns = [
     path('', include(router.urls)),

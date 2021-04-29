@@ -294,7 +294,7 @@ function TableData(props) {
     return () => {
       dispatch(resetStates());
     };
-  }, []);
+  }, [apiLink]);
   const variant = "contained";
   const color = "primary";
   return (

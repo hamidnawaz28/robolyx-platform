@@ -13,6 +13,7 @@ import { updateProgressStatus } from "../../global/progress/reducer";
 import admin from "../../main/adminPanel/reducers/admin.reducer";
 
 import { ticketReducer } from "../../main/pages/tickets/redux/ticketReducers";
+import { vendorApprovalReducer } from "../../main/pages/vendor_management/vendor_admin/redux/approvalReducers";
 
 export default combineReducers({
   themeReducer,
@@ -27,4 +28,5 @@ export default combineReducers({
   updateProgressStatus,
   utilsData,
   tickets: ticketReducer,
+  vendorApproval: vendorApprovalReducer,
 });

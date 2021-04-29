@@ -23,22 +23,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function TradesQueryForm(props) {
+function CategoriesQueryForm(props) {
   const dispatch = useDispatch();
   const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const tableStates = useSelector((state) => state.tableStates);
   const { perPage, currentPage, query } = tableStates;
-  const { apiLink } = props;
+  const { apiLink, initialState, tableName } = props;
   const classes = useStyles();
-  const initialState = {
-    name__icontains: "",
-  };
+
   const [formData, setFormData] = useState(initialState);
+
   const credentials = apiLink;
   let fetchApiData = {
     currentPage: currentPage,
     perPage: perPage,
-    project: "1",
   };
   const searchQueryHandle = () => {
     fetchApiData["query"] = formData;
@@ -66,7 +64,7 @@ function TradesQueryForm(props) {
             id="outlined-basic"
             variant="outlined"
             style={{ width: "100%" }}
-            label="Trade Name"
+            label={tableName}
             value={formData.name__icontains}
             size="small"
             onChange={(e) =>
@@ -110,4 +108,4 @@ function TradesQueryForm(props) {
     </BorderWrapper>
   );
 }
-export default TradesQueryForm;
+export default CategoriesQueryForm;

@@ -3,11 +3,11 @@ from rest_framework.response import Response
 from .models import VendorRequest, VendorTags, Categories, Trades, DiversityClassification, VendorBasicInfo, CertificatesAndLisences,\
 VendorAddress, VendorFileUpload, Notes, VendorHistory, ReviewTemplate, ReviewResponse, ReviewResponseStatus, ComplianceVendorTask, \
 ComplianceVendorResponse, ComplianceTaskCriteria, VendorComplianceStatus, VendorComplianceHistory
-from .serializers import VendorRequestSerializer, VendorTagsSerializer, CategoriesSerializer, TradesSerializer,\
+from .serializers import VendorRequestSerializer, VendorTagsSerializer, CategoriesSerializer, TradesSerializer, TradesSerializerWithDepth, \
 DiversityClassificationSerializer, VendorBasicSerializer, CertAndLisencesSerializer, VendorAddressSerializer,\
 VendorFileUploadSerializer, NotesSerializer, VendorHistorySerializer, ReviewTemplateSerializer, ReviewResponseSerializer, \
 ReviewResponseStatusSerializer, ComplianceVendorTaskSerializer, ComplianceVendorResponseSerializer, ComplianceTaskCriteriaSerializer, \
-VendorComplianceStatusSerializer, VendorComplianceHistorySerializer
+VendorComplianceStatusSerializer, VendorComplianceHistorySerializer, PendingVendorBasicSerializer
 from rest_framework.generics import get_object_or_404
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.contrib.auth.models import User
@@ -458,10 +458,13 @@ class VendorBasicViewSet(viewsets.ViewSet):
             serializer = VendorBasicSerializer(new_vendor)
             print('Vendor Serializer', serializer.data['id'])
 
+            newvendorid=VendorBasicInfo.objects.get(id=serializer.data['id'])
+            serializer1 = VendorBasicSerializer(newvendorid)
+
             new_history = VendorHistory.objects.create(vendor_id=VendorBasicInfo.objects.get(id=serializer.data['id']), modified_by=User.objects.get(id=vendor_data['created_by']), change_type='create', model_changed='Vendor Basic')
             new_history.save()
             dict_response = {"error": False,
-                             "message": "Vendor Basic Information saved successfully",}
+                             "message": "Vendor Basic Information saved successfully", "vendorid": serializer1.data}
         except:
             dict_response = {'error': True,
                              'message': "Error During Saving Vendor Basic Information"}
@@ -490,8 +493,32 @@ class VendorBasicViewSet(viewsets.ViewSet):
             dict_response = {"error": False,
                              "message": "Successfully Updated Vendor"}
         except:
-            dict_response = {'error': True,
+            dict_response = {'error':           True,
                              'message': "Error During Updating Vendor"}
+        return Response(dict_response)
+
+    def partial_update(self, request, pk=id):
+        new_data = request.data
+        try:
+            queryset = VendorBasicInfo.objects.all()
+            vendor = get_object_or_404(queryset, pk=pk)
+
+            vendor1 = VendorBasicSerializer(vendor)
+            print('vendor',vendor1.data)
+            print('vendor',new_data)
+
+            new_history = VendorHistory.objects.create(vendor_id=VendorBasicInfo.objects.get(id = vendor1.data['id']), modified_by=User.objects.get(id=vendor1.data['created_by']), change_type='modified',pre_value=vendor1.data['approval_status'] , post_value=new_data['approval_status'],item_changed="approval_status")
+            new_history.save()
+
+            serializer = PendingVendorBasicSerializer(
+                vendor, data=request.data, context={"request": request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            dict_response = {"error": False,
+                             "message": "Successfully Updated Vendor's Approval Status"}
+        except:
+            dict_response = {'error': True,
+                             'message': "Error During Updating Vendor's Approval Status"}
         return Response(dict_response)
 
     def retrieve(self, request, pk=id):
@@ -1560,3 +1587,67 @@ class VendorComplianceHistoryViewSet(viewsets.ViewSet):
             dict_response = {'error': True,
                              'message': "Error During Deleting Vendor Compliance History"}
         return Response(dict_response)
+
+class ApprovedVendorsViewSet(viewsets.ViewSet):
+    #authentication_classes = [JWTAuthentication]
+    #permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        query_filter = json.loads(self.request.query_params.get("query"))
+        current_page = int(self.request.query_params.get("currentPage"))
+        per_page = int(self.request.query_params.get("perPage"))
+        start = per_page * current_page
+        end = per_page * current_page + per_page
+        print('START END', start, end)
+
+        all_objs = VendorBasicInfo.ApprovedVendors.all()
+        print('QUERY FILTER', query_filter, current_page, per_page)
+        #query_filter = ast.literal_eval(query_filter)
+        response_dict = {}
+        if query_filter is not None:
+            approved_vendors = all_objs.filter(**query_filter)[start:end]
+            count = all_objs.count()
+        else:
+            approved_vendors = all_objs[start:end]
+            count = all_objs.count()
+
+        serializer = VendorBasicSerializer(
+            approved_vendors, many=True, context={"request": request})
+
+        response_dict = {'data': serializer.data,
+                             'count': count}
+
+        return Response(response_dict)
+
+class PendingVendorsViewSet(viewsets.ViewSet):
+    #authentication_classes = [JWTAuthentication]
+    #permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        query_filter = json.loads(self.request.query_params.get("query"))
+        current_page = int(self.request.query_params.get("currentPage"))
+        per_page = int(self.request.query_params.get("perPage"))
+        curr = current_page-1
+        print("curr", curr)
+        start = per_page * curr
+        end = per_page * curr + per_page
+        print('START END', start, end)
+
+        all_objs = VendorBasicInfo.PendingVendors.all()
+        print('QUERY FILTER', query_filter, current_page, per_page)
+        #query_filter = ast.literal_eval(query_filter)
+        response_dict = {}
+        if query_filter is not None:
+            pending_vendors = all_objs.filter(**query_filter)[start:end]
+            count = all_objs.count()
+        else:
+            pending_vendors = all_objs[start:end]
+            count = all_objs.count()
+
+        serializer = VendorBasicSerializer(
+            pending_vendors, many=True, context={"request": request})
+
+        response_dict = {'data': serializer.data,
+                             'count': count}
+
+        return Response(response_dict)

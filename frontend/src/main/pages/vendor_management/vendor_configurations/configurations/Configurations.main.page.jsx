@@ -1,19 +1,27 @@
 import React from "react";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import VendorTags from "./tags/Tags";
-import VendorTrades from "./trades/Trades";
-import VendorCategories from "./categories/Categories";
-import VendorDiversity from "./diversity/Diversity";
+import VendorConfigs from "./vendor_config/VendorConfigs";
+import {
+  VENDOR_TRADES_API_LINK,
+  VENDOR_TRADES_COLUMNS,
+  VENDOR_TAGS_API_LINK,
+  VENDOR_TAGS_COLUMNS,
+  VENDOR_CATEGORIES_API_LINK,
+  VENDOR_CATEGORIES_COLUMNS,
+  VENDOR_DIVERSITY_API_LINK,
+  VENDOR_DIVERSITY_COLUMNS,
+} from "../../../../../global/constants";
+import { resetStates } from "../../../../../global/table/table.actionCreators";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120,
+    minWidth: 180,
     marginBottom: "1em",
   },
   selectEmpty: {
@@ -23,16 +31,33 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SimpleSelect() {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [configOption, setConfigOption] = React.useState("VendorTag");
 
   const handleChange = (event) => {
     setConfigOption(event.target.value);
+    dispatch(resetStates());
+  };
+
+  const initialState = {
+    name: "",
+    trade_status: "",
+  };
+  const initialStateForTrade = {
+    name: "",
+    trade_status: "",
+  };
+
+  const initialStateForSearch = {
+    name__icontains: "",
   };
 
   return (
     <div>
       <FormControl className={classes.formControl}>
-        <InputLabel id="demo-simple-select-label">Select</InputLabel>
+        <InputLabel id="demo-simple-select-label">
+          Select Configuration Type
+        </InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
@@ -46,13 +71,37 @@ export default function SimpleSelect() {
         </Select>
       </FormControl>
       {configOption == "VendorTag" ? (
-        <VendorTags />
+        <VendorConfigs
+          API_LINK={VENDOR_TAGS_API_LINK}
+          COLUMNS={VENDOR_TAGS_COLUMNS}
+          tableName={"Tags"}
+          initialState={initialState}
+          initialStateForSearch={initialStateForSearch}
+        />
       ) : configOption == "VendorTrades" ? (
-        <VendorTrades />
+        <VendorConfigs
+          API_LINK={VENDOR_TRADES_API_LINK}
+          COLUMNS={VENDOR_TRADES_COLUMNS}
+          tableName={"Trades"}
+          initialState={initialStateForTrade}
+          initialStateForSearch={initialStateForSearch}
+        />
       ) : configOption == "Categories" ? (
-        <VendorCategories />
+        <VendorConfigs
+          API_LINK={VENDOR_CATEGORIES_API_LINK}
+          COLUMNS={VENDOR_CATEGORIES_COLUMNS}
+          tableName={"Categories"}
+          initialState={initialStateForTrade}
+          initialStateForSearch={initialStateForSearch}
+        />
       ) : configOption == "Diversity" ? (
-        <VendorDiversity />
+        <VendorConfigs
+          API_LINK={VENDOR_DIVERSITY_API_LINK}
+          COLUMNS={VENDOR_DIVERSITY_COLUMNS}
+          tableName={"Diversity"}
+          initialState={initialState}
+          initialStateForSearch={initialStateForSearch}
+        />
       ) : (
         ""
       )}

@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import Table from "../../../../../../global/table/table.table";
-import {
-  VENDOR_TRADES_API_LINK,
-  VENDOR_TRADES_COLUMNS,
-} from "../../../../../../global/constants";
-import TradesDataForm from "./TradesDataForm";
-import TradesQueryForm from "./TradesQueryForm";
+import VendorConfigsDataForm from "./VendorConfigsDataForm";
+import VendorConfigsQueryForm from "./VendorConfigsQueryForm";
 import { Typography, Grid } from "@material-ui/core";
 import tagIcon from "../../../../../../assets/tag.png";
 import { makeStyles } from "@material-ui/core/styles";
@@ -20,12 +16,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function VendorTrades() {
+function VendorConfigs(props) {
   const [selectedRow, setSelectedRow] = useState("");
   const [actionType, setActionType] = useState("");
   const [formState, setFormState] = useState(false);
   const classes = useStyles();
   const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+
+  const {
+    API_LINK,
+    COLUMNS,
+    tableName,
+    initialState,
+    initialStateForSearch,
+  } = props;
 
   const addNewDataHandle = () => {
     setActionType("New");
@@ -40,44 +44,42 @@ function VendorTrades() {
   console.log("selectedRow from main page", selectedRow);
   return (
     <>
-      <Grid container justify="space-between">
+      <Grid container justify="space-between" alignItems="center">
         <Grid item>
           <Grid container spacing={2} alignItems="center">
-            <Grid item>
-              <img src={tagIcon} alt="tagIcon" className={classes.tagIcon} />
-            </Grid>
-            <Grid item>
-              <Typography variant={matches ? "h4" : "h3"}>
-                Vendor Trades
-              </Typography>
-            </Grid>
+            <Typography variant={matches ? "h4" : "h3"}>{tableName}</Typography>
           </Grid>
         </Grid>
         <Grid item>
-          <TradesQueryForm apiLink={VENDOR_TRADES_API_LINK} />
+          <VendorConfigsQueryForm
+            apiLink={API_LINK}
+            initialState={initialStateForSearch}
+            tableName={tableName}
+          />
         </Grid>
       </Grid>
 
       <Table
-        tableHeaders={VENDOR_TRADES_COLUMNS}
+        tableHeaders={COLUMNS}
         selectOption={true}
         paginationOption={true}
-        apiLink={VENDOR_TRADES_API_LINK}
+        apiLink={API_LINK}
         addNewDataHandle={addNewDataHandle}
         editDataHandle={editDataHandle}
       />
       {formState && (
-        <TradesDataForm
-          apiLink={VENDOR_TRADES_API_LINK}
-          table={"Trades"}
+        <VendorConfigsDataForm
+          apiLink={API_LINK}
+          table={tableName}
           actionType={actionType}
           formState={formState}
           formData={selectedRow}
           formCloseEvent={() => setFormState(false)}
+          initialState={initialState}
         />
       )}
     </>
   );
 }
 
-export default VendorTrades;
+export default VendorConfigs;

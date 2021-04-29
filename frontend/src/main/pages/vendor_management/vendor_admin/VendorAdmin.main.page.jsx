@@ -8,6 +8,8 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import AddVendorIcon from "../../../../assets/supply-chain.png";
+import VendorApprovals from "./vendor_approvals/VendorApprovals.main.page";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -55,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function VendorAdmin() {
   const classes = useStyles();
+  const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -68,11 +71,11 @@ export default function VendorAdmin() {
           <img
             src={AddVendorIcon}
             alt="add vendor logo"
-            style={{ width: "3em" }}
+            style={{ width: matches ? "2em" : "3em" }}
           />
         </Grid>
         <Grid item>
-          <Typography variant="h2">Vendor Admin</Typography>
+          <Typography variant={matches ? "h4" : "h2"}>Vendor Admin</Typography>
         </Grid>
       </Grid>
       <div className={classes.root}>
@@ -97,15 +100,15 @@ export default function VendorAdmin() {
           Item One
         </TabPanel>
         <TabPanel value={value} index={1}>
-          Item Two
+          <VendorApprovals />
         </TabPanel>
-        <TabPanel value={value} index={1}>
+        <TabPanel value={value} index={2}>
           Item 3
         </TabPanel>
-        <TabPanel value={value} index={1}>
+        <TabPanel value={value} index={3}>
           Item 4
         </TabPanel>
-        <TabPanel value={value} index={1}>
+        <TabPanel value={value} index={4}>
           Item 5
         </TabPanel>
       </div>

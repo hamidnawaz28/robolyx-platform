@@ -64,12 +64,3 @@ class PaymentTerm(models.Model):
 
     def __str__(self):
         return self.name
-
-class Diversity(models.Model):
-    name = models.CharField(max_length=255)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="diversity_rev")
-    created_at = models.DateField(default=timezone.now)
-    last_modified_date = models.DateField(default=timezone.now)
-
-    def __str__(self):
-        return self.name
