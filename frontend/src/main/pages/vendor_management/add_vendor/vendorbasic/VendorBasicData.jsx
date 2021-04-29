@@ -19,17 +19,17 @@ import { spacing } from '@material-ui/system';
 const RequestForm = () => {
   const [formstate, setFormState] = useState(false);
   const [vendoraddress,setVendorAddress] = useState([]);
-  const headers ={
+  const headers = {
     "Address Type": "address_type",
     "Street Address": "street_address",
     "Postal Code": "postal_code",
     "Subhurb Name": "subhurb_name",
-  "Billing Status": "billing_status",
-  "City": "city",
-  "State": "state",
-  "Country": "country",
-  "Lattitude": "lattitude",
-  "Longitude": "longitude"
+    "Billing Status": "billing_status",
+    "City": "city",
+    "State": "state",
+    "Country": "country",
+    "Lattitude": "lattitude",
+    "Longitude": "longitude"
   }
   const handleAddress = (address)=>{
      const addresses = [...vendoraddress]

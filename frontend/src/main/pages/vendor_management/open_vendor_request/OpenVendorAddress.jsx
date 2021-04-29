@@ -6,11 +6,14 @@ import { Grid, Button } from "@material-ui/core";
 import { openVendorAddressSchema } from "../formvalidations/Schemas";
 import { openVendorAddressInitialValues } from "../formvalidations/InitialValues";
 import { gr1, gr2, gr3, gr4, gr6 } from "../../../../components/Theme";
-
+import SelectField from "../../../../components/SelectField";
 import GridInput from "../../../../components/GridInput";
 // import MailTemplate from "./MailTemplate";
 import { postopenVendorData } from "../../../../services/VendorManagement";
-
+const addressData = [
+  {label:'Headquarter',value:'Headquarter'},
+  {label:'Site', value:'Site'}
+];
 const RequestForm = ({handleSubmit}) => (
   <div>
     <Formik
@@ -23,14 +26,14 @@ const RequestForm = ({handleSubmit}) => (
           <Grid container>
             <Grid {...gr1}>
               <Grid container spacing={3}>
-                
-                <GridInput
-                  sp="2"
-                  label="Address Type"
-                  placeholder="Enter address type"
-                  type="text"
-                  name="address_type"
-                />
+                <Grid xs={12} >
+                  <SelectField 
+                    label ={"Address Type"}
+                    name="street_address"
+                    data={addressData}
+                    style={{width:"100%",marginBottom: "20px"}}
+                  />
+                </Grid>
                 <GridInput
                   sp="2"
                   label="Street Address"

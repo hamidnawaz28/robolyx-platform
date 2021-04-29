@@ -28,16 +28,14 @@ const RequestForm = ({handleSubmit}) => (
         <form onSubmit={handleSubmit}>
           <Grid container>
             <Grid {...gr1}>
-              <Grid container spacing={3}>
-              
-              <Grid container xs={12} spacing={5}>
-                 <SelectField 
-                  label ={"Address Type"}
-                  name="street_address"
-                  placeholder="kk"
-                  data={addressData}
-                
-                />
+              <Grid container >
+                <Grid xs={12} >
+                  <SelectField 
+                    label ={"Address Type"}
+                    name="street_address"
+                    data={addressData}
+                    style={{width:"100%",marginBottom: "20px"}}
+                  />
               </Grid>
                 {/* <GridInput
                   sp="2"

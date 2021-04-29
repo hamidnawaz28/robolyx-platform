@@ -11,7 +11,6 @@ import {
 } from "@material-ui/core";
 
 function SelectField(props) {
-  
   const { label, data, ...rest } = props;
   const [field, meta] = useField(props);
   const { value: selectedValue } = field;
@@ -26,7 +25,7 @@ function SelectField(props) {
   return (
     <FormControl {...rest} error={isError}>
       <InputLabel style={{ fontSize: "0.85em" }}>{label}</InputLabel>
-      <Select {...field} value={""}>
+      <Select {...field} value={selectedValue ? selectedValue : ""}>
         {data.map((item, index) => (
           <MenuItem key={index} value={item.value}>
             <span style={{ fontSize: "0.85em" }}>{item.label}</span>
