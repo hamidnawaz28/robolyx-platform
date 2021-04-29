@@ -22,8 +22,7 @@ export const vendorBasicInitalValues = {
  
 };
 
-export const VendorAddressInitialValues = {
-
+export const vendorAddressInitialValues = {
   address_type: "",
   street_address: "", 
   postal_code: "",
@@ -34,7 +33,28 @@ export const VendorAddressInitialValues = {
   billing_status: "",
   longitude: "",
   lattitude: "",
-  
 };
-
+export const openVendorInitalValues = {
+  vendor_name: "",
+  contact_name: "",
+  contact_email: "",
+  contact_phone: "",
+  designation:"",
+  department:"",
+  password:"",
+  confirm_password:"",
+ 
+};
+export const openVendorAddressInitialValues = {
+  address_type: "",
+  street_address: "", 
+  postal_code: "",
+  subhurb_name: "",
+  city: "",
+  state: "",
+  country: "",
+  billing_status: "",
+  longitude: "",
+  lattitude: "",
+};
 

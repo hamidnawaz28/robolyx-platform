@@ -147,6 +147,11 @@ const VendorHomepage = async(() =>
   import(
     "../main/pages/vendor_management/vendor_homepage/VendorHomepage.main.page"
   )
+)
+ const OpenVendor = async(() =>
+  import(
+    "../main/pages/vendor_management/open_vendor_request/OpenVendorData"
+  )
 );
 const VendorAnalytics = async(() =>
   import(
@@ -538,6 +543,11 @@ const VendorManagement = {
       path: "/vendor-management/add-vendor",
       name: "Add Vendor",
       component: AddVendor,
+    },
+    {
+      path: "/vendor-management/open_vendor_request",
+      name: "Open Vendor",
+      component: OpenVendor,
     },
     {
       path: "/vendor-management/vendor-networks",

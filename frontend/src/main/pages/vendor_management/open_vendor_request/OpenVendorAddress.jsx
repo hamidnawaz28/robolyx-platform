@@ -1,27 +1,21 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import Input from "../../../../../components/Input";
+import Input from "../../../../components/Input";
 import { Grid, Button } from "@material-ui/core";
-import { sizing } from '@material-ui/system';
-
-import Box from '@material-ui/core/Box';
 // import Button from '@material-ui/core/Button';
-import { vendorAddressSchema } from "../../formvalidations/Schemas";
-import { vendorAddressInitialValues } from "../../formvalidations/InitialValues";
-import { gr1, gr2, gr3, gr4, gr6 } from "../../../../../components/Theme";
-import SelectField from "../../../../../components/SelectField";
-import GridInput from "../../../../../components/GridInput";
+import { openVendorAddressSchema } from "../formvalidations/Schemas";
+import { openVendorAddressInitialValues } from "../formvalidations/InitialValues";
+import { gr1, gr2, gr3, gr4, gr6 } from "../../../../components/Theme";
+
+import GridInput from "../../../../components/GridInput";
 // import MailTemplate from "./MailTemplate";
-import { postopenVendorData } from "../../../../../services/VendorManagement";
-const addressData = [
-  {label:'Headquarter',value:'Headquarter'},
-  {label:'Site', value:'Site'}
-];
+import { postopenVendorData } from "../../../../services/VendorManagement";
+
 const RequestForm = ({handleSubmit}) => (
   <div>
     <Formik
-      initialValues={vendorAddressInitialValues}
-      validationSchema={vendorAddressSchema}
+      initialValues={openVendorAddressInitialValues}
+      validationSchema={openVendorAddressSchema}
       onSubmit={handleSubmit}
     >
       {({ handleSubmit, handleChange, handleBlur, values, errors }) => (
@@ -29,23 +23,21 @@ const RequestForm = ({handleSubmit}) => (
           <Grid container>
             <Grid {...gr1}>
               <Grid container spacing={3}>
-              
-              <Grid container xs={12} spacing={5}>
-                 <SelectField 
-                  label ={"Address Type"}
-                  name="street_address"
-                  placeholder="kk"
-                  data={addressData}
                 
+                <GridInput
+                  sp="2"
+                  label="Address Type"
+                  placeholder="Enter address type"
+                  type="text"
+                  name="address_type"
                 />
-              </Grid>
-                {/* <GridInput
+                <GridInput
                   sp="2"
                   label="Street Address"
                   placeholder="Enter street address"
                   type="text"
                   name="street_address"
-                /> */}
+                />
                 <GridInput
                   sp="2"
                   label="Postal Code"
