@@ -24,10 +24,16 @@ class Categories(models.Model):
         return self.name
 
 class Trades(models.Model):
+
+    trade_options = (
+        ('primary', 'primary'),
+        ('secondary', 'secondary'),
+    )
     name = models.CharField(max_length=255)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="vendortrades_created_rev")
     created_at = models.DateField(default=timezone.now)
     last_modified_date = models.DateField(default=timezone.now)
+    trade_status = models.CharField(max_length=50, choices=trade_options, default="secondary",)
 
     def __str__(self):
         return self.name
@@ -49,6 +55,14 @@ class VendorBasicInfo(models.Model):
         ('pending', 'pending'),
     )
 
+    class ApprovedVendors(models.Manager):
+        def get_queryset(self):
+            return super().get_queryset().filter(approval_status="approved")
+
+    class PendingVendors(models.Manager):
+        def get_queryset(self):
+            return super().get_queryset().filter(approval_status="pending")
+
     vendor_name = models.CharField(max_length=255)
     contact_name = models.CharField(max_length=255)
     contact_email = models.EmailField(max_length=255)
@@ -63,6 +77,9 @@ class VendorBasicInfo(models.Model):
     approval_status = models.CharField(max_length=50, choices=approval_options, default="pending", blank=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="vendorbasic_created_rev")
     created_at = models.DateField(default=timezone.now)
+    objects = models.Manager()
+    ApprovedVendors = ApprovedVendors()
+    PendingVendors = PendingVendors()
 
     def __str__(self):
         return self.vendor_name

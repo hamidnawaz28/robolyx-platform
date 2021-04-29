@@ -41,7 +41,7 @@ class TicketViewSet(viewsets.ModelViewSet):
         ticket_data = request.data
         print(' ADDED DATA')
         print('ticket_data',ticket_data)
-        new_ticket = Ticket.objects.create(ticket_title=ticket_data['ticket_title'], ticket_number=ticket_data['ticket_number'],ticket_content=ticket_data['ticket_content'], ticket_color=ticket_data['ticket_color'], created_by=User.objects.get(id=ticket_data['created_by']),  priority=ticket_data['priority'],ticket_types=ticket_data['ticket_types'],responsible_person=User.objects.get(id=ticket_data['responsible_person']),due_date=ticket_data['due_date'], list_tickets=ticket_data['list_tickets'])
+        new_ticket = Ticket.objects.create(ticket_title=ticket_data['ticket_title'], ticket_number=ticket_data['ticket_number'],ticket_content=ticket_data['ticket_content'], ticket_color=ticket_data['ticket_color'], created_by=User.objects.get(id=ticket_data['created_by']),  priority=ticket_data['priority'],ticket_types=ticket_data['ticket_types'],responsible_person=User.objects.get(id=ticket_data['responsible_person']),due_date=ticket_data['due_date'], list_tickets=ticket_data['list_tickets'], approval_status='pending')
         new_ticket.save()
 
         serializer = TicketSerializer(new_ticket)
