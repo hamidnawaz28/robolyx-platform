@@ -16,8 +16,25 @@ import {
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import EditIcon from "@material-ui/icons/Edit";
 import localStorage from "../../../../../../common/storage/localStorage";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+    width: "100%",
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+}));
 
 function FormPopUp(props) {
+  const classes = useStyles();
   const {
     actionType,
     formData,
@@ -26,6 +43,7 @@ function FormPopUp(props) {
     updateDataFunction,
     apiLink,
     table,
+    initialState,
   } = props;
   const tableStates = useSelector((state) => state.tableStates);
   const { perPage, currentPage, query } = tableStates;
@@ -34,9 +52,6 @@ function FormPopUp(props) {
   const userId = user.userId;
   console.log("user", user.userId);
 
-  const initialState = {
-    name: "",
-  };
   const [popupFormData, setPopupFormData] = useState(initialState);
   const credentials = apiLink;
   const dispatch = useDispatch();
@@ -115,7 +130,7 @@ function FormPopUp(props) {
                   <TextField
                     id="outlined-basic"
                     variant="outlined"
-                    fullWidth
+                    style={{ width: "100%" }}
                     label="Name"
                     value={popupFormData.name}
                     onChange={(e) =>
@@ -127,6 +142,33 @@ function FormPopUp(props) {
                   />
                 </Box>
               </Grid>
+              {table == "Trades" ? (
+                <Grid xs={12}>
+                  <Box m={1}>
+                    <FormControl className={classes.formControl}>
+                      <InputLabel id="demo-simple-select-label">
+                        Trade Status
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={popupFormData.trade_status}
+                        onChange={(e) =>
+                          setPopupFormData({
+                            ...popupFormData,
+                            trade_status: e.target.value,
+                          })
+                        }
+                      >
+                        <MenuItem value={"primary"}>Primary</MenuItem>
+                        <MenuItem value={"secondary"}>Secondary</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </Grid>
+              ) : (
+                ""
+              )}
             </Grid>
           </DialogContent>
           <Grid container justify="center" style={{ marginBottom: "1em" }}>

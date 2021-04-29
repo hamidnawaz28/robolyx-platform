@@ -20,6 +20,11 @@ import {
   onPartialUpdateTicketStart,
 } from "../../main/pages/tickets/redux/ticketSaga";
 
+import {
+  onFetchPendingVendorsStart,
+  onPartialUpdateApprovalStatus,
+} from "../../main/pages/vendor_management/vendor_admin/redux/approvalSaga";
+
 export default function* rootSaga() {
   yield all([
     call(onAddStart),
@@ -37,5 +42,7 @@ export default function* rootSaga() {
     call(onFetchContentHistoryStart),
     call(onArchiveTicketsQueryStart),
     call(onPartialUpdateTicketStart),
+    call(onFetchPendingVendorsStart),
+    call(onPartialUpdateApprovalStatus),
   ]);
 }

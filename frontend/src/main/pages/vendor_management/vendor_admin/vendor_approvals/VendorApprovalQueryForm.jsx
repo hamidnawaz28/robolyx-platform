@@ -4,9 +4,9 @@ import { Grid, Button, Box, TextField, Typography } from "@material-ui/core";
 import { Search, RotateLeft } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import {
-  updateFormQuery,
-  fetchTableData,
-} from "../../../../../../global/table/table.actionCreators";
+  updateQuery,
+  fetchPendingVendorsStart,
+} from "../redux/approvalActions";
 import styled from "styled-components";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
@@ -23,39 +23,39 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function DiversityQueryForm(props) {
+function VendorApprovalQueryForm(props) {
   const dispatch = useDispatch();
   const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
-  const tableStates = useSelector((state) => state.tableStates);
-  const { perPage, currentPage, query } = tableStates;
-  const { apiLink } = props;
+  const vendorApproval = useSelector((state) => state.vendorApproval);
+  const { perPage, currentPage, query } = vendorApproval;
   const classes = useStyles();
+
   const initialState = {
-    name__icontains: "",
+    vendor_name__icontains: "",
   };
+
   const [formData, setFormData] = useState(initialState);
-  const credentials = apiLink;
+
   let fetchApiData = {
     currentPage: currentPage,
     perPage: perPage,
-    project: "1",
   };
+
   const searchQueryHandle = () => {
     fetchApiData["query"] = formData;
-    dispatch(updateFormQuery(formData));
-    dispatch(fetchTableData({ apiLink: credentials, fetchApiData }));
+    dispatch(updateQuery(formData));
+    dispatch(fetchPendingVendorsStart({ fetchApiData }));
   };
+
   const resetQueryHandle = () => {
     fetchApiData["query"] = JSON.stringify(initialState);
     setFormData(initialState);
-    dispatch(updateFormQuery(initialState));
-    dispatch(fetchTableData({ apiLink: credentials, fetchApiData }));
+    dispatch(updateQuery(initialState));
+    dispatch(fetchPendingVendorsStart({ fetchApiData }));
   };
-  // useEffect(()=>{
 
-  // },[])
   return (
-    <BorderWrapper p={3} mb={matches ? 0 : 3}>
+    <BorderWrapper p={matches ? 1 : 3} mb={matches ? 0 : 3}>
       <Grid
         container
         spacing={0}
@@ -65,29 +65,36 @@ function DiversityQueryForm(props) {
           <TextField
             id="outlined-basic"
             variant="outlined"
-            style={{ width: "100%" }}
-            label="Search Diversity"
-            value={formData.name__icontains}
+            label={matches ? "Vendor Name" : "Search by Vendor Name"}
+            style={{ width: matches ? "90%" : "100%" }}
+            value={formData.vendor_name__icontains}
             size="small"
             onChange={(e) =>
               setFormData({
                 ...formData,
-                name__icontains: e.target.value,
+                vendor_name__icontains: e.target.value,
               })
             }
           />
         </Grid>
-
-        <Grid item>
-          {matches ? (
+        {matches ? (
+          <Grid item>
             <Search
               onClick={() => searchQueryHandle()}
               style={{
-                marginLeft: "0.5em",
-                marginTop: "0.2em",
+                marginTop: "0.3em",
               }}
             />
-          ) : (
+            <RotateLeft
+              onClick={() => resetQueryHandle()}
+              style={{
+                marginLeft: "0.1em",
+                marginTop: "0.3em",
+              }}
+            />
+          </Grid>
+        ) : (
+          <Grid item>
             <Grid container spacing={2} className={classes.root}>
               <Grid item>
                 <Button
@@ -103,11 +110,25 @@ function DiversityQueryForm(props) {
                   Search
                 </Button>
               </Grid>
+              <Grid item>
+                <Button
+                  style={{
+                    backgroundColor: "#232f3e",
+                    color: "#fff",
+                    width: "10em",
+                  }}
+                  variant="contained"
+                  startIcon={<RotateLeft />}
+                  onClick={() => resetQueryHandle()}
+                >
+                  Reset
+                </Button>
+              </Grid>
             </Grid>
-          )}
-        </Grid>
+          </Grid>
+        )}
       </Grid>
     </BorderWrapper>
   );
 }
-export default DiversityQueryForm;
+export default VendorApprovalQueryForm;

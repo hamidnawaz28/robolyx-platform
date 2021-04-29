@@ -229,6 +229,7 @@ export const VENDOR_TRADES_COLUMNS = {
   "Created By": "created_by",
   "Created at": "created_at",
   "Last Modified Date": "last_modified_date",
+  Status: "trade_status",
 };
 
 export const VENDOR_CATEGORIES_COLUMNS = {
