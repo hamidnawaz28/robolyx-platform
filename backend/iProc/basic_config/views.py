@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
-from .models import BusinessUnit, Department, Regions, Divisions, Sites, Tags
-from .serializers import BusinessUnitSerializer, DepartmentSerializer, RegionsSerializer, DivisionsSerializer, SitesSerializer, TagsSerializer
+from .models import BusinessUnit, Department, Regions, Divisions, Sites, Tags, PaymentTerm
+from .serializers import BusinessUnitSerializer, DepartmentSerializer, RegionsSerializer, DivisionsSerializer, SitesSerializer, TagsSerializer, PaymentTermSerializer
 from rest_framework.generics import get_object_or_404
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.contrib.auth.models import User
@@ -558,3 +558,7 @@ class PaymentTermViewSet(viewsets.ViewSet):
             dict_response = {'error': True,
                              'message': "Error During Deleting Payment Term"}
         return Response(dict_response)
+
+class PaymentTermList(viewsets.ModelViewSet):
+    queryset=PaymentTerm.objects.all()
+    serializer_class=PaymentTermSerializer

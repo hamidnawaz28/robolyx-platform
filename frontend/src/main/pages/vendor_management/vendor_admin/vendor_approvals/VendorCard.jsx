@@ -84,7 +84,7 @@ export default function VendorCard({ vendor }) {
 
   return (
     <Card className={classes.root}>
-      <CardContent style={{ padding: "0.3em" }}>
+      <CardContent style={{ padding: "0.5em" }}>
         <Grid container>
           <Grid item md={3}>
             <Grid
@@ -95,7 +95,9 @@ export default function VendorCard({ vendor }) {
               justify="center"
             >
               <Grid item>
-                <Typography variant="h3">{vendor.vendor_name}</Typography>
+                <Typography variant={matches ? "h5" : "h3"}>
+                  {vendor.vendor_name}
+                </Typography>
                 <Typography variant="body1">Vendor ID: {vendor.id}</Typography>
               </Grid>
             </Grid>
@@ -109,8 +111,8 @@ export default function VendorCard({ vendor }) {
               paddingLeft: matches ? "0" : "1em",
             }}
           >
-            <Typography variant="h5">
-              Contact Name: {vendor.contact_name}
+            <Typography variant={matches ? "h6" : "h5"}>
+              {matches ? "" : "Contact Name:"} {vendor.contact_name}
             </Typography>
             <Grid container spacing={matches ? 0 : 6}>
               <Grid item xs={12} sm={12} md={6}>

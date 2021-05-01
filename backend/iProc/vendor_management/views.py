@@ -439,7 +439,7 @@ class VendorBasicViewSet(viewsets.ViewSet):
             vendor_basic = all_objs[start:end]
             count = all_objs.count()
 
-        serializer = VendorBasicSerializer(
+        serializer = PendingVendorBasicSerializer(
             vendor_basic, many=True, context={"request": request})
 
         response_dict = {'data': serializer.data,
@@ -503,15 +503,19 @@ class VendorBasicViewSet(viewsets.ViewSet):
             queryset = VendorBasicInfo.objects.all()
             vendor = get_object_or_404(queryset, pk=pk)
 
-            vendor1 = VendorBasicSerializer(vendor)
-            print('vendor',vendor1.data)
+            vendor1 = PendingVendorBasicSerializer(vendor)
+            print('vendor1',vendor1.data)
             print('vendor',new_data)
 
-            new_history = VendorHistory.objects.create(vendor_id=VendorBasicInfo.objects.get(id = vendor1.data['id']), modified_by=User.objects.get(id=vendor1.data['created_by']), change_type='modified',pre_value=vendor1.data['approval_status'] , post_value=new_data['approval_status'],item_changed="approval_status")
-            new_history.save()
+            for x in new_data:
+                print(new_data[x], vendor1.data[x])
+                if new_data[x] != vendor1.data[x]:
+                    print(x, "has changed")
+                    new_history = VendorHistory.objects.create(vendor_id=VendorBasicInfo.objects.get(id=vendor1.data['id']), modified_by=User.objects.get(id=vendor1.data['created_by']), change_type='modified',pre_value=vendor1.data[x] , post_value=new_data[x],item_changed=x)
+                    new_history.save()
 
             serializer = PendingVendorBasicSerializer(
-                vendor, data=request.data, context={"request": request})
+                vendor, data=request.data, context={"request": request}, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             dict_response = {"error": False,
@@ -1596,11 +1600,13 @@ class ApprovedVendorsViewSet(viewsets.ViewSet):
         query_filter = json.loads(self.request.query_params.get("query"))
         current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
-        start = per_page * current_page
-        end = per_page * current_page + per_page
+        curr = current_page-1
+        print("curr", curr)
+        start = per_page * curr
+        end = per_page * curr + per_page
         print('START END', start, end)
 
-        all_objs = VendorBasicInfo.ApprovedVendors.all()
+        all_objs = VendorBasicInfo.ApprovedVendors.all().order_by('-id')
         print('QUERY FILTER', query_filter, current_page, per_page)
         #query_filter = ast.literal_eval(query_filter)
         response_dict = {}
@@ -1611,7 +1617,7 @@ class ApprovedVendorsViewSet(viewsets.ViewSet):
             approved_vendors = all_objs[start:end]
             count = all_objs.count()
 
-        serializer = VendorBasicSerializer(
+        serializer = PendingVendorBasicSerializer(
             approved_vendors, many=True, context={"request": request})
 
         response_dict = {'data': serializer.data,
@@ -1651,3 +1657,20 @@ class PendingVendorsViewSet(viewsets.ViewSet):
                              'count': count}
 
         return Response(response_dict)
+
+class VendorTagsList(viewsets.ModelViewSet):
+    queryset=VendorTags.objects.all()
+    serializer_class=VendorTagsSerializer
+
+class VendorTradesList(viewsets.ModelViewSet):
+    queryset=Trades.objects.all()
+    serializer_class=TradesSerializer
+
+class VendorCategoriesList(viewsets.ModelViewSet):
+    queryset=Categories.objects.all()
+    serializer_class=CategoriesSerializer
+
+class DiversityClassificationList(viewsets.ModelViewSet):
+    queryset=DiversityClassification.objects.all()
+    serializer_class=DiversityClassificationSerializer
+

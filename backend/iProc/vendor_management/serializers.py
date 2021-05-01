@@ -51,7 +51,7 @@ class PendingVendorBasicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = VendorBasicInfo
-        fields = [ 'approval_status',]
+        fields = '__all__'
 
 class CertAndLisencesSerializer(serializers.ModelSerializer):
 
