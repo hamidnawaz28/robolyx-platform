@@ -53,6 +53,13 @@ class PendingVendorBasicSerializer(serializers.ModelSerializer):
         model = VendorBasicInfo
         fields = '__all__'
 
+class VendorBasicSerializerWithDepth(serializers.ModelSerializer):
+
+    class Meta:
+        model = VendorBasicInfo
+        fields = '__all__'
+        depth=1
+
 class CertAndLisencesSerializer(serializers.ModelSerializer):
 
     class Meta:

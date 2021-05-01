@@ -7,7 +7,7 @@ from .serializers import VendorRequestSerializer, VendorTagsSerializer, Categori
 DiversityClassificationSerializer, VendorBasicSerializer, CertAndLisencesSerializer, VendorAddressSerializer,\
 VendorFileUploadSerializer, NotesSerializer, VendorHistorySerializer, ReviewTemplateSerializer, ReviewResponseSerializer, \
 ReviewResponseStatusSerializer, ComplianceVendorTaskSerializer, ComplianceVendorResponseSerializer, ComplianceTaskCriteriaSerializer, \
-VendorComplianceStatusSerializer, VendorComplianceHistorySerializer, PendingVendorBasicSerializer
+VendorComplianceStatusSerializer, VendorComplianceHistorySerializer, PendingVendorBasicSerializer, VendorBasicSerializerWithDepth
 from rest_framework.generics import get_object_or_404
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.contrib.auth.models import User
@@ -1617,7 +1617,7 @@ class ApprovedVendorsViewSet(viewsets.ViewSet):
             approved_vendors = all_objs[start:end]
             count = all_objs.count()
 
-        serializer = PendingVendorBasicSerializer(
+        serializer = VendorBasicSerializerWithDepth(
             approved_vendors, many=True, context={"request": request})
 
         response_dict = {'data': serializer.data,

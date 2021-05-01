@@ -55,26 +55,14 @@ export default function MainFormik({ vendor }) {
 
     let post_data = {};
 
-    if (category.length > 0) {
-      category = category.map(String);
-      post_data.category = category;
-    }
-    if (tags.length > 0) {
-      tags = tags.map(String);
-      post_data.tags = tags;
-    }
-    if (trades.length > 0) {
-      trades = trades.map(String);
-      post_data.trades = trades;
-    }
-    if (diversity.length > 0) {
-      diversity = diversity.map(String);
-      post_data.diversity = diversity;
-    }
-    if (payment_term.length > 0) {
-      payment_term = payment_term.map(String);
-      post_data.payment_term = payment_term;
-    }
+    post_data.payment_term = payment_term
+      .map((payment) => payment.id)
+      .map(String);
+
+    post_data.category = category.map((cat) => cat.id).map(String);
+    post_data.tags = tags.map((tg) => tg.id).map(String);
+    post_data.trades = trades.map((trade) => trade.id).map(String);
+    post_data.diversity = diversity.map((diver) => diver.id).map(String);
 
     console.log("Hello", post_data);
 
