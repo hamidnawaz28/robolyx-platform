@@ -151,6 +151,8 @@ const VendorHomepage = async(() =>
 const OpenVendor = async(() =>
   import("../main/pages/vendor_management/open_vendor_request/OpenVendorData")
 );
+const ComplienceForm = async(()=>
+import("../main/pages/vendor_management/complience_form"))
 const VendorAnalytics = async(() =>
   import(
     "../main/pages/vendor_management/vendor_analytics/VendorAnalytics.main.page"
@@ -566,6 +568,11 @@ const VendorManagement = {
       path: "/vendor-management/vendor-configs",
       name: "Vendor Configurations",
       component: VendorConfigurations,
+    },
+    {
+      path: "/vendor-management/complience-form",
+      name: "Complience Form",
+      component: ComplienceForm,
     },
   ],
   component: null,

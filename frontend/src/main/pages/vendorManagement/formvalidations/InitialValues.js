@@ -17,26 +17,23 @@ export const vendorBasicInitalValues = {
   contact_name: "",
   contact_email: "",
   contact_phone: "",
-  designation:"",
-  department:"",
-  created_by:"",
+  designation: "",
+  department: "",
+  created_by: "",
 };
 
 export const VendorAddressInitialValues = {
   vendor_id: "",
   address_type: "",
-  street_address: "", 
+  street_address: "",
   postal_code: "",
-  subhurb_name: "",
+  suburb_name: "",
   city: "",
   state: "",
   country: "",
   billing_status: "",
   longitude: "",
-  lattitude: "",
+  latitude: "",
   created_by: "",
   created_at: "",
-
 };
-
-

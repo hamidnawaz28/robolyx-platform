@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { stringRequired,emailSchema ,passwordSchema} from "./YupValidations";
+import { stringRequired, emailSchema, passwordSchema } from "./YupValidations";
 
 export const supplierRequestSchema = Yup.object().shape({
   company_name: stringRequired,
@@ -16,46 +16,45 @@ export const supplierRequestSchema = Yup.object().shape({
 });
 export const createVendorSchema = Yup.object().shape({});
 export const vendorBasicSchema = Yup.object().shape({
-  vendor_name:stringRequired,
-  contact_name:stringRequired,
-  contact_email:emailSchema, 
-  contact_phone:stringRequired,
-  designation:stringRequired,
-  department:stringRequired,
+  vendor_name: stringRequired,
+  contact_name: stringRequired,
+  contact_email: emailSchema,
+  contact_phone: stringRequired,
+  designation: stringRequired,
+  department: stringRequired,
 });
 export const vendorAddressSchema = Yup.object().shape({
-  address_type:stringRequired,
-  street_address:stringRequired, 
-  postal_code:stringRequired,
-  subhurb_name:stringRequired,
-  city:stringRequired,
-  state:stringRequired,
-  country:stringRequired,
-  billing_status:stringRequired,
-  longitude:stringRequired,
-  lattitude:stringRequired,
+  address_type: stringRequired,
+  street_address: stringRequired,
+  postal_code: stringRequired,
+  suburb_name: stringRequired,
+  city: stringRequired,
+  state: stringRequired,
+  country: stringRequired,
+  billing_status: stringRequired,
+  longitude: stringRequired,
+  latitude: stringRequired,
 });
 
 export const openVendorSchema = Yup.object().shape({
-  vendor_name:stringRequired,
-  contact_name:stringRequired,
-  contact_email:emailSchema, 
-  contact_phone:stringRequired,
-  designation:stringRequired,
-  department:stringRequired,
-  password:passwordSchema,
-  confirm_password:passwordSchema,
-
+  vendor_name: stringRequired,
+  contact_name: stringRequired,
+  contact_email: emailSchema,
+  contact_phone: stringRequired,
+  designation: stringRequired,
+  department: stringRequired,
+  password: passwordSchema,
+  confirm_password: passwordSchema,
 });
 export const openVendorAddressSchema = Yup.object().shape({
-  address_type:stringRequired,
-  street_address:stringRequired, 
-  postal_code:stringRequired,
-  subhurb_name:stringRequired,
-  city:stringRequired,
-  state:stringRequired,
-  country:stringRequired,
-  billing_status:stringRequired,
-  longitude:stringRequired,
-  lattitude:stringRequired,
+  address_type: stringRequired,
+  street_address: stringRequired,
+  postal_code: stringRequired,
+  suburb_name: stringRequired,
+  city: stringRequired,
+  state: stringRequired,
+  country: stringRequired,
+  billing_status: stringRequired,
+  longitude: stringRequired,
+  latitude: stringRequired,
 });

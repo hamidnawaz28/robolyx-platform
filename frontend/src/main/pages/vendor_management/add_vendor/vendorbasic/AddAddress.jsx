@@ -2,9 +2,9 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Input from "../../../../../components/Input";
 import { Grid, Button } from "@material-ui/core";
-import { sizing } from '@material-ui/system';
+import { sizing } from "@material-ui/system";
 
-import Box from '@material-ui/core/Box';
+import Box from "@material-ui/core/Box";
 // import Button from '@material-ui/core/Button';
 import { vendorAddressSchema } from "../../formvalidations/Schemas";
 import { vendorAddressInitialValues } from "../../formvalidations/InitialValues";
@@ -14,10 +14,10 @@ import GridInput from "../../../../../components/GridInput";
 // import MailTemplate from "./MailTemplate";
 import { postopenVendorData } from "../../../../../services/VendorManagement";
 const addressData = [
-  {label:'Headquarter',value:'Headquarter'},
-  {label:'Site', value:'Site'}
+  { label: "Headquarter", value: "HO" },
+  { label: "Site", value: "SO" },
 ];
-const RequestForm = ({handleSubmit}) => (
+const RequestForm = ({ handleSubmit }) => (
   <div>
     <Formik
       initialValues={vendorAddressInitialValues}
@@ -28,15 +28,15 @@ const RequestForm = ({handleSubmit}) => (
         <form onSubmit={handleSubmit}>
           <Grid container>
             <Grid {...gr1}>
-              <Grid container >
-                <Grid xs={12} >
-                  <SelectField 
-                    label ={"Address Type"}
+              <Grid container>
+                <Grid xs={12}>
+                  <SelectField
+                    label={"Address Type"}
                     name="address_type"
                     data={addressData}
-                    style={{width:"100%",marginBottom: "20px"}}
+                    style={{ width: "100%", marginBottom: "20px" }}
                   />
-              </Grid>
+                </Grid>
                 <GridInput
                   sp="2"
                   label="Street Address"
@@ -56,7 +56,7 @@ const RequestForm = ({handleSubmit}) => (
                   label="Subhurb Name"
                   placeholder="Enter subhurb name"
                   type="text"
-                  name="subhurb_name"
+                  name="suburb_name"
                 />
                 <GridInput
                   sp="2"
@@ -72,7 +72,7 @@ const RequestForm = ({handleSubmit}) => (
                   type="text"
                   name="state"
                 />
-               <GridInput
+                <GridInput
                   sp="2"
                   label="Country"
                   placeholder="Enter country"
@@ -87,7 +87,7 @@ const RequestForm = ({handleSubmit}) => (
                   type="text"
                   name="billing_status"
                 />
-                 <GridInput
+                <GridInput
                   sp="2"
                   label="Longitude"
                   placeholder="Enter longitude"
@@ -96,24 +96,23 @@ const RequestForm = ({handleSubmit}) => (
                 />
                 <GridInput
                   sp="2"
-                  label="Lattitude"
-                  placeholder="Enter lattitude"
+                  label="Latitude"
+                  placeholder="Enter latitude"
                   type="text"
-                  name="lattitude"
+                  name="latitude"
                 />
-                
-               
-
               </Grid>
-
-             
             </Grid>
-            
           </Grid>
-          <Box  style={{marginTop:"2%",marginLeft: "42%"}}>
-             <Button variant="contained" color="primary" type="submit" onClick={handleSubmit} >
-                Save
-             </Button>
+          <Box style={{ marginTop: "2%", marginLeft: "42%" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              onClick={handleSubmit}
+            >
+              Save
+            </Button>
           </Box>
         </form>
       )}

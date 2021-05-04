@@ -17,44 +17,41 @@ export const vendorBasicInitalValues = {
   contact_name: "",
   contact_email: "",
   contact_phone: "",
-  designation:"",
-  department:"",
- 
+  designation: "",
+  department: "",
 };
 
 export const vendorAddressInitialValues = {
   address_type: "",
-  street_address: "", 
+  street_address: "",
   postal_code: "",
-  subhurb_name: "",
+  suburb_name: "",
   city: "",
   state: "",
   country: "",
   billing_status: "",
   longitude: "",
-  lattitude: "",
+  latitude: "",
 };
 export const openVendorInitalValues = {
   vendor_name: "",
   contact_name: "",
   contact_email: "",
   contact_phone: "",
-  designation:"",
-  department:"",
-  password:"",
-  confirm_password:"",
- 
+  designation: "",
+  department: "",
+  password: "",
+  confirm_password: "",
 };
 export const openVendorAddressInitialValues = {
   address_type: "",
-  street_address: "", 
+  street_address: "",
   postal_code: "",
-  subhurb_name: "",
+  suburb_name: "",
   city: "",
   state: "",
   country: "",
   billing_status: "",
   longitude: "",
-  lattitude: "",
+  latitude: "",
 };
-
