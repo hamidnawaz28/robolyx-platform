@@ -4,7 +4,7 @@ from .views import VendorRequestViewSet, VendorTagsViewSet, CategoriesViewSet, T
 VendorBasicViewSet, CertificatesAndLisencesViewSet, VendorAddressViewSet, VendorUploadView, VendorUploadDetail, NotesViewSet, \
 VendorHistoryViewSet, ReviewTemplateViewSet, ReviewResponseViewSet, ReviewResponseStatusViewSet, ComplianceVendorTaskViewSet, \
 ComplianceVendorResponseViewSet, ComplianceTaskCriteriaViewSet, VendorComplianceStatusViewSet, VendorComplianceHistoryViewSet, \
-ApprovedVendorsViewSet, PendingVendorsViewSet
+ApprovedVendorsViewSet, PendingVendorsViewSet, VendorTagsList, VendorTradesList, VendorCategoriesList, DiversityClassificationList
 
 router=routers.DefaultRouter()
 router.register("vendor-req", VendorRequestViewSet, basename='vendor-req')
@@ -27,7 +27,10 @@ router.register("vendor_compliance-status", VendorComplianceStatusViewSet, basen
 router.register("review-response-history", VendorComplianceHistoryViewSet, basename='review-response-history')
 router.register("approved-vendors", ApprovedVendorsViewSet, basename='approved-vendors')
 router.register("pending-vendors", PendingVendorsViewSet, basename='pending-vendors')
-
+router.register("vendor-tags-list", VendorTagsList, basename='vendor-tags-list')
+router.register("vendor-trades-list", VendorTradesList, basename='vendor-trades-list')
+router.register("vendor-cats-list", VendorCategoriesList, basename='vendor-cats-list')
+router.register("vendor-diversity-list", DiversityClassificationList, basename='vendor-diversity-list')
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from "react-router-dom";
 import { dashboardLayoutRoutes, authLayoutRoutes } from "./index";
 
 import DashboardLayout from "../layouts/Dashboard";
@@ -16,13 +21,16 @@ const childProtectedRoutes = (Layout, routes) =>
           key={index}
           path={path}
           exact
-          render={props => (
-            localStorage.get('user') && localStorage.get('user').authToken !== '' ?
-            <Layout>
-              <Component {...props} />
-            </Layout> :
-            <Redirect to="/auth/sign-in" />
-          )}
+          render={(props) =>
+            localStorage.get("user") &&
+            localStorage.get("user").authToken !== "" ? (
+              <Layout>
+                <Component {...props} />
+              </Layout>
+            ) : (
+              <Redirect to="/auth/sign-in" />
+            )
+          }
         />
       ))
     ) : (
@@ -31,18 +39,21 @@ const childProtectedRoutes = (Layout, routes) =>
         key={index}
         path={path}
         exact
-        render={props => (
-          localStorage.get('user') && localStorage.get('user').authToken !== '' ?
+        render={(props) =>
+          localStorage.get("user") &&
+          localStorage.get("user").authToken !== "" ? (
             <Layout>
               <Component {...props} />
-            </Layout> :
+            </Layout>
+          ) : (
             <Redirect to="/auth/sign-in" />
-        )}
+          )
+        }
       />
     )
   );
 
-  const childRoutes = (Layout, routes) =>
+const childRoutes = (Layout, routes) =>
   routes.map(({ children, path, component: Component }, index) =>
     children ? (
       // Route item with children
@@ -51,13 +62,16 @@ const childProtectedRoutes = (Layout, routes) =>
           key={index}
           path={path}
           exact
-          render={props => (
-            !localStorage.get('user') || localStorage.get('user').authToken === '' ?
-            <Layout>
-              <Component {...props} />
-            </Layout> :
-            <Redirect to="/" />
-          )}
+          render={(props) =>
+            !localStorage.get("user") ||
+            localStorage.get("user").authToken === "" ? (
+              <Layout>
+                <Component {...props} />
+              </Layout>
+            ) : (
+              <Redirect to="/" />
+            )
+          }
         />
       ))
     ) : (
@@ -66,13 +80,16 @@ const childProtectedRoutes = (Layout, routes) =>
         key={index}
         path={path}
         exact
-        render={props => (
-          !localStorage.get('user') || localStorage.get('user').authToken === '' ?
+        render={(props) =>
+          !localStorage.get("user") ||
+          localStorage.get("user").authToken === "" ? (
             <Layout>
               <Component {...props} />
-            </Layout> :
+            </Layout>
+          ) : (
             <Redirect to="/" />
-        )}
+          )
+        }
       />
     )
   );
@@ -82,6 +99,7 @@ const Routes = () => (
     <Switch>
       {childProtectedRoutes(DashboardLayout, dashboardLayoutRoutes)}
       {childRoutes(AuthLayout, authLayoutRoutes)}
+
       <Route
         render={() => (
           <AuthLayout>

@@ -23,6 +23,13 @@ import {
 import {
   onFetchPendingVendorsStart,
   onPartialUpdateApprovalStatus,
+  onFetchApprovedVendorsStart,
+  onFetchCategoryStart,
+  onFetchTagsStart,
+  onFetchTradesStart,
+  onFetchDiversityStart,
+  onFetchPaymentTermStart,
+  onPartialUpdateVendors,
 } from "../../main/pages/vendor_management/vendor_admin/redux/approvalSaga";
 
 export default function* rootSaga() {
@@ -44,5 +51,12 @@ export default function* rootSaga() {
     call(onPartialUpdateTicketStart),
     call(onFetchPendingVendorsStart),
     call(onPartialUpdateApprovalStatus),
+    call(onFetchApprovedVendorsStart),
+    call(onFetchCategoryStart),
+    call(onFetchTagsStart),
+    call(onFetchTradesStart),
+    call(onFetchDiversityStart),
+    call(onFetchPaymentTermStart),
+    call(onPartialUpdateVendors),
   ]);
 }

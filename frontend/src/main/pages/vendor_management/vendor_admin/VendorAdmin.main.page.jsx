@@ -9,6 +9,7 @@ import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import AddVendorIcon from "../../../../assets/supply-chain.png";
 import VendorApprovals from "./vendor_approvals/VendorApprovals.main.page";
+import OnboardDetails from "./onboarding_details/OnBoardDetails.main.page";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 function TabPanel(props) {
@@ -103,7 +104,7 @@ export default function VendorAdmin() {
           <VendorApprovals />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          Item 3
+          <OnboardDetails />
         </TabPanel>
         <TabPanel value={value} index={3}>
           Item 4

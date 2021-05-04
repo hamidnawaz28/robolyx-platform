@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { Typography, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import VendorCard from "./VendorCard";
+import OnboardDetailsAccordion from "./OnboardDetails.accordion";
 import {
-  fetchPendingVendorsStart,
+  fetchApprovedVendorsStart,
   updateCurrentPage,
 } from "../redux/approvalActions";
-import VendorApprovalQueryForm from "../vendor_approvals/VendorApprovalQueryForm";
+import OnboardDetailsQueryForm from "../onboarding_details/OnboardDetailsSearch";
 import Pagination from "@material-ui/lab/Pagination";
 
 const useStyles = makeStyles((theme) => ({
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function VendorApprovals(props) {
+function OnboardDetails(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
@@ -37,25 +37,27 @@ function VendorApprovals(props) {
   console.log("vendors.count", vendors.count);
 
   useEffect(() => {
-    dispatch(fetchPendingVendorsStart({ fetchApiData }));
+    dispatch(fetchApprovedVendorsStart({ fetchApiData }));
   }, []);
 
   const handleChange = (event, value) => {
     let currPage = value;
     dispatch(updateCurrentPage(currPage));
     fetchApiData["currentPage"] = currPage;
-    dispatch(fetchPendingVendorsStart({ fetchApiData }));
+    dispatch(fetchApprovedVendorsStart({ fetchApiData }));
   };
 
   return (
     <>
       <Grid container justify="space-between" alignItems="center">
-        <VendorApprovalQueryForm />
+        <OnboardDetailsQueryForm />
       </Grid>
       {vendors.data &&
-        vendors.data.map((vendor) => <VendorCard vendor={vendor} />)}
+        vendors.data.map((vendor) => (
+          <OnboardDetailsAccordion vendor={vendor} />
+        ))}
       <Grid container justify="center">
-        <Grid item>
+        <Grid item style={{ marginTop: "0.5em" }}>
           <Pagination
             count={Math.ceil(vendors.count / perPage)}
             page={currentPage}
@@ -64,6 +66,7 @@ function VendorApprovals(props) {
             color="primary"
             size="large"
             color="secondary"
+            size="small"
           />
         </Grid>
       </Grid>
@@ -71,4 +74,4 @@ function VendorApprovals(props) {
   );
 }
 
-export default VendorApprovals;
+export default OnboardDetails;

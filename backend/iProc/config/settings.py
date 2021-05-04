@@ -140,7 +140,7 @@ EMAIL_USE_TLS = True
 DATABASES = {
     'default': {
         "ENGINE": 'django.db.backends.postgresql_psycopg2',
-        "NAME": 'iproc',
+        "NAME": 'iproc10',
         "USER": 'postgres',
         "PASSWORD": 'admin',
         "HOST": '127.0.0.1',

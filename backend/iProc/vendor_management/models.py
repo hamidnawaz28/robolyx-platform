@@ -6,7 +6,7 @@ from basic_config.models import PaymentTerm, Sites
 
 # Create your models here.
 class VendorTags(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.TextField(max_length=255, primary_key=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="vendortag_created_rev")
     created_at = models.DateField(default=timezone.now)
     last_modified_date = models.DateField(default=timezone.now)
@@ -15,7 +15,7 @@ class VendorTags(models.Model):
         return self.name
 
 class Categories(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.TextField(max_length=255, primary_key=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="vendorcat_created_rev")
     created_at = models.DateField(default=timezone.now)
     last_modified_date = models.DateField(default=timezone.now)
@@ -29,7 +29,7 @@ class Trades(models.Model):
         ('primary', 'primary'),
         ('secondary', 'secondary'),
     )
-    name = models.CharField(max_length=255)
+    name = models.TextField(max_length=255, primary_key=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="vendortrades_created_rev")
     created_at = models.DateField(default=timezone.now)
     last_modified_date = models.DateField(default=timezone.now)
@@ -39,7 +39,7 @@ class Trades(models.Model):
         return self.name
 
 class DiversityClassification(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.TextField(max_length=255, primary_key=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="vendordiversity_created_rev")
     created_at = models.DateField(default=timezone.now)
     last_modified_date = models.DateField(default=timezone.now)
@@ -72,8 +72,8 @@ class VendorBasicInfo(models.Model):
     category = models.ManyToManyField(Categories, related_name="vendorbasic_cats_rev", )
     tags = models.ManyToManyField(VendorTags, related_name="vendorbasic_tag_rev", )
     trades = models.ManyToManyField(Trades, related_name="vendorbasic_trade", )
-    diversity = models.ForeignKey(DiversityClassification, on_delete=models.CASCADE, related_name="vendorbasic_diversity_rev", blank=True, null=True)
-    payment_term = models.ForeignKey(PaymentTerm, on_delete=models.CASCADE, related_name="vendorbasic_payterm_rev", blank=True, null=True)
+    diversity = models.ManyToManyField(DiversityClassification,  related_name="vendorbasic_diversity_rev", )
+    payment_term = models.ManyToManyField(PaymentTerm,  related_name="vendorbasic_payterm_rev", )
     approval_status = models.CharField(max_length=50, choices=approval_options, default="pending", blank=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="vendorbasic_created_rev")
     created_at = models.DateField(default=timezone.now)
@@ -191,7 +191,7 @@ class VendorHistory(models.Model):
     modified_at = models.DateField(default=timezone.now)
 
     def __str__(self):
-        return self.certificate_name
+        return self.change_type
 
 class ReviewTemplate(models.Model):
 
