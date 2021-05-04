@@ -27,11 +27,11 @@ export default function MainFormik({ vendor }) {
   console.log("Vendor is here ", vendor);
 
   const reduxVals = {
-    category: vendor.category,
-    diversity: vendor.diversity,
-    payment_term: vendor.payment_term,
-    tags: vendor.tags,
-    trades: vendor.trades,
+    category: vendor.category.map((cat) => cat.name),
+    diversity: vendor.diversity.map((cat) => cat.name),
+    payment_term: vendor.payment_term.map((cat) => cat.name),
+    tags: vendor.tags.map((cat) => cat.name),
+    trades: vendor.trades.map((cat) => cat.name),
   };
 
   const dispatch = useDispatch();
@@ -53,16 +53,7 @@ export default function MainFormik({ vendor }) {
 
     let { category, tags, trades, diversity, payment_term } = values;
 
-    let post_data = {};
-
-    post_data.payment_term = payment_term
-      .map((payment) => payment.id)
-      .map(String);
-
-    post_data.category = category.map((cat) => cat.id).map(String);
-    post_data.tags = tags.map((tg) => tg.id).map(String);
-    post_data.trades = trades.map((trade) => trade.id).map(String);
-    post_data.diversity = diversity.map((diver) => diver.id).map(String);
+    let post_data = values;
 
     console.log("Hello", post_data);
 
@@ -85,7 +76,7 @@ export default function MainFormik({ vendor }) {
   return (
     <React.Fragment>
       <Formik
-        initialValues={reduxVals || formInitialValues}
+        initialValues={reduxVals}
         onSubmit={_submitForm}
         enableReinitialize
       >

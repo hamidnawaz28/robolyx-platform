@@ -43,13 +43,15 @@ function SelectField(props) {
         {...field}
         MenuProps={MenuProps}
         renderValue={(selectedValue) =>
-          selectedValue ? selectedValue.map((item) => item.name + ",") : ""
+          selectedValue ? selectedValue.map((value) => value + ",") : ""
         }
         value={selectedValue ? selectedValue : ""}
       >
         {data.map((item) => (
-          <MenuItem key={item.id} value={item}>
-            <Checkbox checked={selectedValue.indexOf(item) > -1} />
+          <MenuItem key={item.name} value={item.name}>
+            <Checkbox
+              checked={selectedValue && selectedValue.indexOf(item.name) > -1}
+            />
             <ListItemText>{item.name}</ListItemText>
           </MenuItem>
         ))}

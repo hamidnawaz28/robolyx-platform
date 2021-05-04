@@ -55,7 +55,7 @@ class Sites(models.Model):
         return self.site_name
 
 class PaymentTerm(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.TextField(max_length=255, primary_key=True)
     description = models.CharField(max_length=255)
     payment_cycle = models.CharField(max_length=255)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="paymentterm_rev")
