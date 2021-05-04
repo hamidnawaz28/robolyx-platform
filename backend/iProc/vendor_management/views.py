@@ -7,7 +7,7 @@ from .serializers import VendorRequestSerializer, VendorTagsSerializer, Categori
 DiversityClassificationSerializer, VendorBasicSerializer, CertAndLisencesSerializer, VendorAddressSerializer,\
 VendorFileUploadSerializer, NotesSerializer, VendorHistorySerializer, ReviewTemplateSerializer, ReviewResponseSerializer, \
 ReviewResponseStatusSerializer, ComplianceVendorTaskSerializer, ComplianceVendorResponseSerializer, ComplianceTaskCriteriaSerializer, \
-VendorComplianceStatusSerializer, VendorComplianceHistorySerializer, PendingVendorBasicSerializer, VendorBasicSerializerWithDepth
+VendorComplianceStatusSerializer, VendorComplianceHistorySerializer, PendingVendorBasicSerializer, ComplianceTaskSerializer,VendorBasicSerializerWithDepth
 from rest_framework.generics import get_object_or_404
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.contrib.auth.models import User
@@ -1673,4 +1673,16 @@ class VendorCategoriesList(viewsets.ModelViewSet):
 class DiversityClassificationList(viewsets.ModelViewSet):
     queryset=DiversityClassification.objects.all()
     serializer_class=DiversityClassificationSerializer
-
+class ComplianceTaskViewSet(viewsets.ViewSet):
+    def create(self, request):
+        try:
+            serializer = ComplianceTaskSerializer(
+                data=request.data, context={"request": request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            dict_response = {"error": False,
+                             "message": "Vendor Compliance History saved successfully"}
+        except:
+            dict_response = {'error': True,
+                             'message': "Error During Saving Vendor Compliance History"}
+        return Response(dict_response)

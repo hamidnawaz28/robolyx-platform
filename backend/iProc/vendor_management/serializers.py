@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import VendorRequest, VendorTags, Categories, Trades, DiversityClassification, VendorBasicInfo, \
-CertificatesAndLisences, VendorAddress, VendorFileUpload, Notes, VendorHistory, ReviewTemplate, ReviewResponse, \
+CertificatesAndLisences,ComplianceTask,  VendorAddress, VendorFileUpload, Notes, VendorHistory, ReviewTemplate, ReviewResponse, \
 ReviewResponseStatus, ComplianceVendorTask, ComplianceVendorResponse, ComplianceTaskCriteria, VendorComplianceStatus, \
 VendorComplianceHistory
 
@@ -9,6 +9,14 @@ class VendorRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = VendorRequest
         fields = '__all__'
+
+
+class ComplianceTaskSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ComplianceTask
+        fields = '__all__'
+
 
 class VendorTagsSerializer(serializers.ModelSerializer):
 
