@@ -8,6 +8,7 @@ import { openVendorAddressInitialValues } from "../formvalidations/InitialValues
 import { gr1, gr2, gr3, gr4, gr6 } from "../../../../components/Theme";
 import SelectField from "../../../../components/SelectField";
 import GridInput from "../../../../components/GridInput";
+import Box from '@material-ui/core/Box';
 // import MailTemplate from "./MailTemplate";
 import { postopenVendorData } from "../../../../services/VendorManagement";
 const addressData = [
@@ -29,7 +30,7 @@ const RequestForm = ({handleSubmit}) => (
                 <Grid xs={12} >
                   <SelectField 
                     label ={"Address Type"}
-                    name="street_address"
+                    name="address_type"
                     data={addressData}
                     style={{width:"100%",marginBottom: "20px"}}
                   />
@@ -107,11 +108,11 @@ const RequestForm = ({handleSubmit}) => (
             </Grid>
             
           </Grid>
-    
-          <Button variant="contained" color="primary" type="submit" onClick={handleSubmit} >
+          <Box  style={{marginTop:"2%",marginLeft: "42%"}}>
+          <Button variant="contained" color="primary" type="submit" onClick={handleSubmit}  >
                 Save
           </Button>
-         
+          </Box>
         </form>
       )}
     </Formik>

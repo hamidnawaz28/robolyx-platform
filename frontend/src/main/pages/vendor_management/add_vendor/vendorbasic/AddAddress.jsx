@@ -32,18 +32,18 @@ const RequestForm = ({handleSubmit}) => (
                 <Grid xs={12} >
                   <SelectField 
                     label ={"Address Type"}
-                    name="street_address"
+                    name="address_type"
                     data={addressData}
                     style={{width:"100%",marginBottom: "20px"}}
                   />
               </Grid>
-                {/* <GridInput
+                <GridInput
                   sp="2"
                   label="Street Address"
                   placeholder="Enter street address"
                   type="text"
                   name="street_address"
-                /> */}
+                />
                 <GridInput
                   sp="2"
                   label="Postal Code"
@@ -110,11 +110,11 @@ const RequestForm = ({handleSubmit}) => (
             </Grid>
             
           </Grid>
-    
-          <Button variant="contained" color="primary" type="submit" onClick={handleSubmit} >
+          <Box  style={{marginTop:"2%",marginLeft: "42%"}}>
+             <Button variant="contained" color="primary" type="submit" onClick={handleSubmit} >
                 Save
-          </Button>
-         
+             </Button>
+          </Box>
         </form>
       )}
     </Formik>

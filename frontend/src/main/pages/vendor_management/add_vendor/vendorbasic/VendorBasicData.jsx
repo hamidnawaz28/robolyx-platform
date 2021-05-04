@@ -111,7 +111,7 @@ const RequestForm = () => {
                 
               </Grid>
               <br/>
-              <Box m={3}>
+              <Box style={{margin:"1% 0%"}}>
               <Button variant="contained" color="primary" onClick={()=>setFormState(true)}>
                     Add Address
                   </Button>
@@ -123,8 +123,8 @@ const RequestForm = () => {
                      field={<AddAddress handleSubmit={handleAddress}/>} />          
                 {(vendoraddress.length ==0 && <h5> No address added</h5>) }
                     {vendoraddress.length !=0 && <SimpleTable data={vendoraddress } headers={headers}/>}
-             <Box m={3}>
-              <Button variant="contained" color="primary" onClick={handleSubmit}>
+             <Box style={{margin:"1% 0%"}}>
+              <Button variant="contained" color="primary" onClick={handleSubmit} style={{padding:"0.5% 3.25%" }}>
                     Submit
                   </Button>
                   </Box>
