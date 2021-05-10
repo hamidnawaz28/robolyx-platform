@@ -13,7 +13,7 @@ import Paper from "@material-ui/core/Paper";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { deleteTicket } from "../../../redux/ticketActions";
 import GetAppIcon from "@material-ui/icons/GetApp";
-
+import { downloadFile } from "../../../../../../hooks";
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -47,7 +47,6 @@ export default function FileUploadTable({ ticket_id }) {
   const handleDelete = (file_id) => {
     dispatch(deleteTicket(file_id));
   };
-
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} size="small" aria-label="a dense table">
@@ -85,9 +84,10 @@ export default function FileUploadTable({ ticket_id }) {
               <TableCell align="center" className={classes.tableCell}>
                 <Grid container>
                   <Grid item>
-                    <a href={file.ticket_file} download>
-                      <GetAppIcon className={classes.delIcon} />
-                    </a>
+                    <GetAppIcon
+                      onClick={() => downloadFile(file.ticket_file)}
+                      className={classes.delIcon}
+                    />
                   </Grid>
                   <Grid item>
                     <DeleteIcon
