@@ -95,8 +95,8 @@ export default function VendorAdmin() {
 						<Tab label='Supplier Requests' {...a11yProps(0)} />
 						<Tab label='Vendor Approvals' {...a11yProps(1)} />
 						<Tab label='Vendor OnBoarding Details' {...a11yProps(1)} />
-						<Tab label='Vendor Response Approval' {...a11yProps(1)} />
-						<Tab label='Add Review Templates' {...a11yProps(1)} />
+						<Tab label='Review Templates' {...a11yProps(1)} />
+						<Tab label='Add New Review Templates' {...a11yProps(1)} />
 					</Tabs>
 				</AppBar>
 				<TabPanel value={value} index={0}>
