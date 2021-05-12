@@ -266,10 +266,6 @@ class ComplianceTask(models.Model):
     form_type = models.CharField(max_length=75)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="compliance_creator_user")
     created_at = models.DateField(default=timezone.now, blank=True, null=True)
-<<<<<<< HEAD
-=======
-    last_modified_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="compliance_modifier_user")
->>>>>>> ca59b1b67bf438d35661b15bd1f3d7fcece075c7
     last_modified_date = models.DateField(default=timezone.now)
     activation_status = models.CharField(max_length=50, choices=activation_options, default="active",)
     priority = models.CharField(max_length=50, choices=priority_options, default="low",)
