@@ -4,7 +4,7 @@ const downloadFile = (link) => {
   var linkArr = link?.split("/");
   let fileName = linkArr[linkArr?.length - 1];
   axios({
-    url: `http://localhost:8090${link}`,
+    url: `http://localhost:8090/api/ticket/download-file?file-name=${fileName}&path=${link}`,
     method: "GET",
     responseType: "blob",
   }).then((response) => {

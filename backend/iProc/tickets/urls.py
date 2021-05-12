@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
-from .views import TicketViewSet, ContentHistoryViewSet, TicketUploadView, TicketUploadDetail, ArchivedTicketsViewSet
+from .views import TicketViewSet, ContentHistoryViewSet, TicketUploadView, TicketUploadDetail, ArchivedTicketsViewSet, DownloadFileViewSet
 
 router=routers.DefaultRouter()
 router.register("tickets", TicketViewSet, basename='tickets')
@@ -12,4 +12,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('ticket-upload/', TicketUploadView.as_view(), name='ticket-upload'),
     path('ticket-upload/<int:pk>/', TicketUploadDetail.as_view(), name='ticket-upload-detail'),
+    path('download-file', DownloadFileViewSet.as_view(), name='dowoad-file')
 ]

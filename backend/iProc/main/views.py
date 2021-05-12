@@ -17,6 +17,9 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 # ---------------UtilsFunctions----------------------
 
+from .serializers import RoleSerializer,  UserProjectSerializer,  UserDataSerializer, DefaultTemplateSerializer, SavedTemplateSerializer, \
+RuleEngineSerializer, RuleEngineHistorySerializer, InvoiceDataSerializer, TaxonomyDataSerializer, ContractDataSerializer, GLOrgDataSerializer, PODataSerializer 
+
 
 def get_data_range(request):
     current_page = int(request.GET.get("currentPage"))
@@ -105,9 +108,14 @@ def fetch_post_template_data(request):
 def default_templates(request):
     if request.method == 'GET':
         all_data = DefaultTemplate.objects.all()
-        saved_template = serializers.serialize("json", all_data)
-        return HttpResponse(saved_template, content_type="text/json-comment-filtered")
 
+        serializer = DefaultTemplateSerializer(
+            all_data, many=True, context={"request": request})
+
+        response_dict = {'data': serializer.data,
+                             'count': count}
+
+        return Response(response_dict)
 
 def saved_templates(request):
     if request.method == 'GET':

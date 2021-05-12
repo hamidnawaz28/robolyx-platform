@@ -47,6 +47,7 @@ export default function FileUploadTable({ ticket_id }) {
   const handleDelete = (file_id) => {
     dispatch(deleteTicket(file_id));
   };
+
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} size="small" aria-label="a dense table">
@@ -85,8 +86,10 @@ export default function FileUploadTable({ ticket_id }) {
                 <Grid container>
                   <Grid item>
                     <GetAppIcon
-                      onClick={() => downloadFile(file.ticket_file)}
                       className={classes.delIcon}
+                      onClick={() => {
+                        downloadFile(file.ticket_file);
+                      }}
                     />
                   </Grid>
                   <Grid item>

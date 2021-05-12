@@ -5,13 +5,13 @@ from .serializers import TicketSerializer, TicketUploadSerializer, ContentHistor
 from rest_framework.generics import get_object_or_404
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.contrib.auth.models import User
-
+from django.conf import settings
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework import generics
 import json
-
+from wsgiref.util import FileWrapper
 class TicketViewSet(viewsets.ModelViewSet):
     serializer_class = TicketSerializerWithDepth
 
@@ -372,3 +372,20 @@ class ArchivedTicketsViewSet(viewsets.ViewSet):
                              'count': count}
 
         return Response(response_dict)
+        
+import mimetypes
+import os
+from django.http.response import HttpResponse
+
+class DownloadFileViewSet(APIView):
+
+    def get(self, request,):
+        file_name = self.request.query_params.get("file-name")
+        file_path = settings.MEDIA_ROOT +'/'+ file_name
+        file_wrapper = FileWrapper(open(file_path,'rb'))
+        file_mimetype = mimetypes.guess_type(file_path)
+        response = HttpResponse(file_wrapper, content_type=file_mimetype )
+        response['X-Sendfile'] = file_path
+        response['Content-Length'] = os.stat(file_path).st_size
+        response['Content-Disposition'] = 'attachment; filename='+file_name 
+        return response
