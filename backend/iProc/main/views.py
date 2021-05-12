@@ -527,6 +527,364 @@ def manage_templates(request):
         return HttpResponse("Successfully Deleted!", content_type="text/json-comment-filtered")
 
 
+class TaxonomyDataViewSet(viewsets.ViewSet):
+    #authentication_classes = [JWTAuthentication]
+    #permission_classes = [IsAuthenticated]
+    import pdb
+    def list(self, request):
+        query_filter = json.loads(self.request.query_params.get("q"))
+        current_page = int(self.request.query_params.get("page"))
+        per_page = int(self.request.query_params.get("perPage"))
+        start = per_page * current_page
+        end = per_page * current_page + per_page
+        taxonomy_data = TaxonomyData.objects.all()
+        response_dict = {}
+        if query_filter is not None:
+            taxonomy_filtered = taxonomy_data.filter(**query_filter)[start:end]
+            count = taxonomy_data.count()
+        else:
+            taxonomy_filtered = taxonomy_data[start:end]
+            count = taxonomy_data.count()
+        serializer = TaxonomyDataSerializer(
+            taxonomy_filtered, many=True, context={"request": request})
+
+        response_dict = {'data': serializer.data,
+                             'count': count}
+        return Response(response_dict)
+
+    def create(self, request):
+        try:
+            serializer = TaxonomyDataSerializer(
+                data=request.data, context={"request": request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            dict_response = {"error": False,
+                             "message": "Vendor Tag saved successfully"}
+        except:
+            dict_response = {'error': True,
+                             'message': "Error During Saving Vendor Tag"}
+        return Response(dict_response)
+
+    def update(self, request, pk=id):
+        try:
+            queryset = TaxonomyData.objects.all()
+            taxonomy_data = get_object_or_404(queryset, pk=pk)
+            serializer = TaxonomyDataSerializer(
+                taxonomy_data, data=request.data, context={"request": request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            dict_response = {"error": False,
+                             "message": "Successfully Updated Vendor Tag"}
+        except:
+            dict_response = {'error': True,
+                             'message': "Error During Updating Vendor Tag"}
+        return Response(dict_response)
+
+    def retrieve(self, request, pk=id):
+        queryset = TaxonomyData.objects.all()
+        taxonomy_data = get_object_or_404(queryset, pk=pk)
+        serializer = TaxonomyDataSerializer(taxonomy_data, context={"request": request})
+        return Response({'error': False, 'message': "Single Data Fetch", "data": serializer.data})
+
+    def destroy(self, request, pk=id):
+        try:
+            queryset = TaxonomyData.objects.all()
+            taxonomy_data = get_object_or_404(queryset, pk=pk)
+            taxonomy_data.delete()
+            dict_response = {"error": False,
+                             "message": "Successfully Deleted Vendor Tag"}
+        except:
+            dict_response = {'error': True,
+                             'message': "Error During Deleting Vendor Tag"}
+        return Response(dict_response)
+
+
+class InvoiceDataViewSet(viewsets.ViewSet):
+    #authentication_classes = [JWTAuthentication]
+    #permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        query_filter = json.loads(self.request.query_params.get("q"))
+        current_page = int(self.request.query_params.get("page"))
+        per_page = int(self.request.query_params.get("perPage"))
+        start = per_page * current_page
+        end = per_page * current_page + per_page
+        invoice_data = InvoiceData.objects.all()
+        response_dict = {}
+        if query_filter is not None:
+            taxonomy_filtered = invoice_data.filter(**query_filter)[start:end]
+            count = invoice_data.count()
+        else:
+            taxonomy_filtered = invoice_data[start:end]
+            count = invoice_data.count()
+        serializer = InvoiceDataSerializer(
+            taxonomy_filtered, many=True, context={"request": request})
+
+        response_dict = {'data': serializer.data,
+                             'count': count}
+        return Response(response_dict)
+
+    def create(self, request):
+        try:
+            serializer = InvoiceDataSerializer(
+                data=request.data, context={"request": request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            dict_response = {"error": False,
+                             "message": "Vendor Tag saved successfully"}
+        except:
+            dict_response = {'error': True,
+                             'message': "Error During Saving Vendor Tag"}
+        return Response(dict_response)
+
+    def update(self, request, pk=id):
+        try:
+            queryset = InvoiceData.objects.all()
+            invoice_data = get_object_or_404(queryset, pk=pk)
+            serializer = InvoiceDataSerializer(
+                invoice_data, data=request.data, context={"request": request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            dict_response = {"error": False,
+                             "message": "Successfully Updated Vendor Tag"}
+        except:
+            dict_response = {'error': True,
+                             'message': "Error During Updating Vendor Tag"}
+        return Response(dict_response)
+
+    def retrieve(self, request, pk=id):
+        queryset = InvoiceData.objects.all()
+        invoice_data = get_object_or_404(queryset, pk=pk)
+        serializer = InvoiceDataSerializer(invoice_data, context={"request": request})
+        return Response({'error': False, 'message': "Single Data Fetch", "data": serializer.data})
+
+    def destroy(self, request, pk=id):
+        try:
+            queryset = InvoiceData.objects.all()
+            invoice_data = get_object_or_404(queryset, pk=pk)
+            invoice_data.delete()
+            dict_response = {"error": False,
+                             "message": "Successfully Deleted Vendor Tag"}
+        except:
+            dict_response = {'error': True,
+                             'message': "Error During Deleting Vendor Tag"}
+        return Response(dict_response)
+
+
+class ContractDataViewSet(viewsets.ViewSet):
+    #authentication_classes = [JWTAuthentication]
+    #permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        query_filter = json.loads(self.request.query_params.get("q"))
+        current_page = int(self.request.query_params.get("page"))
+        per_page = int(self.request.query_params.get("perPage"))
+        start = per_page * current_page
+        end = per_page * current_page + per_page
+        contract_data = ContractData.objects.all()
+        response_dict = {}
+        if query_filter is not None:
+            taxonomy_filtered = contract_data.filter(**query_filter)[start:end]
+            count = contract_data.count()
+        else:
+            taxonomy_filtered = contract_data[start:end]
+            count = contract_data.count()
+        serializer = ContractDataSerializer(
+            taxonomy_filtered, many=True, context={"request": request})
+
+        response_dict = {'data': serializer.data,
+                             'count': count}
+        return Response(response_dict)
+
+    def create(self, request):
+        try:
+            serializer = ContractDataSerializer(
+                data=request.data, context={"request": request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            dict_response = {"error": False,
+                             "message": "Vendor Tag saved successfully"}
+        except:
+            dict_response = {'error': True,
+                             'message': "Error During Saving Vendor Tag"}
+        return Response(dict_response)
+
+    def update(self, request, pk=id):
+        try:
+            queryset = ContractData.objects.all()
+            contract_data = get_object_or_404(queryset, pk=pk)
+            serializer = ContractDataSerializer(
+                contract_data, data=request.data, context={"request": request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            dict_response = {"error": False,
+                             "message": "Successfully Updated Vendor Tag"}
+        except:
+            dict_response = {'error': True,
+                             'message': "Error During Updating Vendor Tag"}
+        return Response(dict_response)
+
+    def retrieve(self, request, pk=id):
+        queryset = ContractData.objects.all()
+        contract_data = get_object_or_404(queryset, pk=pk)
+        serializer = ContractDataSerializer(contract_data, context={"request": request})
+        return Response({'error': False, 'message': "Single Data Fetch", "data": serializer.data})
+
+    def destroy(self, request, pk=id):
+        try:
+            queryset = ContractData.objects.all()
+            contract_data = get_object_or_404(queryset, pk=pk)
+            contract_data.delete()
+            dict_response = {"error": False,
+                             "message": "Successfully Deleted Vendor Tag"}
+        except:
+            dict_response = {'error': True,
+                             'message': "Error During Deleting Vendor Tag"}
+        return Response(dict_response)
+
+
+class GLOrgDataViewSet(viewsets.ViewSet): 
+    #authentication_classes = [JWTAuthentication]
+    #permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        query_filter = json.loads(self.request.query_params.get("q"))
+        current_page = int(self.request.query_params.get("page"))
+        per_page = int(self.request.query_params.get("perPage"))
+        start = per_page * current_page
+        end = per_page * current_page + per_page
+        gl_org_data = GLOrgData.objects.all()
+        response_dict = {}
+        if query_filter is not None:
+            taxonomy_filtered = gl_org_data.filter(**query_filter)[start:end]
+            count = gl_org_data.count()
+        else:
+            taxonomy_filtered = gl_org_data[start:end]
+            count = gl_org_data.count()
+        serializer = GLOrgDataSerializer(
+            taxonomy_filtered, many=True, context={"request": request})
+
+        response_dict = {'data': serializer.data,
+                             'count': count}
+        return Response(response_dict)
+
+    def create(self, request):
+        try:
+            serializer = GLOrgDataSerializer(
+                data=request.data, context={"request": request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            dict_response = {"error": False,
+                             "message": "Vendor Tag saved successfully"}
+        except:
+            dict_response = {'error': True,
+                             'message': "Error During Saving Vendor Tag"}
+        return Response(dict_response)
+
+    def update(self, request, pk=id):
+        try:
+            queryset = GLOrgData.objects.all()
+            gl_org_data = get_object_or_404(queryset, pk=pk)
+            serializer = GLOrgDataSerializer(
+                gl_org_data, data=request.data, context={"request": request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            dict_response = {"error": False,
+                             "message": "Successfully Updated Vendor Tag"}
+        except:
+            dict_response = {'error': True,
+                             'message': "Error During Updating Vendor Tag"}
+        return Response(dict_response)
+
+    def retrieve(self, request, pk=id):
+        queryset = GLOrgData.objects.all()
+        gl_org_data = get_object_or_404(queryset, pk=pk)
+        serializer = GLOrgDataSerializer(gl_org_data, context={"request": request})
+        return Response({'error': False, 'message': "Single Data Fetch", "data": serializer.data})
+
+    def destroy(self, request, pk=id):
+        try:
+            queryset = GLOrgData.objects.all()
+            gl_org_data = get_object_or_404(queryset, pk=pk)
+            gl_org_data.delete()
+            dict_response = {"error": False,
+                             "message": "Successfully Deleted Vendor Tag"}
+        except:
+            dict_response = {'error': True,
+                             'message': "Error During Deleting Vendor Tag"}
+        return Response(dict_response)
+
+ 
+class PODataViewSet(viewsets.ViewSet): 
+    #authentication_classes = [JWTAuthentication]
+    #permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        query_filter = json.loads(self.request.query_params.get("q"))
+        current_page = int(self.request.query_params.get("page"))
+        per_page = int(self.request.query_params.get("perPage"))
+        start = per_page * current_page
+        end = per_page * current_page + per_page
+        po_data = POData.objects.all()
+        response_dict = {}
+        if query_filter is not None:
+            taxonomy_filtered = po_data.filter(**query_filter)[start:end]
+            count = po_data.count()
+        else:
+            taxonomy_filtered = po_data[start:end]
+            count = po_data.count()
+        serializer = PODataSerializer(
+            taxonomy_filtered, many=True, context={"request": request})
+
+        response_dict = {'data': serializer.data,
+                             'count': count}
+        return Response(response_dict)
+
+    def create(self, request):
+        try:
+            serializer = PODataSerializer(
+                data=request.data, context={"request": request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            dict_response = {"error": False,
+                             "message": "Vendor Tag saved successfully"}
+        except:
+            dict_response = {'error': True,
+                             'message': "Error During Saving Vendor Tag"}
+        return Response(dict_response)
+
+    def update(self, request, pk=id):
+        try:
+            queryset = POData.objects.all()
+            po_data = get_object_or_404(queryset, pk=pk)
+            serializer = PODataSerializer(
+                po_data, data=request.data, context={"request": request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            dict_response = {"error": False,
+                             "message": "Successfully Updated Vendor Tag"}
+        except:
+            dict_response = {'error': True,
+                             'message': "Error During Updating Vendor Tag"}
+        return Response(dict_response)
+
+    def retrieve(self, request, pk=id):
+        queryset = POData.objects.all()
+        po_data = get_object_or_404(queryset, pk=pk)
+        serializer = PODataSerializer(po_data, context={"request": request})
+        return Response({'error': False, 'message': "Single Data Fetch", "data": serializer.data})
+
+    def destroy(self, request, pk=id):
+        try:
+            queryset = POData.objects.all()
+            po_data = get_object_or_404(queryset, pk=pk)
+            po_data.delete()
+            dict_response = {"error": False,
+                             "message": "Successfully Deleted Vendor Tag"}
+        except:
+            dict_response = {'error': True,
+                             'message': "Error During Deleting Vendor Tag"}
+        return Response(dict_response)
 def taxonomy_data_view(request):
     if request.method == "GET":
         start, end, query_filter = fetch_get_data(request)
@@ -536,7 +894,7 @@ def taxonomy_data_view(request):
         return HttpResponse(serialized_data, content_type="text/json-comment-filtered")
     if request.method == "DELETE":
         pk_list, project_reference_object = fetch_del_data(request)
-        for item in pk_list:
+        for item in pk_list: 
             taxonomy_object = TaxonomyData.objects.get(UserProjectReference=project_reference_object, pk=item)
             taxonomy_object.delete()
         return HttpResponse("Successfully Deleted!", content_type="text/json-comment-filtered")

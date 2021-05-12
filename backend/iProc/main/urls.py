@@ -1,11 +1,15 @@
 from django.urls import path, include
 from rest_framework import routers
 from main import views
-
+   
 
 router=routers.DefaultRouter()
 router.register("userlist", views.UserList, basename='Userlists')
-
+router.register('taxonomy-data', views.TaxonomyDataViewSet, basename="Taxonomy Data"),
+router.register('invoice-data', views.InvoiceDataViewSet, basename="Invoice Data"),
+router.register('po-data', views.PODataViewSet, basename="PO Data"),
+router.register('gl-data', views.GLOrgDataViewSet, basename="GL Data"),
+router.register('contract-data', views.ContractDataViewSet, basename="Contract Data"),
 
 urlpatterns = [
     path('admin-data', views.admin_data, name='Admin Data'),
@@ -13,11 +17,7 @@ urlpatterns = [
     path('utils', views.utils_view, name="Utils"),
     # -------------------------------------DataUrls---------------------------------------------------
     path('file-import/', views.file_import, name='Invoice And Taxonomy Data'),
-    path('taxonomy-data', views.taxonomy_data_view, name="Taxonomy Data"),
-    path('invoice-data', views.invoice_data_view, name="Invoice Data"),
-    path('po-data', views.po_data_view, name="PO Data"),
-    path('gl-data', views.gl_data_view, name="GL Data"),
-    path('contract-data', views.contract_data_view, name="Contract Data"),
+
     path('manage-templates', views.manage_templates, name="Manage Templates"),
     path('default-templates', views.default_templates, name='Default Templates'),
     path('saved-templates', views.saved_templates, name='Saved Templates'),
