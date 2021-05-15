@@ -2,6 +2,7 @@ import * as Types from "./actionTypes";
 
 const initialState = {
   vendors: [],
+  pendingVendors: [],
   isFetching: false,
   perPage: 5,
   currentPage: 1,
@@ -24,7 +25,7 @@ export const vendorApprovalReducer = (state = initialState, action) => {
       return {
         ...state,
         isFetching: false,
-        vendors: action.payload,
+        pendingVendors: action.payload,
       };
     case Types.FETCH_APPROVED_VEN_START:
       return {

@@ -151,8 +151,9 @@ const VendorHomepage = async(() =>
 const OpenVendor = async(() =>
   import("../main/pages/vendor_management/open_vendor_request/OpenVendorData")
 );
-const ComplienceForm = async(()=>
-import("../main/pages/vendor_management/complience_form"))
+const ComplienceForm = async(() =>
+  import("../main/pages/vendor_management/complience_form")
+);
 const VendorAnalytics = async(() =>
   import(
     "../main/pages/vendor_management/vendor_analytics/VendorAnalytics.main.page"
@@ -297,40 +298,7 @@ const PublicDashboards = async(() =>
 const UserProfile = async(() => import("../main/pages/user/UserProfile"));
 const UserHistory = async(() => import("../main/pages/user/UserHistory"));
 const UserTasks = async(() => import("../main/pages/user/UserTasks"));
-const CreateVendor = async(() =>
-  import("../main/pages/vendorManagement/createvendor/CreateVendorForm")
-);
-const OnBoarding = async(() =>
-  import("../main/pages/vendorManagement/onboarding/BoardingForm")
-);
-const SupplierRequests = async(() =>
-  import(
-    "../main/pages/vendorManagement/supplierrequest/allrequests/SupplierData"
-  )
-);
-const supplierManagement = {
-  id: "Vendor Management",
-  path: "/vendor-management",
-  icon: <CardTravelIcon />,
-  children: [
-    {
-      path: "/vendor-management/create-vendor",
-      name: "Create Vendor",
-      component: CreateVendor,
-    },
-    {
-      path: "/vendor-management/on-boarding",
-      name: "On Boarding",
-      component: OnBoarding,
-    },
-    {
-      name: "Supplier Requests",
-      path: "/vendor-management/supplier-requests",
-      component: SupplierRequests,
-    },
-  ],
-  component: null,
-};
+
 const dashboardsRoutes = {
   id: "Dashboard",
   path: "/",
@@ -928,7 +896,6 @@ const User = {
 };
 
 const adminAndSeniorManager = [
-  supplierManagement,
   dashboardsRoutes,
   taxonomy,
   ruleEngineData,

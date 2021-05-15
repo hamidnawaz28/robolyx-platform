@@ -44,10 +44,10 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 
 //json structure
-import form_structure from "./jsonformat";
+import form_structure from "../main/pages/vendor_management/vendor_admin/add_review_template/jsonformat";
 import { Typography } from "@material-ui/core";
 import RadioGroup from "@material-ui/core/RadioGroup";
-import localStorage from "../../../../../common/storage/localStorage";
+import localStorage from "../common/storage/localStorage";
 
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Table from "../../../../../global/table/table.table";
+import Table from "../../../../../../global/table/table.table";
 import {
   VENDOR_REQUEST_COLUMNS,
   VENDOR_REQUEST,
-} from "../../../../../global/constants";
+} from "../../../../../../global/constants";
 import SupplierQueryForm from "./QueryForm";
 import { Typography, Grid } from "@material-ui/core";
 // import InvoicePng from "../../../../assets/invoice.png";
@@ -36,6 +36,7 @@ function Supplier() {
         selectOption={false}
         paginationOption={true}
         apiLink={VENDOR_REQUEST}
+        withId={true}
         // addNewDataHandle={addNewDataHandle}
         // editDataHandle={editDataHandle}
       />
