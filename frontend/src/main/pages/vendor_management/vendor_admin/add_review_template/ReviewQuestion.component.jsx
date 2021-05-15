@@ -56,6 +56,9 @@ import {
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 
+//Responsive
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+
 console.log(form_structure.sections);
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -142,6 +145,8 @@ const useStyles = makeStyles((theme) => ({
 
 function ReviewQuestion({ sections, setSections }) {
   const classes = useStyles();
+  const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+  const matchesXs = useMediaQuery((theme) => theme.breakpoints.down("xs"));
 
   const [expanded, setExpanded] = React.useState(false);
 
@@ -407,6 +412,7 @@ function ReviewQuestion({ sections, setSections }) {
     return sections.map((section, i) => (
       <Grid
         container
+        direction={matches ? "column-reverse" : "row"}
         style={{
           border: "2px solid #eee",
           backgroundColor: "#eee",
@@ -420,11 +426,23 @@ function ReviewQuestion({ sections, setSections }) {
               <Card className={classes.section_cont} variant="outlined">
                 <CardContent>
                   <Grid container>
-                    <Grid item sm={6}>
+                    <Grid
+                      item
+                      sm={6}
+                      style={{ marginBottom: matches ? "1em" : 0 }}
+                    >
                       <Grid container alignItems="center" spacing={2}>
-                        <Grid item>
-                          <Typography variant="h6"> Section Name : </Typography>
-                        </Grid>
+                        {matches ? (
+                          ""
+                        ) : (
+                          <Grid item>
+                            <Typography variant="h6">
+                              {" "}
+                              Section Name :{" "}
+                            </Typography>
+                          </Grid>
+                        )}
+
                         <Grid item sm={8}>
                           <TextField
                             fullWidth
@@ -446,9 +464,13 @@ function ReviewQuestion({ sections, setSections }) {
                     </Grid>
                     <Grid item sm={6}>
                       <Grid container alignItems="center" spacing={2}>
-                        <Grid item>
-                          <Typography variant="h6">Description :</Typography>
-                        </Grid>
+                        {matches ? (
+                          ""
+                        ) : (
+                          <Grid item>
+                            <Typography variant="h6">Description :</Typography>
+                          </Grid>
+                        )}
                         <Grid item sm={9}>
                           <TextField
                             fullWidth
@@ -499,7 +521,8 @@ function ReviewQuestion({ sections, setSections }) {
                                 <Typography
                                   className={classes.Accordion_summ_Ques}
                                 >
-                                  Question # {k + 1}. {ques.question_text}
+                                  {matches ? "" : "Question #"} {k + 1}.{" "}
+                                  {ques.question_text}
                                 </Typography>
                               </Grid>
                               {ques.question_type === "Text" ? (
@@ -511,10 +534,14 @@ function ReviewQuestion({ sections, setSections }) {
                                   <Grid
                                     item
                                     sm={1}
-                                    style={{ paddingLeft: "1em" }}
+                                    style={{
+                                      paddingLeft: "1em",
+                                    }}
                                   >
                                     <ShortTextIcon
-                                      style={{ marginRight: "10px" }}
+                                      style={{
+                                        marginRight: "10px",
+                                      }}
                                     />
                                   </Grid>
                                   <Grid item sm={11}>
@@ -543,7 +570,9 @@ function ReviewQuestion({ sections, setSections }) {
                                     style={{ paddingLeft: "1em" }}
                                   >
                                     <BackupIcon
-                                      style={{ marginRight: "10px" }}
+                                      style={{
+                                        paddingRight: "10px",
+                                      }}
                                     />
                                   </Grid>
                                   <Grid item sm={11}>
@@ -666,7 +695,11 @@ function ReviewQuestion({ sections, setSections }) {
                                   }}
                                 />
                               </Grid>
-                              <Grid item sm={3}>
+                              <Grid
+                                item
+                                sm={3}
+                                style={{ paddingTop: matches ? 0 : 20 }}
+                              >
                                 <Select
                                   className="select"
                                   style={{ color: "#5f6368", fontSize: "13px" }}
@@ -875,11 +908,7 @@ function ReviewQuestion({ sections, setSections }) {
                             ) : (
                               ques.options.map((option, p) => (
                                 <Grid container alignItems="center">
-                                  <Grid
-                                    item
-                                    xs={1}
-                                    style={{ flexBasis: "3em" }}
-                                  >
+                                  <Grid item style={{ flexBasis: "3em" }}>
                                     {ques.question_type === "Radio" ? (
                                       <Radio
                                         value={ques.answerkey}
@@ -908,7 +937,7 @@ function ReviewQuestion({ sections, setSections }) {
                                       />
                                     )}
                                   </Grid>
-                                  <Grid item xs={10}>
+                                  <Grid item sm={10} xs={8}>
                                     <TextField
                                       type="text"
                                       InputProps={{
@@ -978,7 +1007,7 @@ function ReviewQuestion({ sections, setSections }) {
                               alignItems="center"
                               style={{ marginTop: "1em" }}
                             >
-                              <Grid item sm={8}>
+                              <Grid item sm={8} xs={12}>
                                 <Button
                                   size="small"
                                   onClick={() => {
@@ -1279,11 +1308,17 @@ function ReviewQuestion({ sections, setSections }) {
           </Grid>
         </Grid>
         <Grid item sm={1}>
-          <Card style={{ position: "sticky", top: 75, width: "60%" }}>
-            <CardContent style={{ padding: "0.5em 0em" }}>
+          <Card
+            style={{
+              position: "sticky",
+              top: matches ? 0 : 75,
+              width: matches ? "100%" : "60%",
+            }}
+          >
+            <CardContent style={{ padding: matches ? "0" : "0.5em 0em" }}>
               <Grid
                 container
-                direction="column"
+                direction={matches ? "row" : "column"}
                 justify="center"
                 alignItems="center"
               >

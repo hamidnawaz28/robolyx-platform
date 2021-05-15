@@ -12,6 +12,9 @@ import axios from "axios";
 import localStorage from "../../../../../common/storage/localStorage";
 import form_structure from "./jsonformat";
 
+//Responsive
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+
 const useStyles = makeStyles((theme) => ({
   question_form_top_name: {
     border: "1px solid #e1e9f1",
@@ -24,7 +27,8 @@ const useStyles = makeStyles((theme) => ({
 
 function AddReviewTemplate() {
   const classes = useStyles();
-  const [formName, setFormName] = useState("untitled Form");
+  const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+  const [formName, setFormName] = useState("Untitled Form");
   const [sections, setSections] = useState([]);
 
   console.log("Form title", formName);
@@ -105,8 +109,10 @@ function AddReviewTemplate() {
   return (
     <Grid>
       <Grid container alignItems="center" justify="space-between">
-        <Grid item>
-          <h2>Add Review Templates</h2>
+        <Grid item style={{ marginBottom: "1em" }}>
+          <Typography variant={matches ? "h4" : "h2"}>
+            Add Review Templates
+          </Typography>
         </Grid>
         <Grid item style={{ marginRight: "1em" }}>
           <Button
@@ -126,7 +132,7 @@ function AddReviewTemplate() {
         <Grid item>
           <Typography variant="h5">Review Template Name : </Typography>
         </Grid>
-        <Grid item style={{ marginLeft: "1em" }}>
+        <Grid item style={{ marginLeft: matches ? "0" : "1em" }}>
           <TextField
             type="text"
             className="question_form_top_name"
