@@ -59,6 +59,9 @@ import {
 //Responsive
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
+//Drag and Drop
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+
 console.log(form_structure.sections);
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -408,966 +411,1164 @@ function ReviewQuestion({ sections, setSections }) {
     localStorage.set("section", qs);
   }
 
+  function onDragEnd(result) {
+    console.log("result", result);
+    if (!result.destination) {
+      return;
+    }
+    var sect = [...sections];
+    const itemF = reorder(
+      sect,
+      result.source.index,
+      result.destination.index,
+      result.source.droppableId
+    );
+    setSections(itemF);
+  }
+
+  const reorder = (list, startIndex, endIndex, droppableId) => {
+    const result = Array.from(list);
+    console.log("result from reorder", result);
+    const [removed] = result[parseInt(droppableId)].questions.splice(
+      startIndex,
+      1
+    );
+    result[parseInt(droppableId)].questions.splice(endIndex, 0, removed);
+    return result;
+  };
+
   function questionsUI() {
     return sections.map((section, i) => (
-      <Grid
-        container
-        direction={matches ? "column-reverse" : "row"}
-        style={{
-          border: "2px solid #eee",
-          backgroundColor: "#eee",
-          marginBottom: "4em",
-        }}
-        spacing={6}
-      >
-        <Grid item sm={11}>
-          <Grid container direction="column">
-            <Grid item>
-              <Card className={classes.section_cont} variant="outlined">
-                <CardContent>
-                  <Grid container>
-                    <Grid
-                      item
-                      sm={6}
-                      style={{ marginBottom: matches ? "1em" : 0 }}
-                    >
-                      <Grid container alignItems="center" spacing={2}>
-                        {matches ? (
-                          ""
-                        ) : (
-                          <Grid item>
-                            <Typography variant="h6">
-                              {" "}
-                              Section Name :{" "}
-                            </Typography>
-                          </Grid>
-                        )}
-
-                        <Grid item sm={8}>
-                          <TextField
-                            fullWidth
-                            type="text"
-                            placeholder={section.section_name}
-                            value={section.section_name}
-                            onChange={(e) =>
-                              changesectionname(e.target.value, i)
-                            }
-                            InputProps={{
-                              classes: {
-                                input: classes.input,
-                                underline: classes.underline,
-                              },
-                            }}
-                          ></TextField>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                    <Grid item sm={6}>
-                      <Grid container alignItems="center" spacing={2}>
-                        {matches ? (
-                          ""
-                        ) : (
-                          <Grid item>
-                            <Typography variant="h6">Description :</Typography>
-                          </Grid>
-                        )}
-                        <Grid item sm={9}>
-                          <TextField
-                            fullWidth
-                            type="text"
-                            placeholder={section.section_desp}
-                            value={section.section_desp}
-                            onChange={(e) =>
-                              changesectiondesp(e.target.value, i)
-                            }
-                            InputProps={{
-                              classes: {
-                                input: classes.input,
-                                underline: classes.underline,
-                              },
-                            }}
-                          ></TextField>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </CardContent>
-              </Card>
-            </Grid>
-
-            <Grid item style={{ paddingTop: "1em" }}>
-              {section.questions.map((ques, k) => (
-                <div className={classes.accordion_contain}>
-                  <Accordion
-                    expanded={sections[i].questions[k].open}
-                    onChange={() => {
-                      handleExpand(i, k);
-                    }}
-                    className={ques.open ? classes.add_border : ""}
-                  >
-                    {!section.questions[k].open ? (
-                      <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1bh-content"
-                        id="panel1bh-header"
-                      >
-                        <Card
-                          className={classes.accord_summary}
-                          variant="outlined"
-                        >
-                          <CardContent>
-                            <Grid container direction="column" spacing={2}>
-                              <Grid item>
-                                <Typography
-                                  className={classes.Accordion_summ_Ques}
-                                >
-                                  {matches ? "" : "Question #"} {k + 1}.{" "}
-                                  {ques.question_text}
-                                </Typography>
-                              </Grid>
-                              {ques.question_type === "Text" ? (
-                                <Grid
-                                  container
-                                  alignItems="center"
-                                  alignContent="center"
-                                >
-                                  <Grid
-                                    item
-                                    sm={1}
-                                    style={{
-                                      paddingLeft: "1em",
-                                    }}
-                                  >
-                                    <ShortTextIcon
-                                      style={{
-                                        marginRight: "10px",
-                                      }}
-                                    />
-                                  </Grid>
-                                  <Grid item sm={11}>
-                                    <TextField
-                                      type="text"
-                                      InputProps={{
-                                        disableUnderline: "true",
-                                        className: classes.text_input,
-                                      }}
-                                      placeholder="Long-Answer Text"
-                                      value="Long-Answer Text"
-                                      fullWidth
-                                      disabled
-                                    ></TextField>
-                                  </Grid>
-                                </Grid>
-                              ) : ques.question_type === "File Upload" ? (
-                                <Grid
-                                  container
-                                  alignItems="center"
-                                  alignContent="center"
-                                >
-                                  <Grid
-                                    item
-                                    sm={1}
-                                    style={{ paddingLeft: "1em" }}
-                                  >
-                                    <BackupIcon
-                                      style={{
-                                        paddingRight: "10px",
-                                      }}
-                                    />
-                                  </Grid>
-                                  <Grid item sm={11}>
-                                    <TextField
-                                      type="text"
-                                      InputProps={{
-                                        disableUnderline: "true",
-                                        className: classes.text_input,
-                                      }}
-                                      placeholder="Upload your file here"
-                                      value="Upload your file here"
-                                      fullWidth
-                                      disabled
-                                    ></TextField>
-                                  </Grid>
-                                </Grid>
-                              ) : ques.question_type === "Date" ? (
-                                <Grid
-                                  container
-                                  alignItems="center"
-                                  alignContent="center"
-                                >
-                                  <Grid item sm={1}>
-                                    <EventIcon
-                                      style={{ marginRight: "10px" }}
-                                    />
-                                  </Grid>
-                                  <Grid item sm={11}>
-                                    <TextField
-                                      type="text"
-                                      InputProps={{
-                                        disableUnderline: "true",
-                                        className: classes.text_input,
-                                      }}
-                                      placeholder="Write your date here"
-                                      value="Write your date here"
-                                      fullWidth
-                                      disabled
-                                    ></TextField>
-                                  </Grid>
-                                </Grid>
-                              ) : (
-                                <Grid item>
-                                  {ques.options.map((op, j) => (
-                                    <div key={j}>
-                                      <div style={{ display: "flex" }}>
-                                        <FormControlLabel
-                                          style={{
-                                            marginLeft: "5px",
-                                            marginBottom: "5px",
-                                          }}
-                                          disabled
-                                          control={
-                                            ques.question_type ===
-                                            "Checkbox" ? (
-                                              <Checkbox
-                                                name="checkedB"
-                                                color="primary"
-                                                required={ques.type}
-                                              />
-                                            ) : ques.question_type ===
-                                              "Radio" ? (
-                                              <Radio
-                                                value="a"
-                                                name="radio-button"
-                                                required={ques.type}
-                                              />
-                                            ) : ques.question_type ===
-                                              "Dropdown" ? (
-                                              <Radio
-                                                value="a"
-                                                name="radio-button"
-                                                required={ques.type}
-                                              />
-                                            ) : (
-                                              <input
-                                                type={ques.question_type}
-                                                color="primary"
-                                                style={{ marginRight: "3px" }}
-                                                required={ques.type}
-                                              />
-                                            )
-                                          }
-                                          label={
-                                            <Typography
-                                              className={
-                                                classes.Accordion_summ_option
-                                              }
-                                            >
-                                              {ques.options[j].optionText}
-                                            </Typography>
-                                          }
-                                        />
-                                      </div>
-                                    </div>
-                                  ))}
-                                </Grid>
-                              )}
-                            </Grid>
-                          </CardContent>
-                        </Card>
-                      </AccordionSummary>
-                    ) : (
-                      <div></div>
-                    )}
-                    {!ques.answer ? (
-                      <AccordionDetails>
-                        <Grid container direction="column">
-                          <Grid item className={classes.quesText}>
-                            <Grid container spacing={10}>
-                              <Grid item sm={9}>
-                                <TextField
-                                  id="standard-basic"
-                                  variant="filled"
-                                  fullWidth
-                                  placeholder="Question"
-                                  value={ques.question_text}
-                                  onChange={(e) => {
-                                    handleQuestionValue(e.target.value, i, k);
-                                  }}
-                                />
-                              </Grid>
-                              <Grid
-                                item
-                                sm={3}
-                                style={{ paddingTop: matches ? 0 : 20 }}
-                              >
-                                <Select
-                                  className="select"
-                                  style={{ color: "#5f6368", fontSize: "13px" }}
-                                  value={ques.question_type}
-                                >
-                                  {/* <MenuItem value="radio" className="menuitem" >
-														 <ShortTextIcon style={{marginRight:"10px"}} /> <span style={{marginBottom:"10px"}}>Short Paragraph</span></MenuItem>
-														 */}
-                                  <MenuItem
-                                    id="text"
-                                    value="Text"
-                                    onClick={() => {
-                                      addQuestionType(i, k, "Text");
-                                    }}
-                                  >
-                                    <Grid container alignItems="center">
-                                      <Grid item>
-                                        <SubjectIcon
-                                          style={{ marginRight: "10px" }}
-                                        />
-                                      </Grid>
-                                      <Grid item>Paragraph</Grid>
-                                    </Grid>
-                                  </MenuItem>
-
-                                  <MenuItem
-                                    id="file_upload"
-                                    value="File Upload"
-                                    onClick={() => {
-                                      addQuestionType(i, k, "File Upload");
-                                    }}
-                                  >
-                                    <Grid container alignItems="center">
-                                      <Grid item>
-                                        <BackupIcon
-                                          style={{ marginRight: "10px" }}
-                                        />
-                                      </Grid>
-                                      <Grid item>File Upload</Grid>
-                                    </Grid>
-                                  </MenuItem>
-
-                                  <MenuItem
-                                    id="date"
-                                    value="Date"
-                                    onClick={() => {
-                                      addQuestionType(i, k, "Date");
-                                    }}
-                                  >
-                                    <Grid container alignItems="center">
-                                      <Grid item>
-                                        <EventIcon
-                                          style={{ marginRight: "10px" }}
-                                        />
-                                      </Grid>
-
-                                      <Grid item>Date</Grid>
-                                    </Grid>
-                                  </MenuItem>
-
-                                  {/* <MenuItem id="checkbox"><RadioButtonCheckedIcon checked style={{marginRight:"10px", color:"#70757a"}}/> Multiple Choice</MenuItem> */}
-                                  <MenuItem
-                                    id="Checkbox"
-                                    value="Checkbox"
-                                    onClick={() => {
-                                      addQuestionType(i, k, "Checkbox");
-                                    }}
-                                  >
-                                    <Grid container alignItems="center">
-                                      <Grid item>
-                                        <CheckBoxIcon
-                                          style={{
-                                            marginRight: "10px",
-                                            color: "#70757a",
-                                          }}
-                                          checked
-                                        />
-                                      </Grid>
-                                      <Grid item>Checkboxes</Grid>
-                                    </Grid>
-                                  </MenuItem>
-                                  <MenuItem
-                                    id="dropdown"
-                                    value="Dropdown"
-                                    onClick={() => {
-                                      addQuestionType(i, k, "Dropdown");
-                                    }}
-                                  >
-                                    <Grid container alignItems="center">
-                                      <Grid item>
-                                        <ArrowDropDownCircleIcon
-                                          style={{
-                                            marginRight: "10px",
-                                            color: "#70757a",
-                                          }}
-                                          checked
-                                        />
-                                      </Grid>
-                                      <Grid item>Dropdown</Grid>
-                                    </Grid>
-                                  </MenuItem>
-
-                                  <MenuItem
-                                    id="Radio"
-                                    value="Radio"
-                                    onClick={() => {
-                                      addQuestionType(i, k, "Radio");
-                                    }}
-                                  >
-                                    <Radio
-                                      style={{
-                                        marginRight: "10px",
-                                        color: "#70757a",
-                                      }}
-                                      checked
-                                    />
-                                    Multiple Choice
-                                  </MenuItem>
-                                  {/* <MenuItem value="40"> <BackupIcon style={{marginRight:"10px"}} /> File Upload</MenuItem>
-														<MenuItem value="50"> <LinearScaleIcon style={{marginRight:"10px"}} /> Linear Scale</MenuItem>
-														<MenuItem value="60"> <AppsIcon style={{marginRight:"10px"}} /> Tick-box grid</MenuItem>
-					 */}
-
-                                  {/* <MenuItem value="aate"  onClick= {(e)=>{setType(e.target.id)}}> <EventIcon style={{marginRight:"10px"}} /> Date</MenuItem>
-														<MenuItem value="date"  onClick= {(e)=>{setType(e.target.id)}}> <ScheduleIcon style={{marginRight:"10px"}} /> Time</MenuItem>
-					 */}
-                                </Select>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-
-                          <Grid item>
-                            {ques.question_type === "Text" ? (
-                              <Grid
-                                container
-                                alignItems="center"
-                                alignContent="center"
-                                style={{ marginTop: "1em" }}
-                              >
-                                <Grid item style={{ paddingLeft: "1em" }}>
-                                  <ShortTextIcon
-                                    style={{ marginRight: "10px" }}
-                                  />
-                                </Grid>
-                                <Grid item sm={11}>
-                                  <TextField
-                                    type="text"
-                                    InputProps={{
-                                      disableUnderline: "true",
-                                      className: classes.text_input,
-                                    }}
-                                    placeholder="Long-Answer Text"
-                                    value="Long-Answer Text"
-                                    fullWidth
-                                    disabled
-                                  ></TextField>
-                                </Grid>
-                              </Grid>
-                            ) : ques.question_type === "File Upload" ? (
-                              <Grid
-                                container
-                                alignItems="center"
-                                alignContent="center"
-                                style={{ marginTop: "1em" }}
-                              >
-                                <Grid item style={{ paddingLeft: "1em" }}>
-                                  <BackupIcon style={{ marginRight: "10px" }} />
-                                </Grid>
-                                <Grid item sm={11}>
-                                  <TextField
-                                    type="text"
-                                    InputProps={{
-                                      disableUnderline: "true",
-                                      className: classes.text_input,
-                                    }}
-                                    placeholder="Upload your file here"
-                                    value="Upload your file here"
-                                    fullWidth
-                                    disabled
-                                  ></TextField>
-                                </Grid>
-                              </Grid>
-                            ) : ques.question_type === "Date" ? (
-                              <Grid
-                                container
-                                alignItems="center"
-                                alignContent="center"
-                                style={{ marginTop: "1em" }}
-                              >
-                                <Grid item style={{ paddingLeft: "1em" }}>
-                                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                    <KeyboardDatePicker
-                                      disableToolbar
-                                      variant="inline"
-                                      format="MM/dd/yyyy"
-                                      margin="normal"
-                                      id="date-picker-inline"
-                                      label="Select a date"
-                                      KeyboardButtonProps={{
-                                        "aria-label": "change date",
-                                      }}
-                                    />
-                                  </MuiPickersUtilsProvider>
-                                </Grid>
-                              </Grid>
-                            ) : (
-                              ques.options.map((option, p) => (
-                                <Grid container alignItems="center">
-                                  <Grid item style={{ flexBasis: "3em" }}>
-                                    {ques.question_type === "Radio" ? (
-                                      <Radio
-                                        value={ques.answerkey}
-                                        name={ques.type}
-                                        required={ques.type}
-                                        disabled
-                                      />
-                                    ) : ques.question_type === "Dropdown" ? (
-                                      <Radio
-                                        value={ques.answerkey}
-                                        name={ques.type}
-                                        required={ques.type}
-                                        disabled
-                                      />
-                                    ) : ques.question_type === "Checkbox" ? (
-                                      <Checkbox
-                                        name="checkedB"
-                                        color="primary"
-                                        checked={ques.checkbox_answerkey[p]}
-                                        required={ques.type}
-                                        disabled
-                                      />
-                                    ) : (
-                                      <ShortTextIcon
-                                        style={{ marginRight: "10px" }}
-                                      />
-                                    )}
-                                  </Grid>
-                                  <Grid item sm={10} xs={8}>
-                                    <TextField
-                                      type="text"
-                                      InputProps={{
-                                        disableUnderline: "true",
-                                        className: classes.text_input,
-                                      }}
-                                      placeholder="option"
-                                      value={ques.options[p].optionText}
-                                      fullWidth
-                                      onChange={(e) => {
-                                        handleOptionValue(
-                                          e.target.value,
-                                          i,
-                                          k,
-                                          p
-                                        );
-                                      }}
-                                    ></TextField>
-                                  </Grid>
-                                  <Grid item xs={1}>
-                                    <IconButton
-                                      aria-label="delete"
-                                      onClick={() => {
-                                        removeOption(i, k, p);
-                                      }}
-                                    >
-                                      <CloseIcon />
-                                    </IconButton>
-                                  </Grid>
-                                </Grid>
-                              ))
-                            )}
-                          </Grid>
-                          {ques.question_type === "File Upload" ||
-                          ques.question_type === "Date" ||
-                          ques.question_type === "Text" ? (
-                            ""
-                          ) : (
-                            <Grid item>
-                              {ques.options.length < 5 &&
-                              ques.question_type !== "Text" ? (
-                                <Grid className="add_question_body">
-                                  <Button
-                                    size="small"
-                                    onClick={() => {
-                                      addOption(i, k);
-                                    }}
-                                    style={{
-                                      textTransform: "none",
-                                      color: "#4285f4",
-                                      fontSize: "13px",
-                                      fontWeight: "600",
-                                    }}
-                                  >
-                                    Add Option
-                                  </Button>
-                                </Grid>
-                              ) : (
-                                ""
-                              )}
-                            </Grid>
-                          )}
-                          <Divider />
-                          <Grid item>
-                            <Grid
-                              container
-                              alignItems="center"
-                              style={{ marginTop: "1em" }}
-                            >
-                              <Grid item sm={8} xs={12}>
-                                <Button
-                                  size="small"
-                                  onClick={() => {
-                                    addAnswer(i, k);
-                                  }}
-                                  style={{
-                                    textTransform: "none",
-                                    color: "#4285f4",
-                                    fontSize: "13px",
-                                    fontWeight: "600",
-                                  }}
-                                >
-                                  <CropRotateIcon
-                                    style={{
-                                      border: "2px solid #4285f4",
-                                      padding: "2px",
-                                      marginRight: "8px",
-                                    }}
-                                  />
-                                  Answer key
-                                </Button>
-                              </Grid>
-                              <Grid item>
-                                <IconButton
-                                  aria-label="Copy"
-                                  onClick={() => {
-                                    copyQuestion(i, k);
-                                  }}
-                                >
-                                  <FilterNoneIcon />
-                                </IconButton>
-                              </Grid>
-                              <Grid item>
-                                <IconButton
-                                  aria-label="delete"
-                                  onClick={() => {
-                                    deleteQuestion(i, k);
-                                  }}
-                                >
-                                  <DeleteForeverIcon />
-                                </IconButton>
-                              </Grid>
-                              <Grid item>
-                                <span
-                                  style={{ color: "#5f6368", fontSize: "13px" }}
-                                >
-                                  Required
-                                </span>
-                                <Switch
-                                  name="checkedA"
-                                  color="primary"
-                                  checked={ques.required}
-                                  onClick={() => {
-                                    requiredQuestion(i, k);
-                                  }}
-                                />
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                      </AccordionDetails>
-                    ) : (
-                      <AccordionDetails>
-                        <Grid container direction="column">
-                          <Grid item style={{ marginBottom: "1em" }}>
-                            <Typography variant="h4">
-                              Choose Correct Answer:
-                            </Typography>{" "}
-                          </Grid>
-                          <Grid item>
-                            <Grid container spacing={4}>
-                              <Grid item sm={10}>
-                                <TextField
-                                  type="text"
-                                  fullWidth
-                                  InputProps={{
-                                    classes: {
-                                      input: classes.answerInput,
-                                    },
-                                  }}
-                                  placeholder="Question"
-                                  value={ques.question_text}
-                                  onChange={(e) => {
-                                    handleQuestionValue(e.target.value, i);
-                                  }}
-                                  variant="filled"
-                                  disabled
-                                />
-                              </Grid>
-                              <Grid item sm={2}>
-                                <TextField
-                                  type="number"
-                                  variant="outlined"
-                                  size="small"
-                                  className="points"
-                                  min="0"
-                                  step="1"
-                                  placeholder="0"
-                                  value={ques.points}
-                                  onChange={(e) => {
-                                    setOptionPoints(e.target.value, i, k);
-                                  }}
-                                />
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                          <Grid item>
-                            {ques.question_type === "Text" ? (
-                              <Grid
-                                container
-                                alignItems="center"
-                                alignContent="center"
-                                style={{ marginTop: "1em" }}
-                              >
-                                <Grid item style={{ paddingLeft: "1em" }}>
-                                  <ShortTextIcon
-                                    style={{ marginRight: "10px" }}
-                                  />
-                                </Grid>
-                                <Grid item sm={11}>
-                                  <TextField
-                                    type="text"
-                                    InputProps={{
-                                      disableUnderline: "true",
-                                      className: classes.text_input,
-                                    }}
-                                    placeholder="Long-Answer Text"
-                                    value="Long-Answer Text"
-                                    fullWidth
-                                    disabled
-                                  ></TextField>
-                                </Grid>
-                              </Grid>
-                            ) : ques.question_type === "Date" ? (
-                              <Grid
-                                container
-                                alignItems="center"
-                                alignContent="center"
-                                style={{ marginTop: "1em" }}
-                              >
-                                <Grid item style={{ paddingLeft: "1em" }}>
-                                  <EventIcon style={{ marginRight: "10px" }} />
-                                </Grid>
-                                <Grid item sm={11}>
-                                  <TextField
-                                    type="text"
-                                    InputProps={{
-                                      disableUnderline: "true",
-                                      className: classes.text_input,
-                                    }}
-                                    placeholder="Write Date Here"
-                                    value="Write Date Here"
-                                    fullWidth
-                                    disabled
-                                  ></TextField>
-                                </Grid>
-                              </Grid>
-                            ) : ques.question_type === "File Upload" ? (
-                              <Grid
-                                container
-                                alignItems="center"
-                                alignContent="center"
-                                style={{ marginTop: "1em" }}
-                              >
-                                <Grid item style={{ paddingLeft: "1em" }}>
-                                  <BackupIcon style={{ marginRight: "10px" }} />
-                                </Grid>
-                                <Grid item sm={11}>
-                                  <TextField
-                                    type="text"
-                                    InputProps={{
-                                      disableUnderline: "true",
-                                      className: classes.text_input,
-                                    }}
-                                    placeholder="Write Date Here"
-                                    value="Write Date Here"
-                                    fullWidth
-                                    disabled
-                                  ></TextField>
-                                </Grid>
-                              </Grid>
-                            ) : (
-                              ques.options.map((op, p) => (
-                                <div
-                                  className="add_question_body"
-                                  key={p}
-                                  style={{
-                                    marginLeft: "8px",
-                                    marginBottom: "10px",
-                                    marginTop: "5px",
-                                  }}
-                                >
-                                  <div key={p}>
-                                    <div
-                                      style={{ display: "flex" }}
-                                      className=""
-                                    >
-                                      <div className="form-check">
-                                        <label
-                                          style={{ fontSize: "13px" }}
-                                          onClick={() => {
-                                            setOptionAnswer(
-                                              ques.options[p].optionText,
-                                              i,
-                                              k,
-                                              p
-                                            );
-                                          }}
-                                        >
-                                          {ques.question_type === "Radio" ? (
-                                            <RadioGroup
-                                              name="radio-button"
-                                              onChange={handleRadioChange}
-                                              value={radioValue}
-                                            >
-                                              <FormControlLabel
-                                                required={ques.required}
-                                                value={
-                                                  ques.options[p].optionText
-                                                }
-                                                control={<Radio />}
-                                                label={
-                                                  ques.options[p].optionText
-                                                }
-                                              />
-                                            </RadioGroup>
-                                          ) : ques.question_type ===
-                                            "Dropdown" ? (
-                                            <RadioGroup
-                                              name="radio-button"
-                                              onChange={handleRadioChange}
-                                              value={radioValue}
-                                            >
-                                              <FormControlLabel
-                                                required={ques.required}
-                                                value={
-                                                  ques.options[p].optionText
-                                                }
-                                                control={<Radio />}
-                                                label={
-                                                  ques.options[p].optionText
-                                                }
-                                              />
-                                            </RadioGroup>
-                                          ) : ques.question_type ===
-                                            "Checkbox" ? (
-                                            <FormControlLabel
-                                              control={
-                                                <Checkbox
-                                                  name={ques.question_text}
-                                                />
-                                              }
-                                              label={ques.options[p].optionText}
-                                              value="option3"
-                                              required={ques.required}
-                                              checked={
-                                                ques.checkbox_answerkey[p]
-                                              }
-                                            />
-                                          ) : (
-                                            <ShortTextIcon
-                                              style={{ marginRight: "10px" }}
-                                            />
-                                          )}
-                                        </label>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              ))
-                            )}
-                          </Grid>
-                          <Grid item>
-                            <Button
-                              variant="outlined"
-                              color="primary"
-                              style={{
-                                textTransform: "none",
-                                color: "#4285f4",
-                                fontSize: "12px",
-                                marginTop: "12px",
-                                fontWeight: "600",
-                              }}
-                              onClick={() => {
-                                doneAnswer(i, k);
-                              }}
-                            >
-                              Done
-                            </Button>
-                          </Grid>
-                        </Grid>
-                      </AccordionDetails>
-                    )}
-                  </Accordion>
-                </div>
-              ))}
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item sm={1}>
-          <Card
-            style={{
-              position: "sticky",
-              top: matches ? 0 : 75,
-              width: matches ? "100%" : "60%",
-            }}
-          >
-            <CardContent style={{ padding: matches ? "0" : "0.5em 0em" }}>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId={String(i)}>
+          {(provided, snapshot) => (
+            <div {...provided.droppableProps} ref={provided.innerRef}>
               <Grid
                 container
-                direction={matches ? "row" : "column"}
-                justify="center"
-                alignItems="center"
+                direction={matches ? "column-reverse" : "row"}
+                style={{
+                  border: "2px solid #eee",
+                  backgroundColor: "#eee",
+                  marginBottom: "4em",
+                }}
+                spacing={6}
               >
-                <Grid item>
-                  <IconButton
-                    aria-label="add_question"
-                    onClick={() => {
-                      addMoreQuestionField(i);
-                    }}
-                  >
-                    <AddCircleOutlineIcon />
-                  </IconButton>
-                </Grid>
-                <Grid item>
-                  <IconButton
-                    aria-label="add_section"
-                    onClick={() => {
-                      restoreForm();
-                    }}
-                  >
-                    <SettingsBackupRestoreIcon />
-                  </IconButton>
-                </Grid>
-                <Grid item>
-                  <IconButton
-                    aria-label="add_section"
-                    onClick={() => {
-                      addSectionField(i);
-                    }}
-                  >
-                    <LibraryAddIcon />
-                  </IconButton>
-                </Grid>
+                <Grid item sm={11}>
+                  <Grid container direction="column">
+                    <Grid item>
+                      <Card className={classes.section_cont} variant="outlined">
+                        <CardContent>
+                          <Grid container>
+                            <Grid
+                              item
+                              sm={6}
+                              style={{ marginBottom: matches ? "1em" : 0 }}
+                            >
+                              <Grid container alignItems="center" spacing={2}>
+                                {matches ? (
+                                  ""
+                                ) : (
+                                  <Grid item>
+                                    <Typography variant="h6">
+                                      {" "}
+                                      Section Name :{" "}
+                                    </Typography>
+                                  </Grid>
+                                )}
 
-                <Grid item>
-                  <IconButton
-                    aria-label="delete_section"
-                    onClick={() => {
-                      adddeleteSection(i);
+                                <Grid item sm={8}>
+                                  <TextField
+                                    fullWidth
+                                    type="text"
+                                    placeholder={section.section_name}
+                                    value={section.section_name}
+                                    onChange={(e) =>
+                                      changesectionname(e.target.value, i)
+                                    }
+                                    InputProps={{
+                                      classes: {
+                                        input: classes.input,
+                                        underline: classes.underline,
+                                      },
+                                    }}
+                                  ></TextField>
+                                </Grid>
+                              </Grid>
+                            </Grid>
+                            <Grid item sm={6}>
+                              <Grid container alignItems="center" spacing={2}>
+                                {matches ? (
+                                  ""
+                                ) : (
+                                  <Grid item>
+                                    <Typography variant="h6">
+                                      Description :
+                                    </Typography>
+                                  </Grid>
+                                )}
+                                <Grid item sm={9}>
+                                  <TextField
+                                    fullWidth
+                                    type="text"
+                                    placeholder={section.section_desp}
+                                    value={section.section_desp}
+                                    onChange={(e) =>
+                                      changesectiondesp(e.target.value, i)
+                                    }
+                                    InputProps={{
+                                      classes: {
+                                        input: classes.input,
+                                        underline: classes.underline,
+                                      },
+                                    }}
+                                  ></TextField>
+                                </Grid>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+
+                    <Grid item style={{ paddingTop: "1em" }}>
+                      {section.questions.map((ques, k) => (
+                        <Draggable key={k} draggableId={String(k)} index={k}>
+                          {(provided, snapshot) => (
+                            <div
+                              className={classes.accordion_contain}
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <Accordion
+                                expanded={sections[i].questions[k].open}
+                                onChange={() => {
+                                  handleExpand(i, k);
+                                }}
+                                className={ques.open ? classes.add_border : ""}
+                              >
+                                {!section.questions[k].open ? (
+                                  <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel1bh-content"
+                                    id="panel1bh-header"
+                                  >
+                                    <Card
+                                      className={classes.accord_summary}
+                                      variant="outlined"
+                                    >
+                                      <CardContent>
+                                        <Grid
+                                          container
+                                          direction="column"
+                                          spacing={2}
+                                        >
+                                          <Grid item>
+                                            <Typography
+                                              className={
+                                                classes.Accordion_summ_Ques
+                                              }
+                                            >
+                                              {matches ? "" : "Question #"}{" "}
+                                              {k + 1}. {ques.question_text}
+                                            </Typography>
+                                          </Grid>
+                                          {ques.question_type === "Text" ? (
+                                            <Grid
+                                              container
+                                              alignItems="center"
+                                              alignContent="center"
+                                            >
+                                              <Grid
+                                                item
+                                                sm={1}
+                                                style={{
+                                                  paddingLeft: "1em",
+                                                }}
+                                              >
+                                                <ShortTextIcon
+                                                  style={{
+                                                    marginRight: "10px",
+                                                  }}
+                                                />
+                                              </Grid>
+                                              <Grid item sm={11}>
+                                                <TextField
+                                                  type="text"
+                                                  InputProps={{
+                                                    disableUnderline: "true",
+                                                    className:
+                                                      classes.text_input,
+                                                  }}
+                                                  placeholder="Long-Answer Text"
+                                                  value="Long-Answer Text"
+                                                  fullWidth
+                                                  disabled
+                                                ></TextField>
+                                              </Grid>
+                                            </Grid>
+                                          ) : ques.question_type ===
+                                            "File Upload" ? (
+                                            <Grid
+                                              container
+                                              alignItems="center"
+                                              alignContent="center"
+                                            >
+                                              <Grid
+                                                item
+                                                sm={1}
+                                                style={{ paddingLeft: "1em" }}
+                                              >
+                                                <BackupIcon
+                                                  style={{
+                                                    paddingRight: "10px",
+                                                  }}
+                                                />
+                                              </Grid>
+                                              <Grid item sm={11}>
+                                                <TextField
+                                                  type="text"
+                                                  InputProps={{
+                                                    disableUnderline: "true",
+                                                    className:
+                                                      classes.text_input,
+                                                  }}
+                                                  placeholder="Upload your file here"
+                                                  value="Upload your file here"
+                                                  fullWidth
+                                                  disabled
+                                                ></TextField>
+                                              </Grid>
+                                            </Grid>
+                                          ) : ques.question_type === "Date" ? (
+                                            <Grid
+                                              container
+                                              alignItems="center"
+                                              alignContent="center"
+                                            >
+                                              <Grid item sm={1}>
+                                                <EventIcon
+                                                  style={{
+                                                    marginRight: "10px",
+                                                  }}
+                                                />
+                                              </Grid>
+                                              <Grid item sm={11}>
+                                                <TextField
+                                                  type="text"
+                                                  InputProps={{
+                                                    disableUnderline: "true",
+                                                    className:
+                                                      classes.text_input,
+                                                  }}
+                                                  placeholder="Write your date here"
+                                                  value="Write your date here"
+                                                  fullWidth
+                                                  disabled
+                                                ></TextField>
+                                              </Grid>
+                                            </Grid>
+                                          ) : (
+                                            <Grid item>
+                                              {ques.options.map((op, j) => (
+                                                <div key={j}>
+                                                  <div
+                                                    style={{ display: "flex" }}
+                                                  >
+                                                    <FormControlLabel
+                                                      style={{
+                                                        marginLeft: "5px",
+                                                        marginBottom: "5px",
+                                                      }}
+                                                      disabled
+                                                      control={
+                                                        ques.question_type ===
+                                                        "Checkbox" ? (
+                                                          <Checkbox
+                                                            name="checkedB"
+                                                            color="primary"
+                                                            required={ques.type}
+                                                          />
+                                                        ) : ques.question_type ===
+                                                          "Radio" ? (
+                                                          <Radio
+                                                            value="a"
+                                                            name="radio-button"
+                                                            required={ques.type}
+                                                          />
+                                                        ) : ques.question_type ===
+                                                          "Dropdown" ? (
+                                                          <Radio
+                                                            value="a"
+                                                            name="radio-button"
+                                                            required={ques.type}
+                                                          />
+                                                        ) : (
+                                                          <input
+                                                            type={
+                                                              ques.question_type
+                                                            }
+                                                            color="primary"
+                                                            style={{
+                                                              marginRight:
+                                                                "3px",
+                                                            }}
+                                                            required={ques.type}
+                                                          />
+                                                        )
+                                                      }
+                                                      label={
+                                                        <Typography
+                                                          className={
+                                                            classes.Accordion_summ_option
+                                                          }
+                                                        >
+                                                          {
+                                                            ques.options[j]
+                                                              .optionText
+                                                          }
+                                                        </Typography>
+                                                      }
+                                                    />
+                                                  </div>
+                                                </div>
+                                              ))}
+                                            </Grid>
+                                          )}
+                                        </Grid>
+                                      </CardContent>
+                                    </Card>
+                                  </AccordionSummary>
+                                ) : (
+                                  <div></div>
+                                )}
+                                {!ques.answer ? (
+                                  <AccordionDetails>
+                                    <Grid container direction="column">
+                                      <Grid item className={classes.quesText}>
+                                        <Grid container spacing={10}>
+                                          <Grid item sm={9}>
+                                            <TextField
+                                              id="standard-basic"
+                                              variant="filled"
+                                              fullWidth
+                                              placeholder="Question"
+                                              value={ques.question_text}
+                                              onChange={(e) => {
+                                                handleQuestionValue(
+                                                  e.target.value,
+                                                  i,
+                                                  k
+                                                );
+                                              }}
+                                            />
+                                          </Grid>
+                                          <Grid
+                                            item
+                                            sm={3}
+                                            style={{
+                                              paddingTop: matches ? 0 : 20,
+                                            }}
+                                          >
+                                            <Select
+                                              className="select"
+                                              style={{
+                                                color: "#5f6368",
+                                                fontSize: "13px",
+                                              }}
+                                              value={ques.question_type}
+                                            >
+                                              {/* <MenuItem value="radio" className="menuitem" >
+														 <ShortTextIcon style={{marginRight:"10px"}} /> <span style={{marginBottom:"10px"}}>Short Paragraph</span></MenuItem>
+														 */}
+                                              <MenuItem
+                                                id="text"
+                                                value="Text"
+                                                onClick={() => {
+                                                  addQuestionType(i, k, "Text");
+                                                }}
+                                              >
+                                                <Grid
+                                                  container
+                                                  alignItems="center"
+                                                >
+                                                  <Grid item>
+                                                    <SubjectIcon
+                                                      style={{
+                                                        marginRight: "10px",
+                                                      }}
+                                                    />
+                                                  </Grid>
+                                                  <Grid item>Paragraph</Grid>
+                                                </Grid>
+                                              </MenuItem>
+
+                                              <MenuItem
+                                                id="file_upload"
+                                                value="File Upload"
+                                                onClick={() => {
+                                                  addQuestionType(
+                                                    i,
+                                                    k,
+                                                    "File Upload"
+                                                  );
+                                                }}
+                                              >
+                                                <Grid
+                                                  container
+                                                  alignItems="center"
+                                                >
+                                                  <Grid item>
+                                                    <BackupIcon
+                                                      style={{
+                                                        marginRight: "10px",
+                                                      }}
+                                                    />
+                                                  </Grid>
+                                                  <Grid item>File Upload</Grid>
+                                                </Grid>
+                                              </MenuItem>
+
+                                              <MenuItem
+                                                id="date"
+                                                value="Date"
+                                                onClick={() => {
+                                                  addQuestionType(i, k, "Date");
+                                                }}
+                                              >
+                                                <Grid
+                                                  container
+                                                  alignItems="center"
+                                                >
+                                                  <Grid item>
+                                                    <EventIcon
+                                                      style={{
+                                                        marginRight: "10px",
+                                                      }}
+                                                    />
+                                                  </Grid>
+
+                                                  <Grid item>Date</Grid>
+                                                </Grid>
+                                              </MenuItem>
+
+                                              {/* <MenuItem id="checkbox"><RadioButtonCheckedIcon checked style={{marginRight:"10px", color:"#70757a"}}/> Multiple Choice</MenuItem> */}
+                                              <MenuItem
+                                                id="Checkbox"
+                                                value="Checkbox"
+                                                onClick={() => {
+                                                  addQuestionType(
+                                                    i,
+                                                    k,
+                                                    "Checkbox"
+                                                  );
+                                                }}
+                                              >
+                                                <Grid
+                                                  container
+                                                  alignItems="center"
+                                                >
+                                                  <Grid item>
+                                                    <CheckBoxIcon
+                                                      style={{
+                                                        marginRight: "10px",
+                                                        color: "#70757a",
+                                                      }}
+                                                      checked
+                                                    />
+                                                  </Grid>
+                                                  <Grid item>Checkboxes</Grid>
+                                                </Grid>
+                                              </MenuItem>
+                                              <MenuItem
+                                                id="dropdown"
+                                                value="Dropdown"
+                                                onClick={() => {
+                                                  addQuestionType(
+                                                    i,
+                                                    k,
+                                                    "Dropdown"
+                                                  );
+                                                }}
+                                              >
+                                                <Grid
+                                                  container
+                                                  alignItems="center"
+                                                >
+                                                  <Grid item>
+                                                    <ArrowDropDownCircleIcon
+                                                      style={{
+                                                        marginRight: "10px",
+                                                        color: "#70757a",
+                                                      }}
+                                                      checked
+                                                    />
+                                                  </Grid>
+                                                  <Grid item>Dropdown</Grid>
+                                                </Grid>
+                                              </MenuItem>
+
+                                              <MenuItem
+                                                id="Radio"
+                                                value="Radio"
+                                                onClick={() => {
+                                                  addQuestionType(
+                                                    i,
+                                                    k,
+                                                    "Radio"
+                                                  );
+                                                }}
+                                              >
+                                                <Radio
+                                                  style={{
+                                                    marginRight: "10px",
+                                                    color: "#70757a",
+                                                  }}
+                                                  checked
+                                                />
+                                                Multiple Choice
+                                              </MenuItem>
+                                              {/* <MenuItem value="40"> <BackupIcon style={{marginRight:"10px"}} /> File Upload</MenuItem>
+                                    <MenuItem value="50"> <LinearScaleIcon style={{marginRight:"10px"}} /> Linear Scale</MenuItem>
+                                    <MenuItem value="60"> <AppsIcon style={{marginRight:"10px"}} /> Tick-box grid</MenuItem>*/}
+
+                                              {/* <MenuItem value="aate"  onClick= {(e)=>{setType(e.target.id)}}> <EventIcon style={{marginRight:"10px"}} /> Date</MenuItem>
+                                    <MenuItem value="date"  onClick= {(e)=>{setType(e.target.id)}}> <ScheduleIcon style={{marginRight:"10px"}} /> Time</MenuItem>
+					                                  */}
+                                            </Select>
+                                          </Grid>
+                                        </Grid>
+                                      </Grid>
+
+                                      <Grid item>
+                                        {ques.question_type === "Text" ? (
+                                          <Grid
+                                            container
+                                            alignItems="center"
+                                            alignContent="center"
+                                            style={{ marginTop: "1em" }}
+                                          >
+                                            <Grid
+                                              item
+                                              style={{ paddingLeft: "1em" }}
+                                            >
+                                              <ShortTextIcon
+                                                style={{ marginRight: "10px" }}
+                                              />
+                                            </Grid>
+                                            <Grid item sm={11}>
+                                              <TextField
+                                                type="text"
+                                                InputProps={{
+                                                  disableUnderline: "true",
+                                                  className: classes.text_input,
+                                                }}
+                                                placeholder="Long-Answer Text"
+                                                value="Long-Answer Text"
+                                                fullWidth
+                                                disabled
+                                              ></TextField>
+                                            </Grid>
+                                          </Grid>
+                                        ) : ques.question_type ===
+                                          "File Upload" ? (
+                                          <Grid
+                                            container
+                                            alignItems="center"
+                                            alignContent="center"
+                                            style={{ marginTop: "1em" }}
+                                          >
+                                            <Grid
+                                              item
+                                              style={{ paddingLeft: "1em" }}
+                                            >
+                                              <BackupIcon
+                                                style={{ marginRight: "10px" }}
+                                              />
+                                            </Grid>
+                                            <Grid item sm={11}>
+                                              <TextField
+                                                type="text"
+                                                InputProps={{
+                                                  disableUnderline: "true",
+                                                  className: classes.text_input,
+                                                }}
+                                                placeholder="Upload your file here"
+                                                value="Upload your file here"
+                                                fullWidth
+                                                disabled
+                                              ></TextField>
+                                            </Grid>
+                                          </Grid>
+                                        ) : ques.question_type === "Date" ? (
+                                          <Grid
+                                            container
+                                            alignItems="center"
+                                            alignContent="center"
+                                            style={{ marginTop: "1em" }}
+                                          >
+                                            <Grid
+                                              item
+                                              style={{ paddingLeft: "1em" }}
+                                            >
+                                              <MuiPickersUtilsProvider
+                                                utils={DateFnsUtils}
+                                              >
+                                                <KeyboardDatePicker
+                                                  disableToolbar
+                                                  variant="inline"
+                                                  format="MM/dd/yyyy"
+                                                  margin="normal"
+                                                  id="date-picker-inline"
+                                                  label="Select a date"
+                                                  KeyboardButtonProps={{
+                                                    "aria-label": "change date",
+                                                  }}
+                                                />
+                                              </MuiPickersUtilsProvider>
+                                            </Grid>
+                                          </Grid>
+                                        ) : (
+                                          ques.options.map((option, p) => (
+                                            <Grid container alignItems="center">
+                                              <Grid
+                                                item
+                                                style={{ flexBasis: "3em" }}
+                                              >
+                                                {ques.question_type ===
+                                                "Radio" ? (
+                                                  <Radio
+                                                    value={ques.answerkey}
+                                                    name={ques.type}
+                                                    required={ques.type}
+                                                    disabled
+                                                  />
+                                                ) : ques.question_type ===
+                                                  "Dropdown" ? (
+                                                  <Radio
+                                                    value={ques.answerkey}
+                                                    name={ques.type}
+                                                    required={ques.type}
+                                                    disabled
+                                                  />
+                                                ) : ques.question_type ===
+                                                  "Checkbox" ? (
+                                                  <Checkbox
+                                                    name="checkedB"
+                                                    color="primary"
+                                                    checked={
+                                                      ques.checkbox_answerkey[p]
+                                                    }
+                                                    required={ques.type}
+                                                    disabled
+                                                  />
+                                                ) : (
+                                                  <ShortTextIcon
+                                                    style={{
+                                                      marginRight: "10px",
+                                                    }}
+                                                  />
+                                                )}
+                                              </Grid>
+                                              <Grid item sm={10} xs={8}>
+                                                <TextField
+                                                  type="text"
+                                                  InputProps={{
+                                                    disableUnderline: "true",
+                                                    className:
+                                                      classes.text_input,
+                                                  }}
+                                                  placeholder="option"
+                                                  value={
+                                                    ques.options[p].optionText
+                                                  }
+                                                  fullWidth
+                                                  onChange={(e) => {
+                                                    handleOptionValue(
+                                                      e.target.value,
+                                                      i,
+                                                      k,
+                                                      p
+                                                    );
+                                                  }}
+                                                ></TextField>
+                                              </Grid>
+                                              <Grid item xs={1}>
+                                                <IconButton
+                                                  aria-label="delete"
+                                                  onClick={() => {
+                                                    removeOption(i, k, p);
+                                                  }}
+                                                >
+                                                  <CloseIcon />
+                                                </IconButton>
+                                              </Grid>
+                                            </Grid>
+                                          ))
+                                        )}
+                                      </Grid>
+                                      {ques.question_type === "File Upload" ||
+                                      ques.question_type === "Date" ||
+                                      ques.question_type === "Text" ? (
+                                        ""
+                                      ) : (
+                                        <Grid item>
+                                          {ques.options.length < 5 &&
+                                          ques.question_type !== "Text" ? (
+                                            <Grid className="add_question_body">
+                                              <Button
+                                                size="small"
+                                                onClick={() => {
+                                                  addOption(i, k);
+                                                }}
+                                                style={{
+                                                  textTransform: "none",
+                                                  color: "#4285f4",
+                                                  fontSize: "13px",
+                                                  fontWeight: "600",
+                                                }}
+                                              >
+                                                Add Option
+                                              </Button>
+                                            </Grid>
+                                          ) : (
+                                            ""
+                                          )}
+                                        </Grid>
+                                      )}
+                                      <Divider />
+                                      <Grid item>
+                                        <Grid
+                                          container
+                                          alignItems="center"
+                                          style={{ marginTop: "1em" }}
+                                        >
+                                          <Grid item sm={8} xs={12}>
+                                            <Button
+                                              size="small"
+                                              onClick={() => {
+                                                addAnswer(i, k);
+                                              }}
+                                              style={{
+                                                textTransform: "none",
+                                                color: "#4285f4",
+                                                fontSize: "13px",
+                                                fontWeight: "600",
+                                              }}
+                                            >
+                                              <CropRotateIcon
+                                                style={{
+                                                  border: "2px solid #4285f4",
+                                                  padding: "2px",
+                                                  marginRight: "8px",
+                                                }}
+                                              />
+                                              Answer key
+                                            </Button>
+                                          </Grid>
+                                          <Grid item>
+                                            <IconButton
+                                              aria-label="Copy"
+                                              onClick={() => {
+                                                copyQuestion(i, k);
+                                              }}
+                                            >
+                                              <FilterNoneIcon />
+                                            </IconButton>
+                                          </Grid>
+                                          <Grid item>
+                                            <IconButton
+                                              aria-label="delete"
+                                              onClick={() => {
+                                                deleteQuestion(i, k);
+                                              }}
+                                            >
+                                              <DeleteForeverIcon />
+                                            </IconButton>
+                                          </Grid>
+                                          <Grid item>
+                                            <span
+                                              style={{
+                                                color: "#5f6368",
+                                                fontSize: "13px",
+                                              }}
+                                            >
+                                              Required
+                                            </span>
+                                            <Switch
+                                              name="checkedA"
+                                              color="primary"
+                                              checked={ques.required}
+                                              onClick={() => {
+                                                requiredQuestion(i, k);
+                                              }}
+                                            />
+                                          </Grid>
+                                        </Grid>
+                                      </Grid>
+                                    </Grid>
+                                  </AccordionDetails>
+                                ) : (
+                                  <AccordionDetails>
+                                    <Grid container direction="column">
+                                      <Grid
+                                        item
+                                        style={{ marginBottom: "1em" }}
+                                      >
+                                        <Typography variant="h4">
+                                          Choose Correct Answer:
+                                        </Typography>{" "}
+                                      </Grid>
+                                      <Grid item>
+                                        <Grid container spacing={4}>
+                                          <Grid item sm={10}>
+                                            <TextField
+                                              type="text"
+                                              fullWidth
+                                              InputProps={{
+                                                classes: {
+                                                  input: classes.answerInput,
+                                                },
+                                              }}
+                                              placeholder="Question"
+                                              value={ques.question_text}
+                                              onChange={(e) => {
+                                                handleQuestionValue(
+                                                  e.target.value,
+                                                  i
+                                                );
+                                              }}
+                                              variant="filled"
+                                              disabled
+                                            />
+                                          </Grid>
+                                          <Grid item sm={2}>
+                                            <TextField
+                                              type="number"
+                                              variant="outlined"
+                                              size="small"
+                                              className="points"
+                                              min="0"
+                                              step="1"
+                                              placeholder="0"
+                                              value={ques.points}
+                                              onChange={(e) => {
+                                                setOptionPoints(
+                                                  e.target.value,
+                                                  i,
+                                                  k
+                                                );
+                                              }}
+                                            />
+                                          </Grid>
+                                        </Grid>
+                                      </Grid>
+                                      <Grid item>
+                                        {ques.question_type === "Text" ? (
+                                          <Grid
+                                            container
+                                            alignItems="center"
+                                            alignContent="center"
+                                            style={{ marginTop: "1em" }}
+                                          >
+                                            <Grid
+                                              item
+                                              style={{ paddingLeft: "1em" }}
+                                            >
+                                              <ShortTextIcon
+                                                style={{ marginRight: "10px" }}
+                                              />
+                                            </Grid>
+                                            <Grid item sm={11}>
+                                              <TextField
+                                                type="text"
+                                                InputProps={{
+                                                  disableUnderline: "true",
+                                                  className: classes.text_input,
+                                                }}
+                                                placeholder="Long-Answer Text"
+                                                value="Long-Answer Text"
+                                                fullWidth
+                                                disabled
+                                              ></TextField>
+                                            </Grid>
+                                          </Grid>
+                                        ) : ques.question_type === "Date" ? (
+                                          <Grid
+                                            container
+                                            alignItems="center"
+                                            alignContent="center"
+                                            style={{ marginTop: "1em" }}
+                                          >
+                                            <Grid
+                                              item
+                                              style={{ paddingLeft: "1em" }}
+                                            >
+                                              <EventIcon
+                                                style={{ marginRight: "10px" }}
+                                              />
+                                            </Grid>
+                                            <Grid item sm={11}>
+                                              <TextField
+                                                type="text"
+                                                InputProps={{
+                                                  disableUnderline: "true",
+                                                  className: classes.text_input,
+                                                }}
+                                                placeholder="Write Date Here"
+                                                value="Write Date Here"
+                                                fullWidth
+                                                disabled
+                                              ></TextField>
+                                            </Grid>
+                                          </Grid>
+                                        ) : ques.question_type ===
+                                          "File Upload" ? (
+                                          <Grid
+                                            container
+                                            alignItems="center"
+                                            alignContent="center"
+                                            style={{ marginTop: "1em" }}
+                                          >
+                                            <Grid
+                                              item
+                                              style={{ paddingLeft: "1em" }}
+                                            >
+                                              <BackupIcon
+                                                style={{ marginRight: "10px" }}
+                                              />
+                                            </Grid>
+                                            <Grid item sm={11}>
+                                              <TextField
+                                                type="text"
+                                                InputProps={{
+                                                  disableUnderline: "true",
+                                                  className: classes.text_input,
+                                                }}
+                                                placeholder="Write Date Here"
+                                                value="Write Date Here"
+                                                fullWidth
+                                                disabled
+                                              ></TextField>
+                                            </Grid>
+                                          </Grid>
+                                        ) : (
+                                          ques.options.map((op, p) => (
+                                            <div
+                                              className="add_question_body"
+                                              key={p}
+                                              style={{
+                                                marginLeft: "8px",
+                                                marginBottom: "10px",
+                                                marginTop: "5px",
+                                              }}
+                                            >
+                                              <div key={p}>
+                                                <div
+                                                  style={{ display: "flex" }}
+                                                  className=""
+                                                >
+                                                  <div className="form-check">
+                                                    <label
+                                                      style={{
+                                                        fontSize: "13px",
+                                                      }}
+                                                      onClick={() => {
+                                                        setOptionAnswer(
+                                                          ques.options[p]
+                                                            .optionText,
+                                                          i,
+                                                          k,
+                                                          p
+                                                        );
+                                                      }}
+                                                    >
+                                                      {ques.question_type ===
+                                                      "Radio" ? (
+                                                        <RadioGroup
+                                                          name="radio-button"
+                                                          onChange={
+                                                            handleRadioChange
+                                                          }
+                                                          value={radioValue}
+                                                        >
+                                                          <FormControlLabel
+                                                            required={
+                                                              ques.required
+                                                            }
+                                                            value={
+                                                              ques.options[p]
+                                                                .optionText
+                                                            }
+                                                            control={<Radio />}
+                                                            label={
+                                                              ques.options[p]
+                                                                .optionText
+                                                            }
+                                                          />
+                                                        </RadioGroup>
+                                                      ) : ques.question_type ===
+                                                        "Dropdown" ? (
+                                                        <RadioGroup
+                                                          name="radio-button"
+                                                          onChange={
+                                                            handleRadioChange
+                                                          }
+                                                          value={radioValue}
+                                                        >
+                                                          <FormControlLabel
+                                                            required={
+                                                              ques.required
+                                                            }
+                                                            value={
+                                                              ques.options[p]
+                                                                .optionText
+                                                            }
+                                                            control={<Radio />}
+                                                            label={
+                                                              ques.options[p]
+                                                                .optionText
+                                                            }
+                                                          />
+                                                        </RadioGroup>
+                                                      ) : ques.question_type ===
+                                                        "Checkbox" ? (
+                                                        <FormControlLabel
+                                                          control={
+                                                            <Checkbox
+                                                              name={
+                                                                ques.question_text
+                                                              }
+                                                            />
+                                                          }
+                                                          label={
+                                                            ques.options[p]
+                                                              .optionText
+                                                          }
+                                                          value="option3"
+                                                          required={
+                                                            ques.required
+                                                          }
+                                                          checked={
+                                                            ques
+                                                              .checkbox_answerkey[
+                                                              p
+                                                            ]
+                                                          }
+                                                        />
+                                                      ) : (
+                                                        <ShortTextIcon
+                                                          style={{
+                                                            marginRight: "10px",
+                                                          }}
+                                                        />
+                                                      )}
+                                                    </label>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          ))
+                                        )}
+                                      </Grid>
+                                      <Grid item>
+                                        <Button
+                                          variant="outlined"
+                                          color="primary"
+                                          style={{
+                                            textTransform: "none",
+                                            color: "#4285f4",
+                                            fontSize: "12px",
+                                            marginTop: "12px",
+                                            fontWeight: "600",
+                                          }}
+                                          onClick={() => {
+                                            doneAnswer(i, k);
+                                          }}
+                                        >
+                                          Done
+                                        </Button>
+                                      </Grid>
+                                    </Grid>
+                                  </AccordionDetails>
+                                )}
+                              </Accordion>
+                            </div>
+                          )}
+                        </Draggable>
+                        //Question ends here
+                      ))}
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item sm={1}>
+                  <Card
+                    style={{
+                      position: "sticky",
+                      top: matches ? 0 : 75,
+                      width: matches ? "100%" : "60%",
                     }}
                   >
-                    <DeleteSweepIcon />
-                  </IconButton>
+                    <CardContent
+                      style={{ padding: matches ? "0" : "0.5em 0em" }}
+                    >
+                      <Grid
+                        container
+                        direction={matches ? "row" : "column"}
+                        justify="center"
+                        alignItems="center"
+                      >
+                        <Grid item>
+                          <IconButton
+                            aria-label="add_question"
+                            onClick={() => {
+                              addMoreQuestionField(i);
+                            }}
+                          >
+                            <AddCircleOutlineIcon />
+                          </IconButton>
+                        </Grid>
+                        <Grid item>
+                          <IconButton
+                            aria-label="add_section"
+                            onClick={() => {
+                              restoreForm();
+                            }}
+                          >
+                            <SettingsBackupRestoreIcon />
+                          </IconButton>
+                        </Grid>
+                        <Grid item>
+                          <IconButton
+                            aria-label="add_section"
+                            onClick={() => {
+                              addSectionField(i);
+                            }}
+                          >
+                            <LibraryAddIcon />
+                          </IconButton>
+                        </Grid>
+
+                        <Grid item>
+                          <IconButton
+                            aria-label="delete_section"
+                            onClick={() => {
+                              adddeleteSection(i);
+                            }}
+                          >
+                            <DeleteSweepIcon />
+                          </IconButton>
+                        </Grid>
+                      </Grid>
+                    </CardContent>
+                  </Card>
                 </Grid>
               </Grid>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
     ));
   }
   return (
