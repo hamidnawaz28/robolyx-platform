@@ -36,6 +36,7 @@ function VendorApprovals(props) {
   console.log("vendors.count", pendingVendors.count);
 
   useEffect(() => {
+
     dispatch(fetchPendingVendorsStart({ fetchApiData }));
   }, []);
 

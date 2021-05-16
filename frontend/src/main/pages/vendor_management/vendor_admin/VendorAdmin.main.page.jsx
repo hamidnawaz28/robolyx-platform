@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -12,8 +13,16 @@ import VendorApprovals from "./vendor_approvals/VendorApprovals.main.page";
 import OnboardDetails from "./onboarding_details/OnBoardDetails.main.page";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
+import ReviewTemplateList from './review_template_list/ReviewTemplate.main.page'
+
 import AddReviewTemplate from "./add_review_template/AddReviewTemplate";
 import SupplierData from "./supplierrequest/allrequests/SupplierData";
+
+import {
+  fetchPendingVendorsStart,
+
+} from "./redux/approvalActions"
+
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -63,10 +72,30 @@ export default function VendorAdmin() {
   const classes = useStyles();
   const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const [value, setValue] = React.useState(0);
+  const dispatch = useDispatch();
+
+  const { perPage } =
+    useSelector((state) => state.vendorApproval);
 
   const handleChange = (event, newValue) => {
+    dispatch(fetchPendingVendorsStart({ fetchApiData }));
     setValue(newValue);
   };
+
+  const initialState = {
+    vendor_name__icontains: "",
+  };
+
+  let fetchApiData = {
+    query: JSON.stringify({ vendor_name__icontains: "" }),
+    currentPage: 1,
+    perPage: perPage,
+  };
+
+  useEffect(() => {
+
+    dispatch(fetchPendingVendorsStart({ fetchApiData }));
+  }, [value]);
 
   return (
     <React.Fragment>
@@ -110,7 +139,7 @@ export default function VendorAdmin() {
           <OnboardDetails />
         </TabPanel>
         <TabPanel value={value} index={3}>
-          Item 4
+          <ReviewTemplateList />
         </TabPanel>
         <TabPanel value={value} index={4}>
           <AddReviewTemplate />

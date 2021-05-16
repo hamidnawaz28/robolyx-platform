@@ -978,7 +978,7 @@ class ReviewTemplateViewSet(viewsets.ViewSet):
     #permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        query_filter = json.loads(self.request.query_params.get("searchQuery"))
+        query_filter = json.loads(self.request.query_params.get("query_review_temp"))
         current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
         start = per_page * current_page

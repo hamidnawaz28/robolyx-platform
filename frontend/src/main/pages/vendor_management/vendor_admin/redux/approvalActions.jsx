@@ -30,6 +30,11 @@ export const updateQuery = (data) => ({
   payload: data,
 });
 
+export const updateReviewTemplateQuery = (data) => ({
+  type: type.UPDATE_REVIEW_TEMPLATE_QUERY,
+  payload: data,
+});
+
 export const updateCurrentPage = (data) => ({
   type: type.UPDATE_CURRENT_PAGE,
   payload: data,
@@ -94,5 +99,16 @@ export const fetchPaymentTermSuccess = (data) => ({
 
 export const partialUpdateVendor = (data) => ({
   type: type.PARTIAL_UPDATE_VENDOR,
+  payload: data,
+});
+
+
+export const fetchReviewTemplateStart = (data) => ({
+  type: type.FETCH_REVIEW_TEMPLATE_START,
+  payload: data,
+});
+
+export const fetchReiewTemplateSuccess = (data) => ({
+  type: type.FETCH_REVIEW_TEMPLATE_SUCCESS,
   payload: data,
 });

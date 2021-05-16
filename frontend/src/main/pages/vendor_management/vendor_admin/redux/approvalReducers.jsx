@@ -8,11 +8,13 @@ const initialState = {
   currentPage: 1,
   totalRows: 0,
   query: {},
+  query_review_temp: {},
   categories: [],
   tags: [],
   trades: [],
   diversity: [],
   paymentterm: [],
+  reviewTemplates: [],
 };
 export const vendorApprovalReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -42,6 +44,11 @@ export const vendorApprovalReducer = (state = initialState, action) => {
       return {
         ...state,
         query: action.payload,
+      };
+    case Types.UPDATE_REVIEW_TEMPLATE_QUERY:
+      return {
+        ...state,
+        query_review_temp: action.payload,
       };
     case Types.UPDATE_CURRENT_PAGE:
       return {
@@ -107,6 +114,18 @@ export const vendorApprovalReducer = (state = initialState, action) => {
         ...state,
         isFetching: false,
         paymentterm: action.payload,
+      };
+
+    case Types.FETCH_REVIEW_TEMPLATE_START:
+      return {
+        ...state,
+        isFetching: true,
+      };
+    case Types.FETCH_REVIEW_TEMPLATE_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        reviewTemplates: action.payload,
       };
 
     default:
