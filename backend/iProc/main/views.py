@@ -10,23 +10,16 @@ import pdb
 from itertools import chain
 from django.db.models import Count
 from rest_framework import serializers as ser
-# from .utils import get_data_range
+from .utils import taxonomy_items_and_count, get_data_range
 from rest_framework.renderers import JSONRenderer
 from django.contrib.auth.models import User
+from rest_framework.generics import get_object_or_404
 from rest_framework import viewsets
 from rest_framework.response import Response
-# ---------------UtilsFunctions----------------------
+
 
 from .serializers import RoleSerializer,  UserProjectSerializer,  UserDataSerializer, DefaultTemplateSerializer, SavedTemplateSerializer, \
 RuleEngineSerializer, RuleEngineHistorySerializer, InvoiceDataSerializer, TaxonomyDataSerializer, ContractDataSerializer, GLOrgDataSerializer, PODataSerializer 
-
-
-def get_data_range(request):
-    current_page = int(request.GET.get("currentPage"))
-    per_page = int(request.GET.get("perPage"))
-    start = per_page * current_page
-    end = per_page * current_page + per_page
-    return start, end
 
 
 def fetch_get_data(request):
@@ -70,24 +63,6 @@ def get_serialized_data(query_data_object, count):
     return json.dumps(data_details)
 
 
-def taxonomy_items_and_count(payload):
-    main_category = ''
-    categories_list = ["ONE", "TWO", "THREE", "FOUR", "FIVE"]
-    count = 0
-    for i in categories_list:
-        item = "CATEGORY_LEVEL_" + i
-        if item in payload:
-            if payload[item] != '':
-                count += 1
-                if main_category == '':
-                    main_category += payload["CATEGORY_LEVEL_" + i]
-                else:
-                    main_category += ">" + payload["CATEGORY_LEVEL_" + i]
-    payload['MAIN_CATEGORY'] = main_category
-    payload["CATEGORY_LEVELS"] = count
-    return payload
-
-
 def fetch_post_template_data(request):
     request_body_parameters = json.loads(request.body)
     request_body_payload = json.loads(request_body_parameters["params"]["payload"])
@@ -102,7 +77,6 @@ def fetch_post_template_data(request):
     create_new_template = SavedTemplate(**payload)
     create_new_template.save()
     return payload
-# ----------------------------------------------------
 
 
 def default_templates(request):
@@ -530,10 +504,9 @@ def manage_templates(request):
 class TaxonomyDataViewSet(viewsets.ViewSet):
     #authentication_classes = [JWTAuthentication]
     #permission_classes = [IsAuthenticated]
-    import pdb
     def list(self, request):
         query_filter = json.loads(self.request.query_params.get("q"))
-        current_page = int(self.request.query_params.get("page"))
+        current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
         start = per_page * current_page
         end = per_page * current_page + per_page
@@ -554,15 +527,16 @@ class TaxonomyDataViewSet(viewsets.ViewSet):
 
     def create(self, request):
         try:
+            payload = taxonomy_items_and_count(request.data)
             serializer = TaxonomyDataSerializer(
-                data=request.data, context={"request": request})
+                data=payload, context={"request": request})
             serializer.is_valid(raise_exception=True)
             serializer.save()
             dict_response = {"error": False,
-                             "message": "Vendor Tag saved successfully"}
+                             "message": "Saved successfully"}
         except:
             dict_response = {'error': True,
-                             'message': "Error During Saving Vendor Tag"}
+                             'message': "Error During Saving"}
         return Response(dict_response)
 
     def update(self, request, pk=id):
@@ -574,10 +548,10 @@ class TaxonomyDataViewSet(viewsets.ViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             dict_response = {"error": False,
-                             "message": "Successfully Updated Vendor Tag"}
+                             "message": "Successfully Updated"}
         except:
             dict_response = {'error': True,
-                             'message': "Error During Updating Vendor Tag"}
+                             'message': "Error During Updating"}
         return Response(dict_response)
 
     def retrieve(self, request, pk=id):
@@ -605,7 +579,7 @@ class InvoiceDataViewSet(viewsets.ViewSet):
 
     def list(self, request):
         query_filter = json.loads(self.request.query_params.get("q"))
-        current_page = int(self.request.query_params.get("page"))
+        current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
         start = per_page * current_page
         end = per_page * current_page + per_page
@@ -631,10 +605,10 @@ class InvoiceDataViewSet(viewsets.ViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             dict_response = {"error": False,
-                             "message": "Vendor Tag saved successfully"}
+                             "message": "Invoice saved successfully"}
         except:
             dict_response = {'error': True,
-                             'message': "Error During Saving Vendor Tag"}
+                             'message': "Error During Saving Invoice"}
         return Response(dict_response)
 
     def update(self, request, pk=id):
@@ -677,7 +651,7 @@ class ContractDataViewSet(viewsets.ViewSet):
 
     def list(self, request):
         query_filter = json.loads(self.request.query_params.get("q"))
-        current_page = int(self.request.query_params.get("page"))
+        current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
         start = per_page * current_page
         end = per_page * current_page + per_page
@@ -749,7 +723,7 @@ class GLOrgDataViewSet(viewsets.ViewSet):
 
     def list(self, request):
         query_filter = json.loads(self.request.query_params.get("q"))
-        current_page = int(self.request.query_params.get("page"))
+        current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
         start = per_page * current_page
         end = per_page * current_page + per_page
@@ -821,7 +795,7 @@ class PODataViewSet(viewsets.ViewSet):
 
     def list(self, request):
         query_filter = json.loads(self.request.query_params.get("q"))
-        current_page = int(self.request.query_params.get("page"))
+        current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
         start = per_page * current_page
         end = per_page * current_page + per_page

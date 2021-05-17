@@ -47,12 +47,12 @@ function TaxonomyQueryForm(props) {
     project: "1",
   };
   const searchQueryHandle = () => {
-    fetchApiData["query"] = JSON.stringify(categories);
+    fetchApiData["query"] = categories;
     dispatch(updateFormQuery(categories));
     dispatch(fetchTableData({ apiLink: credentials, fetchApiData }));
   };
   const resetQueryHandle = () => {
-    fetchApiData["query"] = JSON.stringify(initialState);
+    fetchApiData["query"] = initialState;
     setCategories(initialState);
     dispatch(updateFormQuery(initialState));
     dispatch(fetchTableData({ apiLink: credentials, fetchApiData }));

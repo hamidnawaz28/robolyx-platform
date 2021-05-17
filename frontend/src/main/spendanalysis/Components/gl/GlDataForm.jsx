@@ -41,15 +41,15 @@ function FormPopUp(props) {
   const credentials = apiLink;
   const dispatch = useDispatch();
   let updateApidata = {
-    pk: formData.pk,
-    payload: JSON.stringify(popupFormData),
+    id: formData.id,
+    payload: popupFormData,
   };
   let postDataApi = {
-    payload: JSON.stringify(popupFormData),
+    payload: popupFormData,
     project: "1",
   };
   let fetchApiData = {
-    query: JSON.stringify(query),
+    query,
     currentPage: currentPage,
     perPage: perPage,
     project: "1",
@@ -77,7 +77,7 @@ function FormPopUp(props) {
     if (actionType == "Edit") {
       let updatedData = {};
       Object.keys(initialState).map((element) => {
-        updatedData[element] = formData.fields[element];
+        updatedData[element] = formData[element];
       });
       setPopupFormData(updatedData);
     }

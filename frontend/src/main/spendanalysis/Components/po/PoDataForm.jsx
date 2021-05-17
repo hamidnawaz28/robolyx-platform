@@ -12,6 +12,10 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import axios from "axios";
 import { updateData, postData } from "../../../../global/table/table.actions";
+import {
+  addTableData,
+  editTableData,
+} from "../../../../global/table/table.actionCreators";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import EditIcon from "@material-ui/icons/Edit";
 
@@ -131,24 +135,36 @@ function FormPopUp(props) {
   const credentials = apiLink;
   const dispatch = useDispatch();
   let updateApidata = {
-    pk: formData.pk,
-    payload: JSON.stringify(popupFormData),
+    id: formData.id,
+    payload: popupFormData,
   };
   let postDataApi = {
-    payload: JSON.stringify(popupFormData),
+    payload: popupFormData,
     project: "1",
   };
   let fetchApiData = {
-    query: JSON.stringify(query),
+    query,
     currentPage: currentPage,
     perPage: perPage,
     project: "1",
   };
   const handleSave = () => {
     if (actionType == "Edit") {
-      dispatch(updateData(apiLink, updateApidata, fetchApiData));
+      let payload = {
+        apiLink,
+        updateApidata,
+        fetchApiData,
+      };
+
+      dispatch(editTableData(payload));
     } else {
-      dispatch(postData(apiLink, postDataApi, fetchApiData));
+      const payload = {
+        credentials: apiLink,
+        postApiData: postDataApi,
+        fetchApiData: fetchApiData,
+      };
+
+      dispatch(addTableData(payload));
     }
     formCloseEvent();
   };
@@ -156,7 +172,7 @@ function FormPopUp(props) {
     if (actionType == "Edit") {
       let updatedData = {};
       Object.keys(initialState).map((element) => {
-        updatedData[element] = formData.fields[element];
+        updatedData[element] = formData[element];
       });
       setPopupFormData(updatedData);
     }

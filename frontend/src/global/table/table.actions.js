@@ -27,7 +27,7 @@ export function* addData(action) {
       fetchApiData
     );
     const res = yield axios.post(
-      `${SERVER_URL}${credentials}`,
+      `${SERVER_URL}${credentials}/`,
       postApiData.payload,
       {
         headers: {
@@ -36,7 +36,7 @@ export function* addData(action) {
       }
     );
 
-    alert("New data added successfully");
+    alert(res?.data?.message);
 
     console.log(res);
     yield put(fetchTableData({ apiLink: credentials, fetchApiData }));
@@ -58,21 +58,20 @@ export function* queryTableData(action) {
     const { apiLink, fetchApiData } = action.payload;
     console.log("running fetch start saga", apiLink, fetchApiData);
     const { currentPage, perPage, query } = fetchApiData;
-    const q = query ? JSON.stringify(query) : "{}";
+    let filteredQuery = {};
+    Object.keys(query).map((item) => {
+      if (query[item] != "") filteredQuery[item] = query[item];
+    });
+    let q = JSON.stringify(filteredQuery);
     const res = yield axios.get(
-      `${SERVER_URL}${apiLink}?q=${
-        q && q
-      }&currentPage=${currentPage}&perPage=${perPage}`
+      `${SERVER_URL}${apiLink}?currentPage=${currentPage}&perPage=${perPage}&q=${q}`
     );
-    console.log("Data", res.data);
     let serviceData = res.data.data;
-    console.log("Data", serviceData);
     let data = [];
     serviceData.forEach((element) => {
       element["isChecked"] = false;
       data.push(element);
     });
-
     yield put(updateTableData(data));
     yield put(updateTotalRows(res.data.count));
   } catch (error) {
@@ -119,7 +118,7 @@ export function* deleteTableData(action) {
     let idArray = deleteApiData.idArray;
     for (let x in idArray) {
       let id = idArray[x];
-      const res = yield axios.delete(`${SERVER_URL}${apiLink}${id}/`);
+      const res = yield axios.delete(`${SERVER_URL}${apiLink}/${id}/`);
     }
 
     yield put(fetchTableData({ apiLink, fetchApiData }));
@@ -149,7 +148,7 @@ export function* editTableData(action) {
     );
     let id = updateApidata.id;
     const res = yield axios.put(
-      `${SERVER_URL}${apiLink}${id}/`,
+      `${SERVER_URL}${apiLink}/${id}/`,
       updateApidata.payload,
       {
         headers: {
