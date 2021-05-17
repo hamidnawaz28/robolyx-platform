@@ -6,8 +6,8 @@ import { Search, RotateLeft } from "@material-ui/icons";
 import {
   updateFormQuery,
   fetchTableData,
-} from "../../../../../global/table/table.actionCreators";
-import { queryData } from "../../../../../global/table/table.actions";
+} from "../../../../../../global/table/table.actionCreators";
+import { queryData } from "../../../../../../global/table/table.actions";
 //import { updateTaxonomyCategories } from '../../../../global/utils/utils.actions.js'
 import styled from "styled-components";
 import { makeStyles } from "@material-ui/core/styles";

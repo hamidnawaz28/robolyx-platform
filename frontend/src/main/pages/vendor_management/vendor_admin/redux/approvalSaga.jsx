@@ -11,6 +11,7 @@ import {
   fetchTradesSuccess,
   fetchDiversitySuccess,
   fetchPaymentTermSuccess,
+  fetchReiewTemplateSuccess
 } from "./approvalActions";
 import * as type from "./actionTypes";
 import { takeEvery, takeLatest, put, call } from "redux-saga/effects";
@@ -222,3 +223,33 @@ export function* partialUpdateVendor(action) {
 export function* onPartialUpdateVendors() {
   yield takeLatest(type.PARTIAL_UPDATE_VENDOR, partialUpdateVendor);
 }
+
+
+
+//Fetch Review Template Saga
+export function* reviewTemplateData(action) {
+  console.log("action from fetch pending vendors saga", action);
+  try {
+    const { fetchApiData } = action.payload;
+
+    console.log("running fetch review template saga", fetchApiData);
+    const res = yield axios.get(
+      `${SERVER_URL}vendor_management/review-template/`,
+      {
+        params: fetchApiData,
+      }
+    );
+    console.log("Data", res);
+
+    yield put(fetchReiewTemplateSuccess(res.data));
+  } catch (error) {
+    alert(error);
+  }
+}
+
+export function* onFetchReviewTemplateStart() {
+  yield takeLatest(type.FETCH_REVIEW_TEMPLATE_START, reviewTemplateData);
+}
+
+
+

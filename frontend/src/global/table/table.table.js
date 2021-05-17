@@ -151,14 +151,8 @@ function TableData(props) {
   const dispatch = useDispatch();
   const tableStates = useSelector((state) => state.tableStates);
   console.log("tableStates", tableStates);
-  const {
-    data,
-    totalRows,
-    perPage,
-    currentPage,
-    isAllSelected,
-    query,
-  } = tableStates;
+  const { data, totalRows, perPage, currentPage, isAllSelected, query } =
+    tableStates;
 
   console.log("DATA", data);
   const {
@@ -170,6 +164,7 @@ function TableData(props) {
     editDataHandle,
     isActionsEnabled,
     ruleImpEnabled,
+    withId,
   } = props;
 
   console.log("TABLE HEADERS", tableHeaders);
@@ -404,7 +399,12 @@ function TableData(props) {
                   />
                 </TableCell>
               )}
-              <TableCell className={classes.headCells}>ID</TableCell>
+              {withId ? (
+                <TableCell className={classes.headCells}>ID</TableCell>
+              ) : (
+                ""
+              )}
+
               {Object.keys(tableHeaders).map((SingleHeader) => (
                 <TableCell className={classes.headCells}>
                   {SingleHeader}

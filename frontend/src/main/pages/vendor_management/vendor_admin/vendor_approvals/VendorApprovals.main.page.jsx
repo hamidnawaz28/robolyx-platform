@@ -25,18 +25,18 @@ function VendorApprovals(props) {
   const dispatch = useDispatch();
   const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
-  const { query, currentPage, perPage, vendors, totalRows } = useSelector(
-    (state) => state.vendorApproval
-  );
+  const { query, currentPage, perPage, pendingVendors, totalRows } =
+    useSelector((state) => state.vendorApproval);
 
   let fetchApiData = {
     query: JSON.stringify(query),
     currentPage: currentPage,
     perPage: perPage,
   };
-  console.log("vendors.count", vendors.count);
+  console.log("vendors.count", pendingVendors.count);
 
   useEffect(() => {
+
     dispatch(fetchPendingVendorsStart({ fetchApiData }));
   }, []);
 
@@ -52,12 +52,12 @@ function VendorApprovals(props) {
       <Grid container justify="space-between" alignItems="center">
         <VendorApprovalQueryForm />
       </Grid>
-      {vendors.data &&
-        vendors.data.map((vendor) => <VendorCard vendor={vendor} />)}
+      {pendingVendors.data &&
+        pendingVendors.data.map((vendor) => <VendorCard vendor={vendor} />)}
       <Grid container justify="center">
         <Grid item>
           <Pagination
-            count={Math.ceil(vendors.count / perPage)}
+            count={Math.ceil(pendingVendors.count / perPage)}
             page={currentPage}
             onChange={handleChange}
             defaultPage={1}

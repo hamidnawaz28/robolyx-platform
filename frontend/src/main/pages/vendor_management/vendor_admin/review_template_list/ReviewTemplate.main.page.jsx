@@ -3,13 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { Typography, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import OnboardDetailsAccordion from "./OnboardDetails.accordion";
+import ReviewTemplateCard from "./ReviewTemplateCard";
+
 import {
-  fetchApprovedVendorsStart,
+  fetchReviewTemplateStart,
   updateCurrentPage,
 } from "../redux/approvalActions";
-import OnboardDetailsQueryForm from "../onboarding_details/OnboardDetailsSearch";
+import ReviewTemplateQueryForm from "./ReviewTemplateQueryForm";
 import Pagination from "@material-ui/lab/Pagination";
+
 
 const useStyles = makeStyles((theme) => ({
   tagIcon: {
@@ -20,53 +22,53 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function OnboardDetails(props) {
+function ReviewTemplateList(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
-  const { query, currentPage, perPage, vendors, totalRows } = useSelector(
-    (state) => state.vendorApproval
-  );
+  const { query_review_temp, currentPage, perPage, reviewTemplates, totalRows } =
+    useSelector((state) => state.vendorApproval);
 
   let fetchApiData = {
-    query: JSON.stringify(query),
+    query_review_temp: JSON.stringify(query_review_temp),
     currentPage: currentPage,
     perPage: perPage,
   };
-  console.log("vendors.count", vendors.count);
+  console.log("vendors.count", reviewTemplates.count);
 
   useEffect(() => {
-    dispatch(fetchApprovedVendorsStart({ fetchApiData }));
+    dispatch(fetchReviewTemplateStart({ fetchApiData }));
   }, []);
 
   const handleChange = (event, value) => {
     let currPage = value;
     dispatch(updateCurrentPage(currPage));
     fetchApiData["currentPage"] = currPage;
-    dispatch(fetchApprovedVendorsStart({ fetchApiData }));
+    dispatch(fetchReviewTemplateStart({ fetchApiData }));
   };
 
   return (
     <>
-      <Grid container justify="space-between" alignItems="center">
-        <OnboardDetailsQueryForm />
+      <Typography variant={matches ? "h3" : "h2"} style={{ marginBottom: '0.5em' }}>
+        Review Templates
+          </Typography>
+      <ReviewTemplateQueryForm />
+
+      <Grid container spacing={2}>
+        {reviewTemplates.data &&
+          reviewTemplates.data.map((review_template) => <ReviewTemplateCard review_template={review_template} />)}
       </Grid>
-      {vendors.data &&
-        vendors.data.map((vendor) => (
-          <OnboardDetailsAccordion vendor={vendor} />
-        ))}
       <Grid container justify="center">
-        <Grid item style={{ marginTop: "0.5em" }}>
+        <Grid item>
           <Pagination
-            count={Math.ceil(vendors.count / perPage)}
+            count={Math.ceil(reviewTemplates.count / perPage)}
             page={currentPage}
             onChange={handleChange}
-            defaultPage={0}
+            defaultPage={1}
             color="primary"
             size="large"
             color="secondary"
-            size="small"
           />
         </Grid>
       </Grid>
@@ -74,4 +76,4 @@ function OnboardDetails(props) {
   );
 }
 
-export default OnboardDetails;
+export default ReviewTemplateList;

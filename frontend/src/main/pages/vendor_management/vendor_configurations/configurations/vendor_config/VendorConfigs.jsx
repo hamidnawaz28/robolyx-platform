@@ -23,13 +23,8 @@ function VendorConfigs(props) {
   const classes = useStyles();
   const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
-  const {
-    API_LINK,
-    COLUMNS,
-    tableName,
-    initialState,
-    initialStateForSearch,
-  } = props;
+  const { API_LINK, COLUMNS, tableName, initialState, initialStateForSearch } =
+    props;
 
   const addNewDataHandle = () => {
     setActionType("New");
@@ -66,6 +61,7 @@ function VendorConfigs(props) {
         apiLink={API_LINK}
         addNewDataHandle={addNewDataHandle}
         editDataHandle={editDataHandle}
+        withId={false}
       />
       {formState && (
         <VendorConfigsDataForm
