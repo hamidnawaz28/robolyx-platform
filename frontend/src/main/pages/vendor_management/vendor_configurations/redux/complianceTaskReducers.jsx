@@ -7,6 +7,7 @@ const initialState = {
   totalRows: 0,
   query: {},
   categories: [],
+  complianceTasks: [],
 };
 export const complianceTaskReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -20,6 +21,17 @@ export const complianceTaskReducer = (state = initialState, action) => {
         ...state,
         isFetching: false,
         categories: action.payload,
+      };
+    case Types.FETCH_COMPLIANCE_TASK_START:
+      return {
+        ...state,
+        isFetching: true,
+      };
+    case Types.FETCH_COMPLIANCE_TASK_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        complianceTasks: action.payload,
       };
 
     default:
