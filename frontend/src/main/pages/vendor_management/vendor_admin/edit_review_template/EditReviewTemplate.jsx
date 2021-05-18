@@ -107,7 +107,6 @@ function AddReviewTemplate() {
           history.push({
             pathname: "/vendor-management/invite-vendor",
             value: 3,
-            query_review_temp: { name__icontains: name },
           });
 
           //localStorage.set('section', form_structure.sections);

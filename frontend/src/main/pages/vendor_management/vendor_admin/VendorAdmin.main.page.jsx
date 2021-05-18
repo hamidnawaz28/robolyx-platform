@@ -98,11 +98,6 @@ export default function VendorAdmin() {
 
   useEffect(() => {
     dispatch(updateCurrentPage(1));
-    if (location.query_review_temp) {
-      console.log("location.query_review_temp", location.query_review_temp);
-
-      dispatch(fetchReviewTemplateStart({ fetchApiData }));
-    }
   }, [value]);
 
   const handleChange = (event, newValue) => {
