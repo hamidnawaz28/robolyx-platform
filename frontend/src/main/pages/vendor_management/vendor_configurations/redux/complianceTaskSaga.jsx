@@ -29,12 +29,18 @@ export function* onFetchCategoriesStart() {
 
 //Fetch compliance tasks saga
 export function* fetchComplianceTasks(action) {
-  console.log("action from fetch compliance tasks  saga");
+  console.log("action from fetch compliance tasks saga", action);
   try {
+    const { fetchApiData } = action.payload;
+
+    console.log("running fetch compliance tasks saga", fetchApiData);
     const res = yield axios.get(
-      `${SERVER_URL}vendor_management/vendor-cats-list/`
+      `${SERVER_URL}vendor_management/compliance-task/`,
+      {
+        params: fetchApiData,
+      }
     );
-    console.log("Data", res.data);
+    console.log("Data", res);
 
     yield put(fetchComplianceTaskSuccess(res.data));
   } catch (error) {
