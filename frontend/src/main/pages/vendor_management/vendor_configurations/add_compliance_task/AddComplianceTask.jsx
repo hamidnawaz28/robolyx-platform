@@ -33,21 +33,21 @@ function AddComplianceTask() {
 
   //localStorage.set("section", form_structure.sections);
 
-  console.log("Form title", formName);
+  //console.log("Form title", formName);
 
   useEffect(() => {
-    if (localStorage.get("section")) {
-      let sec = localStorage.get("section");
+    if (localStorage.get("compliance_task")) {
+      let sec = localStorage.get("compliance_task");
       setSections(sec);
     } else {
-      localStorage.set("section", form_structure.sections);
+      localStorage.set("compliance_task", form_structure.sections);
       //setSections(form_structure.sections);
       window.location.reload();
     }
   }, []);
 
   function handleSaveTemplate() {
-    let sec = localStorage.get("section");
+    let sec = localStorage.get("compliance_task");
 
     let user = localStorage.get("user");
     let created_by = user.userId;
@@ -103,7 +103,7 @@ function AddComplianceTask() {
           setFormName("untitled Form");
         } else alert("Error");
         console.log(data);
-        localStorage.set("section", form_structure.sections);
+        localStorage.set("compliance_task", form_structure.sections);
       })
       .catch(function (error) {
         console.log(error);
@@ -150,7 +150,11 @@ function AddComplianceTask() {
         </Grid>
       </Grid>
 
-      <ReviewQuestion sections={sections} setSections={setSections} />
+      <ReviewQuestion
+        sections={sections}
+        setSections={setSections}
+        method="complianceTask"
+      />
     </Grid>
   );
 }
