@@ -166,6 +166,8 @@ function ReviewQuestion({ sections, setSections, method }) {
       ? localStorage.set("section_edit", sections)
       : method === "complianceTask"
       ? localStorage.set("compliance_task", sections)
+      : method === "update-compliance-task"
+      ? localStorage.set("comp_task_temp", sections)
       : localStorage.set("section", sections);
   }
 
@@ -174,6 +176,8 @@ function ReviewQuestion({ sections, setSections, method }) {
       ? localStorage.remove("section_edit")
       : method === "complianceTask"
       ? localStorage.remove("compliance_task")
+      : method === "update-compliance-task"
+      ? localStorage.remove("comp_task_temp")
       : localStorage.remove("section");
 
     //localStorage.set('section', form_structure.sections);
@@ -207,6 +211,8 @@ function ReviewQuestion({ sections, setSections, method }) {
       ? localStorage.set("section_edit", sections)
       : method === "complianceTask"
       ? localStorage.set("compliance_task", sections)
+      : method === "update-compliance-task"
+      ? localStorage.set("comp_task_temp", sections)
       : localStorage.set("section", sections);
   }
 
@@ -221,6 +227,8 @@ function ReviewQuestion({ sections, setSections, method }) {
       ? localStorage.set("section_edit", sections)
       : method === "complianceTask"
       ? localStorage.set("compliance_task", sections)
+      : method === "update-compliance-task"
+      ? localStorage.set("comp_task_temp", sections)
       : localStorage.set("section", sections);
   }
 
@@ -233,6 +241,8 @@ function ReviewQuestion({ sections, setSections, method }) {
       ? localStorage.set("section_edit", sections_temp)
       : method === "complianceTask"
       ? localStorage.set("compliance_task", sections_temp)
+      : method === "update-compliance-task"
+      ? localStorage.set("comp_task_temp", sections_temp)
       : localStorage.set("section", sections_temp);
   }
 
@@ -244,6 +254,8 @@ function ReviewQuestion({ sections, setSections, method }) {
       ? localStorage.set("section_edit", sections_temp)
       : method === "complianceTask"
       ? localStorage.set("compliance_task", sections_temp)
+      : method === "update-compliance-task"
+      ? localStorage.set("comp_task_temp", sections_temp)
       : localStorage.set("section", sections_temp);
   }
 
@@ -266,6 +278,8 @@ function ReviewQuestion({ sections, setSections, method }) {
       ? localStorage.set("section_edit", sections_temp)
       : method === "complianceTask"
       ? localStorage.set("compliance_task", sections_temp)
+      : method === "update-compliance-task"
+      ? localStorage.set("comp_task_temp", sections_temp)
       : localStorage.set("section", sections_temp);
   }
 
@@ -295,6 +309,8 @@ function ReviewQuestion({ sections, setSections, method }) {
       ? localStorage.set("section_edit", sections_temp)
       : method === "complianceTask"
       ? localStorage.set("compliance_task", sections_temp)
+      : method === "update-compliance-task"
+      ? localStorage.set("comp_task_temp", sections_temp)
       : localStorage.set("section", sections_temp);
   }
 
@@ -307,6 +323,8 @@ function ReviewQuestion({ sections, setSections, method }) {
       ? localStorage.set("section_edit", sections_temp)
       : method === "complianceTask"
       ? localStorage.set("compliance_task", sections_temp)
+      : method === "update-compliance-task"
+      ? localStorage.set("comp_task_temp", sections_temp)
       : localStorage.set("section", sections_temp);
   }
 
@@ -319,12 +337,16 @@ function ReviewQuestion({ sections, setSections, method }) {
         ? localStorage.set("section_edit", sections_temp)
         : method === "complianceTask"
         ? localStorage.set("compliance_task", sections_temp)
+        : method === "update-compliance-task"
+        ? localStorage.set("comp_task_temp", sections_temp)
         : localStorage.set("section", sections_temp);
     } else {
       method === "update"
         ? localStorage.set("section_edit", form_structure.sections)
         : method === "complianceTask"
         ? localStorage.set("compliance_task", form_structure.sections)
+        : method === "update-compliance-task"
+        ? localStorage.set("comp_task_temp", form_structure.sections)
         : localStorage.set("section", form_structure.sections);
 
       setSections(form_structure.sections);
@@ -349,6 +371,8 @@ function ReviewQuestion({ sections, setSections, method }) {
       ? localStorage.set("section_edit", sections_temp)
       : method === "complianceTask"
       ? localStorage.set("compliance_task", sections_temp)
+      : method === "update-compliance-task"
+      ? localStorage.set("comp_task_temp", sections_temp)
       : localStorage.set("section", sections_temp);
   }
 
@@ -361,6 +385,8 @@ function ReviewQuestion({ sections, setSections, method }) {
       ? localStorage.set("section_edit", sections_temp)
       : method === "complianceTask"
       ? localStorage.set("compliance_task", sections_temp)
+      : method === "update-compliance-task"
+      ? localStorage.set("comp_task_temp", sections_temp)
       : localStorage.set("section", sections_temp);
   }
 
@@ -375,6 +401,8 @@ function ReviewQuestion({ sections, setSections, method }) {
       ? localStorage.set("section_edit", sec)
       : method === "complianceTask"
       ? localStorage.set("compliance_task", sec)
+      : method === "update-compliance-task"
+      ? localStorage.set("comp_task_temp", sec)
       : localStorage.set("section", sec);
   }
 
@@ -394,6 +422,8 @@ function ReviewQuestion({ sections, setSections, method }) {
       ? localStorage.set("section_edit", sec)
       : method === "complianceTask"
       ? localStorage.set("compliance_task", sec)
+      : method === "update-compliance-task"
+      ? localStorage.set("comp_task_temp", sec)
       : localStorage.set("section", sec);
   }
 
@@ -408,6 +438,8 @@ function ReviewQuestion({ sections, setSections, method }) {
       ? localStorage.set("section_edit", sec)
       : method === "complianceTask"
       ? localStorage.set("compliance_task", sec)
+      : method === "update-compliance-task"
+      ? localStorage.set("comp_task_temp", sec)
       : localStorage.set("section", sec);
   }
 
@@ -425,6 +457,8 @@ function ReviewQuestion({ sections, setSections, method }) {
       ? localStorage.set("section_edit", sections_temp)
       : method === "complianceTask"
       ? localStorage.set("compliance_task", sections_temp)
+      : method === "update-compliance-task"
+      ? localStorage.set("comp_task_temp", sections_temp)
       : localStorage.set("section", sections_temp);
   }
 
@@ -438,6 +472,8 @@ function ReviewQuestion({ sections, setSections, method }) {
       ? localStorage.set("section_edit", sec)
       : method === "complianceTask"
       ? localStorage.set("compliance_task", sec)
+      : method === "update-compliance-task"
+      ? localStorage.set("comp_task_temp", sec)
       : localStorage.set("section", sec);
   }
 
@@ -451,6 +487,8 @@ function ReviewQuestion({ sections, setSections, method }) {
         ? localStorage.set("section_edit", sections_temp)
         : method === "complianceTask"
         ? localStorage.set("compliance_task", sections_temp)
+        : method === "update-compliance-task"
+        ? localStorage.set("comp_task_temp", sections_temp)
         : localStorage.set("section", sections_temp);
     }
   }
@@ -478,6 +516,8 @@ function ReviewQuestion({ sections, setSections, method }) {
       ? localStorage.set("section_edit", sections_temp)
       : method === "complianceTask"
       ? localStorage.set("compliance_task", sections_temp)
+      : method === "update-compliance-task"
+      ? localStorage.set("comp_task_temp", sections_temp)
       : localStorage.set("section", sections_temp);
   }
 
@@ -500,6 +540,8 @@ function ReviewQuestion({ sections, setSections, method }) {
       ? localStorage.set("section_edit", qs)
       : method === "complianceTask"
       ? localStorage.set("compliance_task", qs)
+      : method === "update-compliance-task"
+      ? localStorage.set("comp_task_temp", qs)
       : localStorage.set("section", qs);
   }
 

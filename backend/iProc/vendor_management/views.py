@@ -1059,7 +1059,7 @@ class ComplianceTaskViewSet(viewsets.ViewSet):
     #permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        query_filter = json.loads(self.request.query_params.get("query_comp"))
+        query_filter = json.loads(self.request.query_params.get("query_compliance"))
         current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
         curr = current_page-1

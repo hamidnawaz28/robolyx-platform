@@ -1,4 +1,6 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -12,6 +14,7 @@ import Configurations from "./configurations/Configurations.main.page";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import AddComplianceTask from "./add_compliance_task/AddComplianceTask";
 import ComplianceTaskList from "./compliance_task_list/ComplianceTask.main.page";
+import { updateComplianceQuery } from "./redux/complianceTaskActions";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -59,11 +62,18 @@ const useStyles = makeStyles((theme) => ({
 
 export default function VendorConfigurations() {
   const classes = useStyles();
+  const location = useLocation();
+  const dispatch = useDispatch();
   const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(location.value ? location.value : 0);
+
+  const initialState = {
+    form_name__icontains: "",
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    dispatch(updateComplianceQuery(initialState));
   };
 
   return (
