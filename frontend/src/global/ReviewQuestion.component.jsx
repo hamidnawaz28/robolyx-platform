@@ -146,7 +146,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ReviewQuestion({ sections, setSections }) {
+function ReviewQuestion({ sections, setSections, method }) {
   const classes = useStyles();
   const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const matchesXs = useMediaQuery((theme) => theme.breakpoints.down("xs"));
@@ -161,7 +161,10 @@ function ReviewQuestion({ sections, setSections }) {
     let sections_temp = [...sections];
     sections_temp[i].section_name = text;
     setSections(sections_temp);
-    localStorage.set("section", sections);
+
+    method === "update"
+      ? localStorage.set("section_edit", sections)
+      : localStorage.set("section", sections);
   }
 
   function restoreForm() {
@@ -193,7 +196,9 @@ function ReviewQuestion({ sections, setSections }) {
     let sections_temp = [...sections];
     sections_temp[i].section_desp = text;
     setSections(sections_temp);
-    localStorage.set("section", sections);
+    method === "update"
+      ? localStorage.set("section_edit", sections)
+      : localStorage.set("section", sections);
   }
 
   function deleteQuestion(i, k) {
@@ -202,21 +207,27 @@ function ReviewQuestion({ sections, setSections }) {
       sec[i].questions.splice(k, 1);
     }
     setSections(sec);
-    localStorage.set("section", sec);
+    method === "update"
+      ? localStorage.set("section_edit", sections)
+      : localStorage.set("section", sections);
   }
 
   function handleQuestionValue(text, i, k) {
     var sections_temp = [...sections];
     sections_temp[i].questions[k].question_text = text;
     setSections(sections_temp);
-    localStorage.set("section", sections_temp);
+    method === "update"
+      ? localStorage.set("section_edit", sections_temp)
+      : localStorage.set("section", sections_temp);
   }
 
   function addQuestionType(i, k, type) {
     let sections_temp = [...sections];
     sections_temp[i].questions[k].question_type = type;
     setSections(sections_temp);
-    localStorage.set("section", sections_temp);
+    method === "update"
+      ? localStorage.set("section_edit", sections_temp)
+      : localStorage.set("section", sections_temp);
   }
 
   function addMoreQuestionField(i) {
@@ -234,7 +245,9 @@ function ReviewQuestion({ sections, setSections }) {
       required: false,
     });
     setSections(sections_temp);
-    localStorage.set("section", sections_temp);
+    method === "update"
+      ? localStorage.set("section_edit", sections_temp)
+      : localStorage.set("section", sections_temp);
   }
 
   function addSectionField() {
@@ -259,7 +272,9 @@ function ReviewQuestion({ sections, setSections }) {
       ],
     });
     setSections(sections_temp);
-    localStorage.set("section", sections_temp);
+    method === "update"
+      ? localStorage.set("section_edit", sections_temp)
+      : localStorage.set("section", sections_temp);
   }
 
   function handleOptionValue(text, i, k, p) {
@@ -267,7 +282,9 @@ function ReviewQuestion({ sections, setSections }) {
     sections_temp[i].questions[k].options[p].optionText = text;
     //newMembersEmail[i]= email;
     setSections(sections_temp);
-    localStorage.set("section", sections_temp);
+    method === "update"
+      ? localStorage.set("section_edit", sections_temp)
+      : localStorage.set("section", sections_temp);
   }
 
   function adddeleteSection(i) {
@@ -275,7 +292,9 @@ function ReviewQuestion({ sections, setSections }) {
     if (sections_temp.length > 1) {
       sections_temp.splice(i, 1);
       setSections(sections_temp);
-      localStorage.set("section", sections_temp);
+      method === "update"
+        ? localStorage.set("section_edit", sections_temp)
+        : localStorage.set("section", sections_temp);
     } else {
       localStorage.set("section", form_structure.sections);
       setSections(form_structure.sections);
@@ -296,7 +315,9 @@ function ReviewQuestion({ sections, setSections }) {
     }
     //console.log(optionsOfQuestion);
     setSections(sections_temp);
-    localStorage.set("section", sections_temp);
+    method === "update"
+      ? localStorage.set("section_edit", sections_temp)
+      : localStorage.set("section", sections_temp);
   }
 
   function addAnswer(i, k) {
@@ -304,7 +325,9 @@ function ReviewQuestion({ sections, setSections }) {
     sections_temp[i].questions[k].answer =
       !sections_temp[i].questions[k].answer;
     setSections(sections_temp);
-    localStorage.set("section", sections_temp);
+    method === "update"
+      ? localStorage.set("section_edit", sections_temp)
+      : localStorage.set("section", sections_temp);
   }
 
   function expandCloseAll(i) {
@@ -349,7 +372,9 @@ function ReviewQuestion({ sections, setSections }) {
     sections_temp[i].questions.push(newQuestion);
 
     setSections(sections_temp);
-    localStorage.set("section", sections_temp);
+    method === "update"
+      ? localStorage.set("section_edit", sections_temp)
+      : localStorage.set("section", sections_temp);
   }
 
   function requiredQuestion(i, k) {
@@ -367,7 +392,9 @@ function ReviewQuestion({ sections, setSections }) {
       sections_temp[i].questions[k].options.splice(p, 1);
       sections_temp[i].questions[k].checkbox_answerkey.splice(p, 1);
       setSections(sections_temp);
-      localStorage.set("section", sections_temp);
+      method === "update"
+        ? localStorage.set("section_edit", sections_temp)
+        : localStorage.set("section", sections_temp);
     }
   }
 
@@ -390,7 +417,9 @@ function ReviewQuestion({ sections, setSections }) {
     // });
 
     setSections(sections_temp);
-    localStorage.set("section", sections_temp);
+    method === "update"
+      ? localStorage.set("section_edit", sections_temp)
+      : localStorage.set("section", sections_temp);
   }
 
   function handleExpand(i, k) {
@@ -1031,10 +1060,7 @@ function ReviewQuestion({ sections, setSections }) {
                                         ) : (
                                           ques.options.map((option, p) => (
                                             <Grid container alignItems="center">
-                                              <Grid
-                                                item
-                                                style={{ flexBasis: "3em" }}
-                                              >
+                                              <Grid item sm={1} xs={2}>
                                                 {ques.question_type ===
                                                 "Radio" ? (
                                                   <Radio
@@ -1093,7 +1119,7 @@ function ReviewQuestion({ sections, setSections }) {
                                                   }}
                                                 ></TextField>
                                               </Grid>
-                                              <Grid item xs={1}>
+                                              <Grid item sm={1} xs={2}>
                                                 <IconButton
                                                   aria-label="delete"
                                                   onClick={() => {

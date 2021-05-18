@@ -43,6 +43,7 @@ function VendorApprovalQueryForm(props) {
 
   const searchQueryHandle = () => {
     fetchApiData["query"] = formData;
+    fetchApiData["currentPage"] = 1;
     dispatch(updateQuery(formData));
     dispatch(fetchPendingVendorsStart({ fetchApiData }));
   };

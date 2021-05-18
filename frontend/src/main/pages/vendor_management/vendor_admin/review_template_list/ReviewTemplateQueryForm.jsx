@@ -43,6 +43,7 @@ function ReviewTemplateQueryForm(props) {
 
   const searchQueryHandle = () => {
     fetchApiData["query_review_temp"] = formData;
+    fetchApiData["currentPage"] = 1;
     dispatch(updateReviewTemplateQuery(formData));
     dispatch(fetchReviewTemplateStart({ fetchApiData }));
   };
@@ -55,12 +56,16 @@ function ReviewTemplateQueryForm(props) {
   };
 
   return (
-    <BorderWrapper p={matches ? 1 : 3} mb={matches ? 0 : 3} style={{ marginBottom: matches ? "1em" : "0.5em" }}>
+    <BorderWrapper
+      p={matches ? 1 : 3}
+      mb={matches ? 0 : 3}
+      style={{ marginBottom: matches ? "1em" : "0.5em" }}
+    >
       <Grid
         container
         spacing={0}
         style={{ marginTop: matches ? "0em" : "0.5em" }}
-        direction='row'
+        direction="row"
       >
         <Grid item sm={3}>
           <TextField
@@ -80,7 +85,7 @@ function ReviewTemplateQueryForm(props) {
           />
         </Grid>
         {matches ? (
-          <Grid item >
+          <Grid item>
             <Search
               onClick={() => searchQueryHandle()}
               style={{
@@ -96,39 +101,39 @@ function ReviewTemplateQueryForm(props) {
             />
           </Grid>
         ) : (
-            <Grid item >
-              <Grid container spacing={2} className={classes.root}>
-                <Grid item >
-                  <Button
-                    style={{
-                      backgroundColor: "#232f3e",
-                      color: "#fff",
-                      width: "10em",
-                    }}
-                    variant="contained"
-                    startIcon={<Search />}
-                    onClick={() => searchQueryHandle()}
-                  >
-                    Search
+          <Grid item>
+            <Grid container spacing={2} className={classes.root}>
+              <Grid item>
+                <Button
+                  style={{
+                    backgroundColor: "#232f3e",
+                    color: "#fff",
+                    width: "10em",
+                  }}
+                  variant="contained"
+                  startIcon={<Search />}
+                  onClick={() => searchQueryHandle()}
+                >
+                  Search
                 </Button>
-                </Grid>
-                <Grid item >
-                  <Button
-                    style={{
-                      backgroundColor: "#232f3e",
-                      color: "#fff",
-                      width: "10em",
-                    }}
-                    variant="contained"
-                    startIcon={<RotateLeft />}
-                    onClick={() => resetQueryHandle()}
-                  >
-                    Reset
+              </Grid>
+              <Grid item>
+                <Button
+                  style={{
+                    backgroundColor: "#232f3e",
+                    color: "#fff",
+                    width: "10em",
+                  }}
+                  variant="contained"
+                  startIcon={<RotateLeft />}
+                  onClick={() => resetQueryHandle()}
+                >
+                  Reset
                 </Button>
-                </Grid>
               </Grid>
             </Grid>
-          )}
+          </Grid>
+        )}
       </Grid>
     </BorderWrapper>
   );

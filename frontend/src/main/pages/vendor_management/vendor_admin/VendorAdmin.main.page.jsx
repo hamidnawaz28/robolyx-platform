@@ -13,16 +13,19 @@ import VendorApprovals from "./vendor_approvals/VendorApprovals.main.page";
 import OnboardDetails from "./onboarding_details/OnBoardDetails.main.page";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
-import ReviewTemplateList from './review_template_list/ReviewTemplate.main.page'
+import ReviewTemplateList from "./review_template_list/ReviewTemplate.main.page";
 
 import AddReviewTemplate from "./add_review_template/AddReviewTemplate";
 import SupplierData from "./supplierrequest/allrequests/SupplierData";
+import { useLocation } from "react-router-dom";
+import { fetchReviewTemplateStart } from "./redux/approvalActions";
 
 import {
-  fetchPendingVendorsStart,
-
-} from "./redux/approvalActions"
-
+  updateQuery,
+  updateReviewTemplateQuery,
+  updateCurrentPage,
+  updateVendorOnboardQuery,
+} from "./redux/approvalActions";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -70,32 +73,46 @@ const useStyles = makeStyles((theme) => ({
 
 export default function VendorAdmin() {
   const classes = useStyles();
+  const location = useLocation();
   const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(location.value ? location.value : 0);
   const dispatch = useDispatch();
 
-  const { perPage } =
-    useSelector((state) => state.vendorApproval);
-
-  const handleChange = (event, newValue) => {
-    dispatch(fetchPendingVendorsStart({ fetchApiData }));
-    setValue(newValue);
+  const initialState = {
+    name__icontains: "",
   };
 
-  const initialState = {
+  const initialStateApprovals = {
     vendor_name__icontains: "",
   };
 
+  const { perPage, currentPage, query_review_temp } = useSelector(
+    (state) => state.vendorApproval
+  );
+
   let fetchApiData = {
-    query: JSON.stringify({ vendor_name__icontains: "" }),
-    currentPage: 1,
+    currentPage: currentPage,
     perPage: perPage,
+    query_review_temp: location.query_review_temp,
   };
 
   useEffect(() => {
+    dispatch(updateCurrentPage(1));
+    if (location.query_review_temp) {
+      console.log("location.query_review_temp", location.query_review_temp);
 
-    dispatch(fetchPendingVendorsStart({ fetchApiData }));
+      dispatch(fetchReviewTemplateStart({ fetchApiData }));
+    }
   }, [value]);
+
+  const handleChange = (event, newValue) => {
+    dispatch(updateCurrentPage(1));
+    dispatch(updateReviewTemplateQuery(initialState));
+    dispatch(updateQuery(initialStateApprovals));
+    dispatch(updateVendorOnboardQuery(initialStateApprovals));
+    console.log("Handle Change is triggered");
+    setValue(newValue);
+  };
 
   return (
     <React.Fragment>
@@ -139,7 +156,7 @@ export default function VendorAdmin() {
           <OnboardDetails />
         </TabPanel>
         <TabPanel value={value} index={3}>
-          <ReviewTemplateList />
+          <ReviewTemplateList setValue={setValue} />
         </TabPanel>
         <TabPanel value={value} index={4}>
           <AddReviewTemplate />

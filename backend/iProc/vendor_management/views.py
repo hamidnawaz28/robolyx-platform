@@ -981,8 +981,10 @@ class ReviewTemplateViewSet(viewsets.ViewSet):
         query_filter = json.loads(self.request.query_params.get("query_review_temp"))
         current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
-        start = per_page * current_page
-        end = per_page * current_page + per_page
+        curr = current_page-1
+        print("curr", curr)
+        start = per_page * curr
+        end = per_page * curr + per_page
         print('START END', start, end)
 
         all_objs = ReviewTemplate.objects.all()
@@ -991,7 +993,7 @@ class ReviewTemplateViewSet(viewsets.ViewSet):
         response_dict = {}
         if query_filter is not None:
             review_templates = all_objs.filter(**query_filter)[start:end]
-            count = all_objs.count()
+            count = all_objs.filter(**query_filter).count()
         else:
             review_templates = all_objs[start:end]
             count = all_objs.count()
@@ -1022,7 +1024,7 @@ class ReviewTemplateViewSet(viewsets.ViewSet):
             queryset = ReviewTemplate.objects.all()
             review_temp = get_object_or_404(queryset, pk=pk)
             serializer = ReviewTemplateSerializer(
-                review_temp, data=request.data, context={"request": request})
+                review_temp, data=request.data, context={"request": request}, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             dict_response = {"error": False,
@@ -1597,7 +1599,7 @@ class ApprovedVendorsViewSet(viewsets.ViewSet):
     #permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        query_filter = json.loads(self.request.query_params.get("query"))
+        query_filter = json.loads(self.request.query_params.get("query_vendor_onboard"))
         current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
         curr = current_page-1
@@ -1607,12 +1609,13 @@ class ApprovedVendorsViewSet(viewsets.ViewSet):
         print('START END', start, end)
 
         all_objs = VendorBasicInfo.ApprovedVendors.all().order_by('-id')
+        
         print('QUERY FILTER', query_filter, current_page, per_page)
         #query_filter = ast.literal_eval(query_filter)
         response_dict = {}
         if query_filter is not None:
             approved_vendors = all_objs.filter(**query_filter)[start:end]
-            count = all_objs.count()
+            count = all_objs.filter(**query_filter).count()
         else:
             approved_vendors = all_objs[start:end]
             count = all_objs.count()
@@ -1645,7 +1648,7 @@ class PendingVendorsViewSet(viewsets.ViewSet):
         response_dict = {}
         if query_filter is not None:
             pending_vendors = all_objs.filter(**query_filter)[start:end]
-            count = all_objs.count()
+            count = all_objs.filter(**query_filter).count()
         else:
             pending_vendors = all_objs[start:end]
             count = all_objs.count()

@@ -11,7 +11,8 @@ import {
   fetchTradesSuccess,
   fetchDiversitySuccess,
   fetchPaymentTermSuccess,
-  fetchReiewTemplateSuccess
+  fetchReiewTemplateSuccess,
+  fetchReviewTemplateStart,
 } from "./approvalActions";
 import * as type from "./actionTypes";
 import { takeEvery, takeLatest, put, call } from "redux-saga/effects";
@@ -42,7 +43,7 @@ export function* onFetchPendingVendorsStart() {
   yield takeLatest(type.FETCH_PENDING_VEN_START, pendingVendorsData);
 }
 
-//Fetch pending vendors saga
+//Fetch approved vendors saga
 export function* approvedVendorsData(action) {
   console.log("action from fetch approved vendors saga", action);
   try {
@@ -224,11 +225,9 @@ export function* onPartialUpdateVendors() {
   yield takeLatest(type.PARTIAL_UPDATE_VENDOR, partialUpdateVendor);
 }
 
-
-
 //Fetch Review Template Saga
 export function* reviewTemplateData(action) {
-  console.log("action from fetch pending vendors saga", action);
+  console.log("action from fetch review template saga", action);
   try {
     const { fetchApiData } = action.payload;
 
@@ -251,5 +250,24 @@ export function* onFetchReviewTemplateStart() {
   yield takeLatest(type.FETCH_REVIEW_TEMPLATE_START, reviewTemplateData);
 }
 
+//Delete Table Data Saga
+export function* deleteReviewTemplate(action) {
+  console.log("action from delete review template saga", action);
 
+  try {
+    const { id, fetchApiData } = action.payload;
 
+    console.log("running delete saga", id, fetchApiData);
+    const res = yield axios.delete(
+      `${SERVER_URL}vendor_management/review-template/${id}/`
+    );
+
+    yield put(fetchReviewTemplateStart({ fetchApiData }));
+  } catch (error) {
+    alert(error);
+  }
+}
+
+export function* onDeleteReviewTemplate() {
+  yield takeLatest(type.DELETE_REVIEW_TEMPLATE, deleteReviewTemplate);
+}

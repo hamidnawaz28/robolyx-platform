@@ -12,7 +12,6 @@ import {
 import ReviewTemplateQueryForm from "./ReviewTemplateQueryForm";
 import Pagination from "@material-ui/lab/Pagination";
 
-
 const useStyles = makeStyles((theme) => ({
   tagIcon: {
     width: "2.5em",
@@ -27,15 +26,20 @@ function ReviewTemplateList(props) {
   const dispatch = useDispatch();
   const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
-  const { query_review_temp, currentPage, perPage, reviewTemplates, totalRows } =
-    useSelector((state) => state.vendorApproval);
+  const {
+    query_review_temp,
+    currentPage,
+    perPage,
+    reviewTemplates,
+    totalRows,
+  } = useSelector((state) => state.vendorApproval);
 
   let fetchApiData = {
     query_review_temp: JSON.stringify(query_review_temp),
     currentPage: currentPage,
     perPage: perPage,
   };
-  console.log("vendors.count", reviewTemplates.count);
+  console.log("vendors.count", reviewTemplates);
 
   useEffect(() => {
     dispatch(fetchReviewTemplateStart({ fetchApiData }));
@@ -50,14 +54,22 @@ function ReviewTemplateList(props) {
 
   return (
     <>
-      <Typography variant={matches ? "h3" : "h2"} style={{ marginBottom: '0.5em' }}>
+      <Typography
+        variant={matches ? "h3" : "h2"}
+        style={{ marginBottom: "0.5em" }}
+      >
         Review Templates
-          </Typography>
+      </Typography>
       <ReviewTemplateQueryForm />
 
       <Grid container spacing={2}>
         {reviewTemplates.data &&
-          reviewTemplates.data.map((review_template) => <ReviewTemplateCard review_template={review_template} />)}
+          reviewTemplates.data.map((review_template) => (
+            <ReviewTemplateCard
+              review_template={review_template}
+              setValue={props.setValue}
+            />
+          ))}
       </Grid>
       <Grid container justify="center">
         <Grid item>
@@ -67,7 +79,7 @@ function ReviewTemplateList(props) {
             onChange={handleChange}
             defaultPage={1}
             color="primary"
-            size="large"
+            size="small"
             color="secondary"
           />
         </Grid>

@@ -4,8 +4,9 @@ import { Grid, Button, Box, TextField, Typography } from "@material-ui/core";
 import { Search, RotateLeft } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import {
-  updateQuery,
-  fetchPendingVendorsStart,
+  updateVendorOnboardQuery,
+  fetchApprovedVendorsStart,
+  updateCurrentPage,
 } from "../redux/approvalActions";
 import styled from "styled-components";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -27,7 +28,7 @@ function OnboardDetailsQueryForm(props) {
   const dispatch = useDispatch();
   const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const vendorApproval = useSelector((state) => state.vendorApproval);
-  const { perPage, currentPage, query } = vendorApproval;
+  const { perPage, currentPage, query_vendor_onboard } = vendorApproval;
   const classes = useStyles();
 
   const initialState = {
@@ -42,16 +43,18 @@ function OnboardDetailsQueryForm(props) {
   };
 
   const searchQueryHandle = () => {
-    fetchApiData["query"] = formData;
-    dispatch(updateQuery(formData));
-    dispatch(fetchPendingVendorsStart({ fetchApiData }));
+    dispatch(updateCurrentPage(1));
+    fetchApiData["query_vendor_onboard"] = formData;
+    fetchApiData["currentPage"] = 1;
+    dispatch(updateVendorOnboardQuery(formData));
+    dispatch(fetchApprovedVendorsStart({ fetchApiData }));
   };
 
   const resetQueryHandle = () => {
-    fetchApiData["query"] = JSON.stringify(initialState);
+    fetchApiData["query_vendor_onboard"] = JSON.stringify(initialState);
     setFormData(initialState);
-    dispatch(updateQuery(initialState));
-    dispatch(fetchPendingVendorsStart({ fetchApiData }));
+    dispatch(updateVendorOnboardQuery(initialState));
+    dispatch(fetchApprovedVendorsStart({ fetchApiData }));
   };
 
   return (
