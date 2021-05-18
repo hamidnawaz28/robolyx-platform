@@ -11,6 +11,7 @@ import AddVendorIcon from "../../../../assets/supply-chain.png";
 import Configurations from "./configurations/Configurations.main.page";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import AddComplianceTask from "./add_compliance_task/AddComplianceTask";
+import ComplianceTaskList from "./compliance_task_list/ComplianceTask.main.page";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -104,7 +105,7 @@ export default function VendorConfigurations() {
           <AddComplianceTask />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          Item Three
+          <ComplianceTaskList />
         </TabPanel>
       </div>
     </React.Fragment>
