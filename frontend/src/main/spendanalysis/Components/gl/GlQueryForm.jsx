@@ -44,12 +44,12 @@ function GlQueryForm(props) {
     project: "1",
   };
   const searchQueryHandle = () => {
-    fetchApiData["query"] = JSON.stringify(formData);
+    fetchApiData["query"] = formData;
     dispatch(updateFormQuery(formData));
     dispatch(fetchTableData({ apiLink: credentials, fetchApiData }));
   };
   const resetQueryHandle = () => {
-    fetchApiData["query"] = JSON.stringify(initialState);
+    fetchApiData["query"] = initialState;
     setFormData(initialState);
     dispatch(updateFormQuery(initialState));
     dispatch(fetchTableData({ apiLink: credentials, fetchApiData }));

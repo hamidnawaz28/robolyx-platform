@@ -129,16 +129,16 @@ function FormPopUp(props){
     }
     const defaultTempleteSelectHandle=(e)=>{
         let selectedIndex = e.target.selectedIndex;
-        let defaultTemplateReference = parseInt(e.target.options[selectedIndex].getAttribute("pk"));
+        let defaultTemplateReference = parseInt(e.target.options[selectedIndex].getAttribute("id"));
         dispatch(setMapSelectedDefaultTemplate(defaultTemplateReference))
         defaultTemplates.forEach((element)=>{
-            if(element.pk===defaultTemplateReference){
-                dispatch(setMapSelectedDefaultTemplateData(element.fields.Items))
+            if(element.id===defaultTemplateReference){
+                dispatch(setMapSelectedDefaultTemplateData(element.Items))
             }
         })
     }
     const mappingItemSelectHandle = (e, sensitivity, type, element) =>{
-        const value = e.target.value
+        const {value} = e.target
         const templeteData = selectedDefaultTemplateData;
         let updatedTempleteData = {}
         let sensitivities  = {...selectedDefaultTemplateData[sensitivity]}
@@ -164,6 +164,7 @@ function FormPopUp(props){
             dispatch(setNewMappingName(MappingName))
         }
     },[])
+    console.log("------>",selectedDefaultTemplateData)
     return(
         <>
             <Dialog open={formState} onClose={formCloseEvent} aria-labelledby="form-dialog-title"  fullWidth={true}
