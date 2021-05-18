@@ -1,12 +1,12 @@
-import { all, call } from "redux-saga/effects";
+import { all, call } from 'redux-saga/effects';
 
 import {
     onAddStart,
     onDeleteDataStart,
     onEditDataStart,
     onQueryStart,
-} from "../../global/table/table.actions";
-import { onFetchTaxonomyStart } from "../../global/utils/utils.actions";
+} from '../../global/table/table.actions';
+import { onFetchTaxonomyStart } from '../../global/utils/utils.actions';
 import {
     onFetchTicketsStart,
     onAddTicketStart,
@@ -18,7 +18,7 @@ import {
     onFetchContentHistoryStart,
     onArchiveTicketsQueryStart,
     onPartialUpdateTicketStart,
-} from "../../main/pages/tickets/redux/ticketSaga";
+} from '../../main/pages/tickets/redux/ticketSaga';
 
 import {
     onFetchPendingVendorsStart,
@@ -31,7 +31,10 @@ import {
     onFetchPaymentTermStart,
     onPartialUpdateVendors,
     onFetchReviewTemplateStart,
-} from "../../main/pages/vendor_management/vendor_admin/redux/approvalSaga";
+    onDeleteReviewTemplate,
+} from '../../main/pages/vendor_management/vendor_admin/redux/approvalSaga';
+
+import { onFetchCategoriesStart } from '../../main/pages/vendor_management/vendor_configurations/redux/complianceTaskSaga';
 
 export default function* rootSaga() {
     yield all([
@@ -60,5 +63,7 @@ export default function* rootSaga() {
         call(onFetchPaymentTermStart),
         call(onPartialUpdateVendors),
         call(onFetchReviewTemplateStart),
+        call(onFetchCategoriesStart),
+        call(onDeleteReviewTemplate),
     ]);
 }

@@ -9,6 +9,7 @@ const initialState = {
   totalRows: 0,
   query: {},
   query_review_temp: {},
+  query_vendor_onboard: {},
   categories: [],
   tags: [],
   trades: [],
@@ -54,6 +55,12 @@ export const vendorApprovalReducer = (state = initialState, action) => {
       return {
         ...state,
         currentPage: action.payload,
+      };
+
+    case Types.UPDATE_PER_PAGE:
+      return {
+        ...state,
+        perPage: action.payload,
       };
     //category
     case Types.FETCH_CATEGORY_START:

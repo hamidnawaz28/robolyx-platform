@@ -4,9 +4,9 @@ import { Grid, Button, Box, TextField, Typography } from "@material-ui/core";
 import { Search, RotateLeft } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import {
-  updateQuery,
-  fetchPendingVendorsStart,
-} from "../redux/approvalActions";
+  updateReviewTemplateQuery,
+  fetchReviewTemplateStart,
+} from "../../vendor_admin/redux/approvalActions";
 import styled from "styled-components";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function VendorApprovalQueryForm(props) {
+function ReviewTemplateQueryForm(props) {
   const dispatch = useDispatch();
   const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const vendorApproval = useSelector((state) => state.vendorApproval);
@@ -31,7 +31,7 @@ function VendorApprovalQueryForm(props) {
   const classes = useStyles();
 
   const initialState = {
-    vendor_name__icontains: "",
+    name__icontains: "",
   };
 
   const [formData, setFormData] = useState(initialState);
@@ -42,38 +42,44 @@ function VendorApprovalQueryForm(props) {
   };
 
   const searchQueryHandle = () => {
-    fetchApiData["query"] = formData;
+    fetchApiData["query_review_temp"] = formData;
     fetchApiData["currentPage"] = 1;
-    dispatch(updateQuery(formData));
-    dispatch(fetchPendingVendorsStart({ fetchApiData }));
+    dispatch(updateReviewTemplateQuery(formData));
+    dispatch(fetchReviewTemplateStart({ fetchApiData }));
   };
 
   const resetQueryHandle = () => {
-    fetchApiData["query"] = JSON.stringify(initialState);
+    fetchApiData["query_review_temp"] = JSON.stringify(initialState);
     setFormData(initialState);
-    dispatch(updateQuery(initialState));
-    dispatch(fetchPendingVendorsStart({ fetchApiData }));
+    dispatch(updateReviewTemplateQuery(initialState));
+    dispatch(fetchReviewTemplateStart({ fetchApiData }));
   };
 
   return (
-    <BorderWrapper p={matches ? 1 : 3} mb={matches ? 0 : 3}>
+    <BorderWrapper
+      p={matches ? 1 : 3}
+      mb={matches ? 0 : 3}
+      style={{ marginBottom: matches ? "1em" : "0.5em" }}
+    >
       <Grid
         container
         spacing={0}
         style={{ marginTop: matches ? "0em" : "0.5em" }}
+        direction="row"
       >
-        <Grid item>
+        <Grid item sm={3}>
           <TextField
             id="outlined-basic"
             variant="outlined"
-            label={matches ? "Vendor Name" : "Search by Vendor Name"}
+            label={matches ? "Template Name" : "Search by Template Name"}
             style={{ width: matches ? "90%" : "100%" }}
-            value={formData.vendor_name__icontains}
+            value={formData.name__icontains}
+            fullWidth={true}
             size="small"
             onChange={(e) =>
               setFormData({
                 ...formData,
-                vendor_name__icontains: e.target.value,
+                name__icontains: e.target.value,
               })
             }
           />
@@ -132,4 +138,4 @@ function VendorApprovalQueryForm(props) {
     </BorderWrapper>
   );
 }
-export default VendorApprovalQueryForm;
+export default ReviewTemplateQueryForm;

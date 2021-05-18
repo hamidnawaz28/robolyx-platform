@@ -36,7 +36,7 @@ function VendorConfigs(props) {
     setActionType("Edit");
     setFormState(true);
   };
-  console.log("selectedRow from main page", selectedRow);
+  //console.log("selectedRow from main page", selectedRow);
   return (
     <>
       <Grid container justify="space-between" alignItems="center">

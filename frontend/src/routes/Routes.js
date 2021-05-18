@@ -10,6 +10,7 @@ import { dashboardLayoutRoutes, authLayoutRoutes } from "./index";
 import DashboardLayout from "../layouts/Dashboard";
 import AuthLayout from "../layouts/Auth";
 import Page404 from "../pages/auth/Page404";
+import ReviewTemplateEdit from "../main/pages/vendor_management/vendor_admin/edit_review_template/EditReviewTemplate";
 import localStorage from "../common/storage/localStorage";
 
 const childProtectedRoutes = (Layout, routes) =>
@@ -99,6 +100,15 @@ const Routes = () => (
     <Switch>
       {childProtectedRoutes(DashboardLayout, dashboardLayoutRoutes)}
       {childRoutes(AuthLayout, authLayoutRoutes)}
+      <Route
+        exact
+        path="/vendor-management/review-template-edit"
+        render={() => (
+          <DashboardLayout>
+            <ReviewTemplateEdit />
+          </DashboardLayout>
+        )}
+      />
 
       <Route
         render={() => (

@@ -2,12 +2,13 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from .models import VendorRequest, VendorTags, Categories, Trades, DiversityClassification, VendorBasicInfo, CertificatesAndLisences,\
 VendorAddress, VendorFileUpload, Notes, VendorHistory, ReviewTemplate, ReviewResponse, ReviewResponseStatus, ComplianceVendorTask, \
-ComplianceVendorResponse, ComplianceTaskCriteria, VendorComplianceStatus, VendorComplianceHistory
+ComplianceVendorResponse, ComplianceTaskCriteria, VendorComplianceStatus, VendorComplianceHistory, ComplianceTask
 from .serializers import VendorRequestSerializer, VendorTagsSerializer, CategoriesSerializer, TradesSerializer, TradesSerializerWithDepth, \
 DiversityClassificationSerializer, VendorBasicSerializer, CertAndLisencesSerializer, VendorAddressSerializer,\
 VendorFileUploadSerializer, NotesSerializer, VendorHistorySerializer, ReviewTemplateSerializer, ReviewResponseSerializer, \
 ReviewResponseStatusSerializer, ComplianceVendorTaskSerializer, ComplianceVendorResponseSerializer, ComplianceTaskCriteriaSerializer, \
-VendorComplianceStatusSerializer, VendorComplianceHistorySerializer, PendingVendorBasicSerializer, ComplianceTaskSerializer,VendorBasicSerializerWithDepth
+VendorComplianceStatusSerializer, VendorComplianceHistorySerializer, PendingVendorBasicSerializer, ComplianceTaskSerializer, \
+VendorBasicSerializerWithDepth, ComplianceTaskSerializer
 from rest_framework.generics import get_object_or_404
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.contrib.auth.models import User
@@ -981,8 +982,10 @@ class ReviewTemplateViewSet(viewsets.ViewSet):
         query_filter = json.loads(self.request.query_params.get("query_review_temp"))
         current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
-        start = per_page * current_page
-        end = per_page * current_page + per_page
+        curr = current_page-1
+        print("curr", curr)
+        start = per_page * curr
+        end = per_page * curr + per_page
         print('START END', start, end)
 
         all_objs = ReviewTemplate.objects.all()
@@ -991,7 +994,7 @@ class ReviewTemplateViewSet(viewsets.ViewSet):
         response_dict = {}
         if query_filter is not None:
             review_templates = all_objs.filter(**query_filter)[start:end]
-            count = all_objs.count()
+            count = all_objs.filter(**query_filter).count()
         else:
             review_templates = all_objs[start:end]
             count = all_objs.count()
@@ -1022,7 +1025,7 @@ class ReviewTemplateViewSet(viewsets.ViewSet):
             queryset = ReviewTemplate.objects.all()
             review_temp = get_object_or_404(queryset, pk=pk)
             serializer = ReviewTemplateSerializer(
-                review_temp, data=request.data, context={"request": request})
+                review_temp, data=request.data, context={"request": request}, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             dict_response = {"error": False,
@@ -1048,6 +1051,86 @@ class ReviewTemplateViewSet(viewsets.ViewSet):
         except:
             dict_response = {'error': True,
                              'message': "Error During Deleting Review Template"}
+        return Response(dict_response)
+
+
+class ComplianceTaskViewSet(viewsets.ViewSet):
+    #authentication_classes = [JWTAuthentication]
+    #permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        query_filter = json.loads(self.request.query_params.get("query_comp"))
+        current_page = int(self.request.query_params.get("currentPage"))
+        per_page = int(self.request.query_params.get("perPage"))
+        curr = current_page-1
+        print("curr", curr)
+        start = per_page * curr
+        end = per_page * curr + per_page
+        print('START END', start, end)
+
+        all_objs = ComplianceTask.objects.all()
+        print('QUERY FILTER', query_filter, current_page, per_page)
+        #query_filter = ast.literal_eval(query_filter)
+        response_dict = {}
+        if query_filter is not None:
+            compliance_tasks = all_objs.filter(**query_filter)[start:end]
+            count = all_objs.filter(**query_filter).count()
+        else:
+            compliance_tasks = all_objs[start:end]
+            count = all_objs.count()
+
+        serializer = ComplianceTaskSerializer(
+            compliance_tasks, many=True, context={"request": request})
+
+        response_dict = {'data': serializer.data,
+                             'count': count}
+
+        return Response(response_dict)
+
+    def create(self, request):
+        try:
+            serializer = ComplianceTaskSerializer(
+                data=request.data, context={"request": request}, partial=True,)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            dict_response = {"error": False,
+                             "message": "Compliance saved successfully"}
+        except:
+            dict_response = {'error': True,
+                             'message': "Error During Saving Compliance"}
+        return Response(dict_response)
+
+    def update(self, request, pk=id):
+        try:
+            queryset = ComplianceTask.objects.all()
+            compliance_task = get_object_or_404(queryset, pk=pk)
+            serializer = ComplianceTaskSerializer(
+                compliance_task, data=request.data, context={"request": request}, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            dict_response = {"error": False,
+                             "message": "Successfully Updated Compliance Task"}
+        except:
+            dict_response = {'error': True,
+                             'message': "Error During Updating Compliance Task"}
+        return Response(dict_response)
+
+    def retrieve(self, request, pk=id):
+        queryset = ComplianceTask.objects.all()
+        compliance_task = get_object_or_404(queryset, pk=pk)
+        serializer = ComplianceTaskSerializer(compliance_task, context={"request": request})
+        return Response({'error': False, 'message': "Single Data Fetch", "data": serializer.data})
+
+    def destroy(self, request, pk=id):
+        try:
+            queryset = ComplianceTask.objects.all()
+            review_template = get_object_or_404(queryset, pk=pk)
+            review_template.delete()
+            dict_response = {"error": False,
+                             "message": "Successfully Deleted Compliance Task"}
+        except:
+            dict_response = {'error': True,
+                             'message': "Error During Deleting Compliance Task"}
         return Response(dict_response)
 
 
@@ -1597,7 +1680,7 @@ class ApprovedVendorsViewSet(viewsets.ViewSet):
     #permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        query_filter = json.loads(self.request.query_params.get("query"))
+        query_filter = json.loads(self.request.query_params.get("query_vendor_onboard"))
         current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
         curr = current_page-1
@@ -1607,12 +1690,13 @@ class ApprovedVendorsViewSet(viewsets.ViewSet):
         print('START END', start, end)
 
         all_objs = VendorBasicInfo.ApprovedVendors.all().order_by('-id')
+        
         print('QUERY FILTER', query_filter, current_page, per_page)
         #query_filter = ast.literal_eval(query_filter)
         response_dict = {}
         if query_filter is not None:
             approved_vendors = all_objs.filter(**query_filter)[start:end]
-            count = all_objs.count()
+            count = all_objs.filter(**query_filter).count()
         else:
             approved_vendors = all_objs[start:end]
             count = all_objs.count()
@@ -1645,7 +1729,7 @@ class PendingVendorsViewSet(viewsets.ViewSet):
         response_dict = {}
         if query_filter is not None:
             pending_vendors = all_objs.filter(**query_filter)[start:end]
-            count = all_objs.count()
+            count = all_objs.filter(**query_filter).count()
         else:
             pending_vendors = all_objs[start:end]
             count = all_objs.count()
@@ -1673,16 +1757,4 @@ class VendorCategoriesList(viewsets.ModelViewSet):
 class DiversityClassificationList(viewsets.ModelViewSet):
     queryset=DiversityClassification.objects.all()
     serializer_class=DiversityClassificationSerializer
-class ComplianceTaskViewSet(viewsets.ViewSet):
-    def create(self, request):
-        try:
-            serializer = ComplianceTaskSerializer(
-                data=request.data, context={"request": request})
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            dict_response = {"error": False,
-                             "message": "Vendor Compliance History saved successfully"}
-        except:
-            dict_response = {'error': True,
-                             'message': "Error During Saving Vendor Compliance History"}
-        return Response(dict_response)
+

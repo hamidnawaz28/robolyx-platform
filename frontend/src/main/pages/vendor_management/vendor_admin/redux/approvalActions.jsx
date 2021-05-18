@@ -35,8 +35,18 @@ export const updateReviewTemplateQuery = (data) => ({
   payload: data,
 });
 
+export const updateVendorOnboardQuery = (data) => ({
+  type: type.UPDATE_VENDOR_ONBOARD_QUERY,
+  payload: data,
+});
+
 export const updateCurrentPage = (data) => ({
   type: type.UPDATE_CURRENT_PAGE,
+  payload: data,
+});
+
+export const updatePerPage = (data) => ({
+  type: type.UPDATE_PER_PAGE,
   payload: data,
 });
 
@@ -102,7 +112,6 @@ export const partialUpdateVendor = (data) => ({
   payload: data,
 });
 
-
 export const fetchReviewTemplateStart = (data) => ({
   type: type.FETCH_REVIEW_TEMPLATE_START,
   payload: data,
@@ -110,5 +119,11 @@ export const fetchReviewTemplateStart = (data) => ({
 
 export const fetchReiewTemplateSuccess = (data) => ({
   type: type.FETCH_REVIEW_TEMPLATE_SUCCESS,
+  payload: data,
+});
+
+//delete review template
+export const deleteReviewTemplate = (data) => ({
+  type: type.DELETE_REVIEW_TEMPLATE,
   payload: data,
 });

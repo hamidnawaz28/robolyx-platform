@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { Typography, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import ReviewTemplateCard from "./ReviewTemplateCard";
+import ReviewTemplateCard from "./ComplianceTaskCard";
 
 import {
   fetchReviewTemplateStart,
   updateCurrentPage,
-} from "../redux/approvalActions";
-import ReviewTemplateQueryForm from "./ReviewTemplateQueryForm";
+} from "../../vendor_admin/redux/approvalActions";
+import ReviewTemplateQueryForm from "./ComplianceTaskQueryForm";
 import Pagination from "@material-ui/lab/Pagination";
 
 const useStyles = makeStyles((theme) => ({
@@ -58,7 +58,7 @@ function ReviewTemplateList(props) {
         variant={matches ? "h3" : "h2"}
         style={{ marginBottom: "0.5em" }}
       >
-        Review Templates
+        Compliance Tasks
       </Typography>
       <ReviewTemplateQueryForm />
 

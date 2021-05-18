@@ -2,7 +2,7 @@ from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 from .models import VendorRequest, VendorTags, Categories, Trades, DiversityClassification, VendorBasicInfo, CertificatesAndLisences, \
 VendorAddress, VendorFileUpload, Notes, VendorHistory, ReviewTemplate, ReviewResponse, ReviewResponseStatus, ComplianceVendorTask, \
-ComplianceVendorResponse, ComplianceTaskCriteria, VendorComplianceStatus, VendorComplianceHistory
+ComplianceVendorResponse, ComplianceTaskCriteria, VendorComplianceStatus, VendorComplianceHistory, ComplianceTask
 
 @admin.register(VendorRequest)
 class VendorRequestAdmin(ImportExportModelAdmin):
@@ -79,3 +79,8 @@ class VendorComplianceStatusAdmin(ImportExportModelAdmin):
 @admin.register(VendorComplianceHistory)
 class VendorComplianceHistoryAdmin(ImportExportModelAdmin):
     list_display = [f.name for f in  VendorComplianceHistory._meta.fields]
+
+@admin.register(ComplianceTask)
+class ComplianceTaskAdmin(ImportExportModelAdmin):
+    list_display = [f.name for f in  ComplianceTask._meta.fields]
+

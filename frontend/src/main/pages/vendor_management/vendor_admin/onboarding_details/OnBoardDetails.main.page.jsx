@@ -25,12 +25,11 @@ function OnboardDetails(props) {
   const dispatch = useDispatch();
   const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
-  const { query, currentPage, perPage, vendors, totalRows } = useSelector(
-    (state) => state.vendorApproval
-  );
+  const { query_vendor_onboard, currentPage, perPage, vendors, totalRows } =
+    useSelector((state) => state.vendorApproval);
 
   let fetchApiData = {
-    query: JSON.stringify(query),
+    query_vendor_onboard: JSON.stringify(query_vendor_onboard),
     currentPage: currentPage,
     perPage: perPage,
   };

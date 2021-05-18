@@ -31,6 +31,8 @@ function AddReviewTemplate() {
   const [formName, setFormName] = useState("Untitled Form");
   const [sections, setSections] = useState([]);
 
+  //localStorage.set("section", form_structure.sections);
+
   console.log("Form title", formName);
 
   useEffect(() => {
@@ -40,6 +42,7 @@ function AddReviewTemplate() {
     } else {
       localStorage.set("section", form_structure.sections);
       //setSections(form_structure.sections);
+      window.location.reload();
     }
   }, []);
 
@@ -100,6 +103,7 @@ function AddReviewTemplate() {
           setFormName("untitled Form");
         } else alert("Error");
         console.log(data);
+        localStorage.set("section", form_structure.sections);
       })
       .catch(function (error) {
         console.log(error);

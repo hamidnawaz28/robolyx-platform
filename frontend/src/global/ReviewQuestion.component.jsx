@@ -146,7 +146,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ReviewQuestion({ sections, setSections }) {
+function ReviewQuestion({ sections, setSections, method }) {
   const classes = useStyles();
   const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const matchesXs = useMediaQuery((theme) => theme.breakpoints.down("xs"));
@@ -161,11 +161,21 @@ function ReviewQuestion({ sections, setSections }) {
     let sections_temp = [...sections];
     sections_temp[i].section_name = text;
     setSections(sections_temp);
-    localStorage.set("section", sections);
+
+    method === "update"
+      ? localStorage.set("section_edit", sections)
+      : method === "complianceTask"
+      ? localStorage.set("compliance_task", sections)
+      : localStorage.set("section", sections);
   }
 
   function restoreForm() {
-    localStorage.remove("section");
+    method === "update"
+      ? localStorage.remove("section_edit")
+      : method === "complianceTask"
+      ? localStorage.remove("compliance_task")
+      : localStorage.remove("section");
+
     //localStorage.set('section', form_structure.sections);
     setSections([
       {
@@ -193,7 +203,11 @@ function ReviewQuestion({ sections, setSections }) {
     let sections_temp = [...sections];
     sections_temp[i].section_desp = text;
     setSections(sections_temp);
-    localStorage.set("section", sections);
+    method === "update"
+      ? localStorage.set("section_edit", sections)
+      : method === "complianceTask"
+      ? localStorage.set("compliance_task", sections)
+      : localStorage.set("section", sections);
   }
 
   function deleteQuestion(i, k) {
@@ -202,21 +216,35 @@ function ReviewQuestion({ sections, setSections }) {
       sec[i].questions.splice(k, 1);
     }
     setSections(sec);
-    localStorage.set("section", sec);
+
+    method === "update"
+      ? localStorage.set("section_edit", sections)
+      : method === "complianceTask"
+      ? localStorage.set("compliance_task", sections)
+      : localStorage.set("section", sections);
   }
 
   function handleQuestionValue(text, i, k) {
     var sections_temp = [...sections];
     sections_temp[i].questions[k].question_text = text;
     setSections(sections_temp);
-    localStorage.set("section", sections_temp);
+
+    method === "update"
+      ? localStorage.set("section_edit", sections_temp)
+      : method === "complianceTask"
+      ? localStorage.set("compliance_task", sections_temp)
+      : localStorage.set("section", sections_temp);
   }
 
   function addQuestionType(i, k, type) {
     let sections_temp = [...sections];
     sections_temp[i].questions[k].question_type = type;
     setSections(sections_temp);
-    localStorage.set("section", sections_temp);
+    method === "update"
+      ? localStorage.set("section_edit", sections_temp)
+      : method === "complianceTask"
+      ? localStorage.set("compliance_task", sections_temp)
+      : localStorage.set("section", sections_temp);
   }
 
   function addMoreQuestionField(i) {
@@ -234,7 +262,11 @@ function ReviewQuestion({ sections, setSections }) {
       required: false,
     });
     setSections(sections_temp);
-    localStorage.set("section", sections_temp);
+    method === "update"
+      ? localStorage.set("section_edit", sections_temp)
+      : method === "complianceTask"
+      ? localStorage.set("compliance_task", sections_temp)
+      : localStorage.set("section", sections_temp);
   }
 
   function addSectionField() {
@@ -259,7 +291,11 @@ function ReviewQuestion({ sections, setSections }) {
       ],
     });
     setSections(sections_temp);
-    localStorage.set("section", sections_temp);
+    method === "update"
+      ? localStorage.set("section_edit", sections_temp)
+      : method === "complianceTask"
+      ? localStorage.set("compliance_task", sections_temp)
+      : localStorage.set("section", sections_temp);
   }
 
   function handleOptionValue(text, i, k, p) {
@@ -267,7 +303,11 @@ function ReviewQuestion({ sections, setSections }) {
     sections_temp[i].questions[k].options[p].optionText = text;
     //newMembersEmail[i]= email;
     setSections(sections_temp);
-    localStorage.set("section", sections_temp);
+    method === "update"
+      ? localStorage.set("section_edit", sections_temp)
+      : method === "complianceTask"
+      ? localStorage.set("compliance_task", sections_temp)
+      : localStorage.set("section", sections_temp);
   }
 
   function adddeleteSection(i) {
@@ -275,9 +315,18 @@ function ReviewQuestion({ sections, setSections }) {
     if (sections_temp.length > 1) {
       sections_temp.splice(i, 1);
       setSections(sections_temp);
-      localStorage.set("section", sections_temp);
+      method === "update"
+        ? localStorage.set("section_edit", sections_temp)
+        : method === "complianceTask"
+        ? localStorage.set("compliance_task", sections_temp)
+        : localStorage.set("section", sections_temp);
     } else {
-      localStorage.set("section", form_structure.sections);
+      method === "update"
+        ? localStorage.set("section_edit", form_structure.sections)
+        : method === "complianceTask"
+        ? localStorage.set("compliance_task", form_structure.sections)
+        : localStorage.set("section", form_structure.sections);
+
       setSections(form_structure.sections);
     }
     //console.log(optionsOfQuestion);
@@ -296,7 +345,11 @@ function ReviewQuestion({ sections, setSections }) {
     }
     //console.log(optionsOfQuestion);
     setSections(sections_temp);
-    localStorage.set("section", sections_temp);
+    method === "update"
+      ? localStorage.set("section_edit", sections_temp)
+      : method === "complianceTask"
+      ? localStorage.set("compliance_task", sections_temp)
+      : localStorage.set("section", sections_temp);
   }
 
   function addAnswer(i, k) {
@@ -304,7 +357,11 @@ function ReviewQuestion({ sections, setSections }) {
     sections_temp[i].questions[k].answer =
       !sections_temp[i].questions[k].answer;
     setSections(sections_temp);
-    localStorage.set("section", sections_temp);
+    method === "update"
+      ? localStorage.set("section_edit", sections_temp)
+      : method === "complianceTask"
+      ? localStorage.set("compliance_task", sections_temp)
+      : localStorage.set("section", sections_temp);
   }
 
   function expandCloseAll(i) {
@@ -313,7 +370,12 @@ function ReviewQuestion({ sections, setSections }) {
       sec[i].questions[j].open = false;
     }
     setSections(sec);
-    localStorage.set("section", sec);
+
+    method === "update"
+      ? localStorage.set("section_edit", sec)
+      : method === "complianceTask"
+      ? localStorage.set("compliance_task", sec)
+      : localStorage.set("section", sec);
   }
 
   const [radioValue, setRadioValue] = React.useState("");
@@ -328,7 +390,11 @@ function ReviewQuestion({ sections, setSections }) {
     sec[i].questions[k].points = points;
 
     setSections(sec);
-    localStorage.set("section", sec);
+    method === "update"
+      ? localStorage.set("section_edit", sec)
+      : method === "complianceTask"
+      ? localStorage.set("compliance_task", sec)
+      : localStorage.set("section", sec);
   }
 
   function doneAnswer(i, k) {
@@ -337,7 +403,12 @@ function ReviewQuestion({ sections, setSections }) {
     sec[i].questions[k].answer = !sec[i].questions[k].answer;
 
     setSections(sec);
-    localStorage.set("section", sec);
+    setSections(sec);
+    method === "update"
+      ? localStorage.set("section_edit", sec)
+      : method === "complianceTask"
+      ? localStorage.set("compliance_task", sec)
+      : localStorage.set("section", sec);
   }
 
   function copyQuestion(i, k) {
@@ -349,7 +420,12 @@ function ReviewQuestion({ sections, setSections }) {
     sections_temp[i].questions.push(newQuestion);
 
     setSections(sections_temp);
-    localStorage.set("section", sections_temp);
+
+    method === "update"
+      ? localStorage.set("section_edit", sections_temp)
+      : method === "complianceTask"
+      ? localStorage.set("compliance_task", sections_temp)
+      : localStorage.set("section", sections_temp);
   }
 
   function requiredQuestion(i, k) {
@@ -358,7 +434,11 @@ function ReviewQuestion({ sections, setSections }) {
     sec[i].questions[k].required = !sec[i].questions[k].required;
 
     setSections(sec);
-    localStorage.set("section", sec);
+    method === "update"
+      ? localStorage.set("section_edit", sec)
+      : method === "complianceTask"
+      ? localStorage.set("compliance_task", sec)
+      : localStorage.set("section", sec);
   }
 
   function removeOption(i, k, p) {
@@ -367,7 +447,11 @@ function ReviewQuestion({ sections, setSections }) {
       sections_temp[i].questions[k].options.splice(p, 1);
       sections_temp[i].questions[k].checkbox_answerkey.splice(p, 1);
       setSections(sections_temp);
-      localStorage.set("section", sections_temp);
+      method === "update"
+        ? localStorage.set("section_edit", sections_temp)
+        : method === "complianceTask"
+        ? localStorage.set("compliance_task", sections_temp)
+        : localStorage.set("section", sections_temp);
     }
   }
 
@@ -390,7 +474,11 @@ function ReviewQuestion({ sections, setSections }) {
     // });
 
     setSections(sections_temp);
-    localStorage.set("section", sections_temp);
+    method === "update"
+      ? localStorage.set("section_edit", sections_temp)
+      : method === "complianceTask"
+      ? localStorage.set("compliance_task", sections_temp)
+      : localStorage.set("section", sections_temp);
   }
 
   function handleExpand(i, k) {
@@ -408,7 +496,11 @@ function ReviewQuestion({ sections, setSections }) {
     }
     console.log(qs[i].questions[k].open);
     setSections(qs);
-    localStorage.set("section", qs);
+    method === "update"
+      ? localStorage.set("section_edit", qs)
+      : method === "complianceTask"
+      ? localStorage.set("compliance_task", qs)
+      : localStorage.set("section", qs);
   }
 
   function onDragEnd(result) {
@@ -1031,10 +1123,7 @@ function ReviewQuestion({ sections, setSections }) {
                                         ) : (
                                           ques.options.map((option, p) => (
                                             <Grid container alignItems="center">
-                                              <Grid
-                                                item
-                                                style={{ flexBasis: "3em" }}
-                                              >
+                                              <Grid item sm={1} xs={2}>
                                                 {ques.question_type ===
                                                 "Radio" ? (
                                                   <Radio
@@ -1093,7 +1182,7 @@ function ReviewQuestion({ sections, setSections }) {
                                                   }}
                                                 ></TextField>
                                               </Grid>
-                                              <Grid item xs={1}>
+                                              <Grid item sm={1} xs={2}>
                                                 <IconButton
                                                   aria-label="delete"
                                                   onClick={() => {
