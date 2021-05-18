@@ -256,22 +256,23 @@ class ComplianceTask(models.Model):
         ('compulsory', 'compulsory'),
         ('conditional', 'conditional'),
     )
-    from_type_options = (
+    form_type_options = (
         ('auto_answer', 'auto_answer'),
         ('to_be_reviewed', 'to_be_reviewed')
     )
     form_questions = models.JSONField()
-    form_name = models.CharField(max_length=255, choices=from_type_options)
+    form_name = models.CharField(max_length=255)
     category = models.ForeignKey(Categories, on_delete=models.CASCADE, related_name="compliance_task_cat")
-    form_type = models.CharField(max_length=75)
+    form_type = models.CharField(max_length=75, choices=form_type_options, default="auto_answer",)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="compliance_creator_user")
     created_at = models.DateField(default=timezone.now, blank=True, null=True)
     last_modified_date = models.DateField(default=timezone.now)
     activation_status = models.CharField(max_length=50, choices=activation_options, default="active",)
     priority = models.CharField(max_length=50, choices=priority_options, default="low",)
-    req_status = models.CharField(max_length=50, choices=req_status_options, default="optinal",)
+    req_status = models.CharField(max_length=50, choices=req_status_options, default="optional",)
+
     def __str__(self):
-        return self.task_name
+        return self.form_name
 
 class ComplianceVendorTask(models.Model):
 
