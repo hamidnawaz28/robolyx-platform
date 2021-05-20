@@ -7,10 +7,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import {
-  updateApprovalStatus,
-  deleteReviewTemplate,
-} from "../../vendor_admin/redux/approvalActions";
+import { deleteComplianceTasks } from "../redux/complianceTaskActions";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Chip from "@material-ui/core/Chip";
 import Modal from "@material-ui/core/Modal";
@@ -91,20 +88,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ReviewTemplateCard({ review_template, setValue }) {
+export default function ComplianceTaskCard({ comp_task, setValue }) {
   const classes = useStyles();
   let history = useHistory();
   const dispatch = useDispatch();
   const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
-  console.log("review template here", review_template);
+  console.log("review template here", comp_task);
 
-  const { query_review_temp, currentPage, perPage } = useSelector(
-    (state) => state.vendorApproval
+  const { query_compliance, currentPage, perPage } = useSelector(
+    (state) => state.complianceTask
   );
 
   let fetchApiData = {
-    query_review_temp: JSON.stringify(query_review_temp),
+    query_compliance: JSON.stringify(query_compliance),
     currentPage: currentPage,
     perPage: perPage,
   };
@@ -125,16 +122,17 @@ export default function ReviewTemplateCard({ review_template, setValue }) {
       id: temp_id,
       fetchApiData: fetchApiData,
     };
+    setOpen(false);
 
-    dispatch(deleteReviewTemplate(data));
+    dispatch(deleteComplianceTasks(data));
   };
 
-  const handleEdit = (temp) => {
-    localStorage.set("section_edit", temp.JSON_fields);
-    localStorage.set("temp", temp);
+  const handleEdit = (comp_task) => {
+    localStorage.set("comp_task_edit", comp_task);
+    localStorage.set("comp_task_temp", comp_task.form_questions);
 
     history.push({
-      pathname: "/vendor-management/review-template-edit",
+      pathname: "/vendor-management/compliance-task-edit",
     });
 
     //history.push("/vendor-management/review-template-edit");
@@ -145,9 +143,9 @@ export default function ReviewTemplateCard({ review_template, setValue }) {
       <Card mb={6}>
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            {review_template.name}
+            {comp_task.form_name}
           </Typography>
-          {review_template.status === "active" ? (
+          {comp_task.activation_status === "active" ? (
             <Chip size="small" label="Active" className={classes.activeChip} />
           ) : (
             <Chip
@@ -159,9 +157,30 @@ export default function ReviewTemplateCard({ review_template, setValue }) {
           <br />
 
           <Typography mb={4} variant="caption">
-            created at : {review_template.created_at}
+            created at : {comp_task.created_at}
+          </Typography>
+          <br />
+          <Typography mb={4} variant="caption">
+            Category : {comp_task.category}
+          </Typography>
+          <br />
+          <Typography mb={4} variant="caption">
+            Status : {comp_task.req_status}
+          </Typography>
+          <br />
+          <Typography mb={4} variant="caption">
+            form_type : {comp_task.form_type}
+          </Typography>
+          <br />
+          <Typography mb={4} variant="caption">
+            activation_status : {comp_task.activation_status}
+          </Typography>
+          <br />
+          <Typography mb={4} variant="caption">
+            priority : {comp_task.priority}
           </Typography>
         </CardContent>
+        <hr />
         <CardActions>
           <Button size="small" color="primary" onClick={handleOpen}>
             Delete
@@ -183,14 +202,14 @@ export default function ReviewTemplateCard({ review_template, setValue }) {
               <Grid className={classes.paper}>
                 <h2>
                   Are you sure you want to delete review template{" "}
-                  {review_template.name}
+                  {comp_task.name}
                 </h2>
                 <Grid container spacing={2}>
                   <Grid item>
                     <Button
                       size="small"
                       color="primary"
-                      onClick={() => handleDelete(review_template.id)}
+                      onClick={() => handleDelete(comp_task.id)}
                       variant="contained"
                     >
                       Confirm
@@ -214,7 +233,7 @@ export default function ReviewTemplateCard({ review_template, setValue }) {
           <Button
             size="small"
             color="primary"
-            onClick={() => handleEdit(review_template)}
+            onClick={() => handleEdit(comp_task)}
           >
             Edit
           </Button>

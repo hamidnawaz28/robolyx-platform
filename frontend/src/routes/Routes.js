@@ -11,6 +11,7 @@ import DashboardLayout from "../layouts/Dashboard";
 import AuthLayout from "../layouts/Auth";
 import Page404 from "../pages/auth/Page404";
 import ReviewTemplateEdit from "../main/pages/vendor_management/vendor_admin/edit_review_template/EditReviewTemplate";
+import EditComplianceTask from "../main/pages/vendor_management/vendor_configurations/edit_compliance_task/EditComplianceTask";
 import localStorage from "../common/storage/localStorage";
 
 const childProtectedRoutes = (Layout, routes) =>
@@ -106,6 +107,15 @@ const Routes = () => (
         render={() => (
           <DashboardLayout>
             <ReviewTemplateEdit />
+          </DashboardLayout>
+        )}
+      />
+      <Route
+        exact
+        path="/vendor-management/compliance-task-edit"
+        render={() => (
+          <DashboardLayout>
+            <EditComplianceTask />
           </DashboardLayout>
         )}
       />
