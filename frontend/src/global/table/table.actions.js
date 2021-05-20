@@ -57,14 +57,14 @@ export function* queryTableData(action) {
   try {
     const { apiLink, fetchApiData } = action.payload;
     console.log("running fetch start saga", apiLink, fetchApiData);
-    const { currentPage, perPage, query } = fetchApiData;
+    const { currentPage, perPage, query, project } = fetchApiData;
     let filteredQuery = {};
     Object.keys(query).map((item) => {
       if (query[item] != "") filteredQuery[item] = query[item];
     });
     let q = JSON.stringify(filteredQuery);
     const res = yield axios.get(
-      `${SERVER_URL}${apiLink}?currentPage=${currentPage}&perPage=${perPage}&q=${q}`
+      `${SERVER_URL}${apiLink}?currentPage=${currentPage}&perPage=${perPage}&q=${q}&project=${project}`
     );
     let serviceData = res.data.data;
     let data = [];
@@ -89,9 +89,8 @@ const queryData = (credentials, apiData) => {
     axios
       .get(`${SERVER_URL}${credentials}`, { params: apiData })
       .then((res) => {
-        let serviceData = JSON.parse(res.data.queryData);
         let data = [];
-        serviceData.forEach((element) => {
+        res.data.data.forEach((element) => {
           element["isChecked"] = false;
           data.push(element);
         });
@@ -174,9 +173,11 @@ export function* onEditDataStart() {
 const updateData = (credentials, updateApiData, fetchApiData) => {
   return (dispatch) => {
     axios
-      .put(`${SERVER_URL}${credentials}`, { params: updateApiData })
+      .put(`${SERVER_URL}${credentials}/${updateApiData.id}/`, {
+        params: updateApiData,
+      })
       .then((res) => {
-        //alert(res.data);
+        alert(res.data);
         dispatch(queryData(credentials, fetchApiData));
         //  dispatch(IsUpdating(false))
       })
@@ -188,7 +189,7 @@ const updateData = (credentials, updateApiData, fetchApiData) => {
 const postData = (credentials, postApiData, fetchApiData) => {
   return (dispatch) => {
     axios
-      .post(`${SERVER_URL}${credentials}`, { params: postApiData })
+      .post(`${SERVER_URL}${credentials}/`, { params: postApiData })
       .then((res) => {
         alert(res.data);
         dispatch(queryData(credentials, fetchApiData));

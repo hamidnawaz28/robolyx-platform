@@ -151,8 +151,14 @@ function TableData(props) {
   const dispatch = useDispatch();
   const tableStates = useSelector((state) => state.tableStates);
   console.log("tableStates", tableStates);
-  const { data, totalRows, perPage, currentPage, isAllSelected, query } =
-    tableStates;
+  const {
+    data,
+    totalRows,
+    perPage,
+    currentPage,
+    isAllSelected,
+    query,
+  } = tableStates;
 
   console.log("DATA", data);
   const {
@@ -402,7 +408,7 @@ function TableData(props) {
               {withId ? (
                 <TableCell className={classes.headCells}>ID</TableCell>
               ) : (
-                ""
+                <></>
               )}
 
               {Object.keys(tableHeaders).map((SingleHeader) => (
@@ -431,7 +437,7 @@ function TableData(props) {
                       />
                     </TableCell>
                   )}
-                  {row?.id && <TableCell>{row.id}</TableCell>}
+                  {withId && row?.id && <TableCell>{row.id}</TableCell>}
                   {Object.keys(tableHeaders).map((key) => (
                     <TableCell className={classes.bodyCells}>
                       {row[tableHeaders[key]]}

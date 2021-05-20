@@ -70,7 +70,7 @@ function Upload() {
     );
     dispatch(setSelectedSavedTemplate(savedTemplateReference));
     savedTemplates.forEach((element) => {
-      if (element.pk === savedTemplateReference) {
+      if (element.id === savedTemplateReference) {
         dispatch(setSelectedSavedTemplateData(element.fields.MappedItems));
       }
     });

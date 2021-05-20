@@ -117,10 +117,14 @@ class ManageTemplates(viewsets.ViewSet):
         for key in query:
             if query[key] != '':
                 query_filter[key] = query[key]
-        query_data_object = SavedTemplate.objects.filter(**query_filter)[start:end]
-        count = SavedTemplate.objects.filter(**query_filter).count()
-        serialized_data = get_serialized_data(query_data_object, count)
-        return HttpResponse(serialized_data, content_type="text/json-comment-filtered")
+        saved_templates_object = SavedTemplate.objects.filter(**query_filter)[start:end]        
+        serializer = SavedTemplateSerializer(
+            saved_templates_object, many=True, context={"request": request})
+        response_dict = {
+                            'data': serializer.data,
+                            'count': saved_templates_object.count()
+                        }
+        return Response(response_dict)
     def create(self, request):
         request_body_parameters = json.loads(request.body)
         request_body_payload = json.loads(request_body_parameters["params"]["payload"])
@@ -135,24 +139,35 @@ class ManageTemplates(viewsets.ViewSet):
         create_new_template = SavedTemplate(**payload)
         create_new_template.save()
         return HttpResponse("Successfully added new template", content_type="text/json-comment-filtered")
-    def update(self, request):
+    def update(self, request, pk=id):
         request_body_parameters = json.loads(request.body)
         request_body_payload = json.loads(request_body_parameters["params"]["payload"])
-        payload = {"MappingName": request_body_payload["templateName"],
-                   "MappedItems": request_body_payload["templateMapping"],
-                   "FileColumns": request_body_payload["fileColumns"]}
-        saved_template_pk = request_body_parameters["params"]['pk']
+        payload = {
+                    "MappingName": request_body_payload["templateName"],
+                    "MappedItems": request_body_payload["templateMapping"],
+                    "FileColumns": request_body_payload["fileColumns"]
+                }
+        saved_template_pk = request_body_parameters["params"]['id']
         template_object = SavedTemplate.objects.get(pk=saved_template_pk)
         for item in payload:
             setattr(template_object, item, payload[item])
         template_object.save()
         return HttpResponse("Updated Successfully!", content_type="text/json-comment-filtered")
-    def destroy(self, request):
-        pk_list, project_reference_object = fetch_del_data(request)
-        for item in pk_list:
-            template_object = SavedTemplate.objects.get(UserProjectReference=project_reference_object, pk=item)
-            template_object.delete()
-        return HttpResponse("Successfully Deleted!", content_type="text/json-comment-filtered")
+    def destroy(self, request, pk=id):
+        try:
+            queryset = SavedTemplate.objects.all()
+            responce_object = get_object_or_404(queryset, pk=pk)
+            responce_object.delete()
+            dict_response = {
+                                "error": False,
+                                "message": "Successfully Deleted"
+                            }
+        except:
+            dict_response = {
+                                'error': True,
+                                'message': "Error During Deleting"
+                            }   
+        return Response(dict_response)
 
 
 class FileImport(viewsets.ViewSet):
@@ -550,10 +565,11 @@ class TaxonomyDataViewSet(viewsets.ViewSet):
 
     def update(self, request, pk=id):
         try:
+            payload = taxonomy_items_and_count(request.data)
             queryset = TaxonomyData.objects.all()
             taxonomy_data = get_object_or_404(queryset, pk=pk)
             serializer = TaxonomyDataSerializer(
-                taxonomy_data, data=request.data, context={"request": request})
+                taxonomy_data, data=payload, context={"request": request})
             serializer.is_valid(raise_exception=True)
             serializer.save()
             dict_response = {"error": False,
@@ -575,10 +591,10 @@ class TaxonomyDataViewSet(viewsets.ViewSet):
             taxonomy_data = get_object_or_404(queryset, pk=pk)
             taxonomy_data.delete()
             dict_response = {"error": False,
-                             "message": "Successfully Deleted Vendor Tag"}
+                             "message": "Successfully Deleted"}
         except:
             dict_response = {'error': True,
-                             'message': "Error During Deleting Vendor Tag"}
+                             'message': "Error During Deleting"}
         return Response(dict_response)
 
 
@@ -629,10 +645,10 @@ class InvoiceDataViewSet(viewsets.ViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             dict_response = {"error": False,
-                             "message": "Successfully Updated Vendor Tag"}
+                             "message": "Successfully Updated"}
         except:
             dict_response = {'error': True,
-                             'message': "Error During Updating Vendor Tag"}
+                             'message': "Error During Updating"}
         return Response(dict_response)
 
     def retrieve(self, request, pk=id):
@@ -647,10 +663,10 @@ class InvoiceDataViewSet(viewsets.ViewSet):
             invoice_data = get_object_or_404(queryset, pk=pk)
             invoice_data.delete()
             dict_response = {"error": False,
-                             "message": "Successfully Deleted Vendor Tag"}
+                             "message": "Successfully Deleted"}
         except:
             dict_response = {'error': True,
-                             'message': "Error During Deleting Vendor Tag"}
+                             'message': "Error During Deleting"}
         return Response(dict_response)
 
 
@@ -686,10 +702,10 @@ class ContractDataViewSet(viewsets.ViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             dict_response = {"error": False,
-                             "message": "Vendor Tag saved successfully"}
+                             "message": "Saved successfully"}
         except:
             dict_response = {'error': True,
-                             'message': "Error During Saving Vendor Tag"}
+                             'message': "Error During Saving"}
         return Response(dict_response)
 
     def update(self, request, pk=id):
@@ -701,10 +717,10 @@ class ContractDataViewSet(viewsets.ViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             dict_response = {"error": False,
-                             "message": "Successfully Updated Vendor Tag"}
+                             "message": "Successfully Updated"}
         except:
             dict_response = {'error': True,
-                             'message': "Error During Updating Vendor Tag"}
+                             'message': "Error During Updating"}
         return Response(dict_response)
 
     def retrieve(self, request, pk=id):
@@ -719,10 +735,10 @@ class ContractDataViewSet(viewsets.ViewSet):
             contract_data = get_object_or_404(queryset, pk=pk)
             contract_data.delete()
             dict_response = {"error": False,
-                             "message": "Successfully Deleted Vendor Tag"}
+                             "message": "Successfully Deleted"}
         except:
             dict_response = {'error': True,
-                             'message': "Error During Deleting Vendor Tag"}
+                             'message': "Error During Deleting"}
         return Response(dict_response)
 
 
@@ -758,10 +774,10 @@ class GLOrgDataViewSet(viewsets.ViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             dict_response = {"error": False,
-                             "message": "Vendor Tag saved successfully"}
+                             "message": "Saved successfully"}
         except:
             dict_response = {'error': True,
-                             'message': "Error During Saving Vendor Tag"}
+                             'message': "Error During Saving"}
         return Response(dict_response)
 
     def update(self, request, pk=id):
@@ -773,10 +789,10 @@ class GLOrgDataViewSet(viewsets.ViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             dict_response = {"error": False,
-                             "message": "Successfully Updated Vendor Tag"}
+                             "message": "Successfully Updated"}
         except:
             dict_response = {'error': True,
-                             'message': "Error During Updating Vendor Tag"}
+                             'message': "Error During Updating"}
         return Response(dict_response)
 
     def retrieve(self, request, pk=id):
@@ -791,10 +807,10 @@ class GLOrgDataViewSet(viewsets.ViewSet):
             gl_org_data = get_object_or_404(queryset, pk=pk)
             gl_org_data.delete()
             dict_response = {"error": False,
-                             "message": "Successfully Deleted Vendor Tag"}
+                             "message": "Successfully Deleted"}
         except:
             dict_response = {'error': True,
-                             'message': "Error During Deleting Vendor Tag"}
+                             'message': "Error During Deleting"}
         return Response(dict_response)
 
  
@@ -830,10 +846,10 @@ class PODataViewSet(viewsets.ViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             dict_response = {"error": False,
-                             "message": "Vendor Tag saved successfully"}
+                             "message": "Saved successfully"}
         except:
             dict_response = {'error': True,
-                             'message': "Error During Saving Vendor Tag"}
+                             'message': "Error During Saving"}
         return Response(dict_response)
 
     def update(self, request, pk=id):
@@ -845,10 +861,10 @@ class PODataViewSet(viewsets.ViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             dict_response = {"error": False,
-                             "message": "Successfully Updated Vendor Tag"}
+                             "message": "Successfully Updated"}
         except:
             dict_response = {'error': True,
-                             'message': "Error During Updating Vendor Tag"}
+                             'message': "Error During Updating"}
         return Response(dict_response)
 
     def retrieve(self, request, pk=id):
@@ -863,10 +879,10 @@ class PODataViewSet(viewsets.ViewSet):
             po_data = get_object_or_404(queryset, pk=pk)
             po_data.delete()
             dict_response = {"error": False,
-                             "message": "Successfully Deleted Vendor Tag"}
+                             "message": "Successfully Deleted"}
         except:
             dict_response = {'error': True,
-                             'message': "Error During Deleting Vendor Tag"}
+                             'message': "Error During Deleting"}
         return Response(dict_response)
 
 
