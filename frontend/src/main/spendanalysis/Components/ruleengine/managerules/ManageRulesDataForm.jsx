@@ -88,7 +88,7 @@ function FormPopUp(props) {
     const [tablePerPage, setPerPage] = useState(5)
     const [tableCurrentPage, setCurrentPage] = useState(0)
     let fetchApiData = {
-        query : JSON.stringify(formData),
+        q : formData,
         currentPage: tableCurrentPage,
         perPage: tablePerPage,
         project: "1"
@@ -113,19 +113,19 @@ function FormPopUp(props) {
     const classes = useStyles()
     
     
-    const getData = (data) =>{
-        setTotalRows(data.count)
-        setTableData(JSON.parse(data.queryData))
+    const getData = (resp) =>{
+        setTotalRows(resp.count)
+        setTableData(resp.data)
     }
     const testRuleHandle = () => {
-        fetchApiData["query"] = JSON.stringify(formData)
+        fetchApiData["q"] = formData
         dispatch( fetchTestRuleData (fetchApiData, getData))
     }
     const resetQueryHandle = () => {
-        fetchApiData["query"] = JSON.stringify(initialState)
+        fetchApiData["q"] = initialState
         setCategoryLevel(3)
         setFormData(initialState)
-        dispatch( fetchTestRuleData (initialState))
+        dispatch( fetchTestRuleData (fetchApiData,getData))
     }
     const queryFieldSelectHandle = (e, field) => {
         let selectedIndex = e.target.selectedIndex;
@@ -142,14 +142,14 @@ function FormPopUp(props) {
 
     let updateApidata = {
         pk: editFormData.pk,
-        payload: JSON.stringify(formData),
+        payload: formData,
     }
     let postDataApi = {
-        payload: JSON.stringify(formData),
+        payload: formData,
         project: "1",
     }
     const handleSave = () => {
-        fetchApiData["query"] = JSON.stringify({})
+        fetchApiData["q"] = {}
         if (actionType == "Edit") {
             dispatch(updateData(
                 apiLink, updateApidata, fetchApiData
@@ -166,7 +166,7 @@ function FormPopUp(props) {
         if (actionType == "Edit") {
             let updatedData = {}
             Object.keys(initialState).map((element) => {
-                updatedData[element] = editFormData.fields[element]
+                updatedData[element] = editFormData[element]
             })
             setFormData(updatedData)
         }

@@ -78,12 +78,12 @@ function InvoiceQueryForm(props) {
         project: "1"
     }
     const searchQueryHandle = () => {
-        fetchApiData["query"] = JSON.stringify(formData)
+        fetchApiData["q"] = formData
         dispatch(updateFormQuery(formData))
         dispatch(queryData(apiLink, fetchApiData))
     }
     const resetQueryHandle = () => {
-        fetchApiData["query"] = JSON.stringify(initialState)
+        fetchApiData["q"] = initialState
         setCategoryLevel(3)
         setFormData(initialState)
         dispatch(updateFormQuery(initialState))
@@ -104,7 +104,7 @@ function InvoiceQueryForm(props) {
     const statusChange = (status) => {
         let data = { ...formData, STATUS: status }
         setFormData(data)
-        fetchApiData["query"] = JSON.stringify(data)
+        fetchApiData["q"] = data
         dispatch(updateFormQuery(formData))
         dispatch(queryData(apiLink, fetchApiData))
     }

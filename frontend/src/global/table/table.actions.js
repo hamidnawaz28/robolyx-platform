@@ -203,7 +203,9 @@ const postData = (credentials, postApiData, fetchApiData) => {
 const implementRule = (credentials, postApiData, fetchApiData) => {
   return (dispatch) => {
     axios
-      .post(`${SERVER_URL}${TEST_AND_IMPLEMENT_RULE}/`, { params: postApiData })
+      .post(`${SERVER_URL}${TEST_AND_IMPLEMENT_RULE}/`, {
+        params: postApiData,
+      })
       .then((res) => {
         alert(res.data);
         dispatch(queryData(credentials, fetchApiData));

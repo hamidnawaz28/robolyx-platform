@@ -268,7 +268,6 @@ function TableData(props) {
       }
     }
     implementApiData["idArray"] = JSON.stringify(idArray);
-    fetchApiData["STATUS"] = "draft";
     idArray.length > 0
       ? dispatch(implementRule(apiLink, implementApiData, fetchApiData))
       : alert("Select Data");
