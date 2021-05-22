@@ -40,6 +40,7 @@ function Invoice() {
         apiLink={INVOICE_DATA}
         addNewDataHandle={addNewDataHandle}
         editDataHandle={editDataHandle}
+        withId={true}
       />
       {formState && (
         <InvoiceDataForm

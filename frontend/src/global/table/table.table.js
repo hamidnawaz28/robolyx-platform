@@ -366,22 +366,26 @@ function TableData(props) {
               </Button>
             )}
 
-            {matches ? (
-              <Edit
-                onClick={() => editData()}
-                className={classes.actionIconEdit}
-              />
+            {withId ? (
+              matches ? (
+                <Edit
+                  onClick={() => editData()}
+                  className={classes.actionIconEdit}
+                />
+              ) : (
+                <Button
+                  color={color}
+                  variant={variant}
+                  startIcon={<Edit />}
+                  onClick={() => editData()}
+                  className={classes.actionButtonsMargin}
+                  size="small"
+                >
+                  Edit
+                </Button>
+              )
             ) : (
-              <Button
-                color={color}
-                variant={variant}
-                startIcon={<Edit />}
-                onClick={() => editData()}
-                className={classes.actionButtonsMargin}
-                size="small"
-              >
-                Edit
-              </Button>
+              ""
             )}
 
             {matches ? (

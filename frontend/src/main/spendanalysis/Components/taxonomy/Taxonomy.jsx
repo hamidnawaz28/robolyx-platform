@@ -39,6 +39,7 @@ function Taxonomy() {
         apiLink={TAXONOMY_DATA}
         addNewDataHandle={addNewDataHandle}
         editDataHandle={editDataHandle}
+        withId={true}
       />
       {formState && (
         <TaxonomyDataForm

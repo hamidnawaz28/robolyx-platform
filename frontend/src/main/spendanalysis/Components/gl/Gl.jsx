@@ -37,6 +37,7 @@ function Gl() {
         apiLink={GL_DATA}
         addNewDataHandle={addNewDataHandle}
         editDataHandle={editDataHandle}
+        withId={true}
       />
       {formState && (
         <GlDataForm
