@@ -532,7 +532,7 @@ class VendorBasicViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=id):
         queryset = VendorBasicInfo.objects.all()
         vendor_basic = get_object_or_404(queryset, pk=pk)
-        serializer = VendorBasicSerializer(vendor_basic, context={"request": request})
+        serializer = VendorBasicSerializerWithDepth(vendor_basic, context={"request": request})
         return Response({'error': False, 'message': "Single Data Fetch", "data": serializer.data})
 
     def destroy(self, request, pk=id):
