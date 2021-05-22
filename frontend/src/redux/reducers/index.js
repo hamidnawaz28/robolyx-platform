@@ -15,6 +15,7 @@ import admin from "../../main/adminPanel/reducers/admin.reducer";
 import { ticketReducer } from "../../main/pages/tickets/redux/ticketReducers";
 import { vendorApprovalReducer } from "../../main/pages/vendor_management/vendor_admin/redux/approvalReducers";
 import { complianceTaskReducer } from "../../main/pages/vendor_management/vendor_configurations/redux/complianceTaskReducers";
+import { vendorNetworksReducer } from "../../main/pages/vendor_management/vendor_networks/redux/vendorNetworksReducers";
 
 export default combineReducers({
   themeReducer,
@@ -31,4 +32,5 @@ export default combineReducers({
   tickets: ticketReducer,
   vendorApproval: vendorApprovalReducer,
   complianceTask: complianceTaskReducer,
+  vendorNetworks: vendorNetworksReducer,
 });

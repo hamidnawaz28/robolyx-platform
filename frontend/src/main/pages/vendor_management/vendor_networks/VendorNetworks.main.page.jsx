@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import AddVendorIcon from "../../../../assets/supply-chain.png";
+import MyNetworks from "./my_network/MyNetwork.main.page";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -92,12 +93,12 @@ export default function VendorNetworks() {
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
-          Item One
+          <MyNetworks />
         </TabPanel>
         <TabPanel value={value} index={1}>
           Item Two
         </TabPanel>
-        <TabPanel value={value} index={1}>
+        <TabPanel value={value} index={2}>
           Configurations
         </TabPanel>
       </div>
