@@ -14,6 +14,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import MultiSelectField from "../../../../../global/MultiSelect";
 
 const BorderWrapper = styled(Box)`
   background: white;
@@ -40,11 +41,61 @@ function VendorNetworkQueryForm(props) {
   const classes = useStyles();
   const [activeStatus, setActiveStatus] = React.useState("");
 
+  const { categories, diversity, paymentterm, tags, trades } = useSelector(
+    (state) => state.vendorApproval
+  );
+
+  const [category, setCategory] = React.useState([]);
+  const [tag, setTag] = React.useState([]);
+  const [trade, setTrade] = React.useState([]);
+  const [diversty, setDiversty] = React.useState([]);
+  const [payTerm, setPayTerm] = React.useState([]);
+
   const handleActiveChange = (event) => {
     setActiveStatus(event.target.value);
     setFormData({
       ...formData,
       approval_status__exact: event.target.value,
+    });
+  };
+
+  const handleCategoryChange = (event) => {
+    setCategory(event.target.value);
+    setFormData({
+      ...formData,
+      category__in: event.target.value,
+    });
+  };
+
+  const handleTagChange = (event) => {
+    setTag(event.target.value);
+    setFormData({
+      ...formData,
+      tag__in: event.target.value,
+    });
+  };
+
+  const handleTradeChange = (event) => {
+    setTrade(event.target.value);
+    setFormData({
+      ...formData,
+      trade__in: event.target.value,
+    });
+  };
+
+  const handleDiversityChange = (event) => {
+    setDiversty(event.target.value);
+    setFormData({
+      ...formData,
+      diversty__in: event.target.value,
+    });
+  };
+
+  const handlePayChange = (event) => {
+    setPayTerm(event.target.value);
+    setFormData({
+      ...formData,
+      payTerm__in: event.target.value,
     });
   };
 
@@ -131,7 +182,7 @@ function VendorNetworkQueryForm(props) {
             }
           />
         </Grid>
-        <Grid item>
+        <Grid item sm={12}>
           <TextField
             id="search-by-id"
             variant="outlined"
@@ -147,7 +198,7 @@ function VendorNetworkQueryForm(props) {
             }
           />
         </Grid>
-        <Grid item>
+        <Grid item sm={12}>
           <FormControl className={classes.formControl}>
             <InputLabel id="approval-status-label">Approval Status</InputLabel>
             <Select
@@ -162,6 +213,46 @@ function VendorNetworkQueryForm(props) {
               <MenuItem value="rejected">Rejected</MenuItem>
             </Select>
           </FormControl>
+        </Grid>
+        <Grid item sm={12}>
+          <MultiSelectField
+            data={categories}
+            handleChange={handleCategoryChange}
+            property={category}
+            label="Categories"
+          />
+        </Grid>
+        <Grid item sm={12}>
+          <MultiSelectField
+            data={tags}
+            handleChange={handleTagChange}
+            property={tag}
+            label="Tags"
+          />
+        </Grid>
+        <Grid item sm={12}>
+          <MultiSelectField
+            data={trades}
+            handleChange={handleTradeChange}
+            property={trade}
+            label="Trade"
+          />
+        </Grid>
+        <Grid item sm={12}>
+          <MultiSelectField
+            data={diversity}
+            handleChange={handleDiversityChange}
+            property={diversty}
+            label="Diversity"
+          />
+        </Grid>
+        <Grid item sm={12}>
+          <MultiSelectField
+            data={paymentterm}
+            handleChange={handlePayChange}
+            property={payTerm}
+            label="PaymentTerm"
+          />
         </Grid>
       </Grid>
     </BorderWrapper>

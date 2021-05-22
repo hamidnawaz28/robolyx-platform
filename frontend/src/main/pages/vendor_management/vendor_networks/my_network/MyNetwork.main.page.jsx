@@ -28,10 +28,6 @@ export default function MyNetworks() {
   const { searchQuery, currentPage, perPage, allVendors, totalRows } =
     useSelector((state) => state.vendorNetworks);
 
-  const { categories, diversity, paymentterm, tags, trades } = useSelector(
-    (state) => state.vendorApproval
-  );
-
   let fetchApiData = {
     searchQuery: JSON.stringify(searchQuery),
     currentPage: currentPage,
