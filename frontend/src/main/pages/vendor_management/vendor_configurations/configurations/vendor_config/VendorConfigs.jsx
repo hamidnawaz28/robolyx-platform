@@ -60,7 +60,6 @@ function VendorConfigs(props) {
         paginationOption={true}
         apiLink={API_LINK}
         addNewDataHandle={addNewDataHandle}
-        editDataHandle={editDataHandle}
         withId={false}
       />
       {formState && (
