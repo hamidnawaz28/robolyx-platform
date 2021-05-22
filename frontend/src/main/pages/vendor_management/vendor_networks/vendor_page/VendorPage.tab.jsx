@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function VendorPageTab() {
+export default function VendorPageTab({ vendor }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -128,7 +128,7 @@ export default function VendorPageTab() {
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0} className={classes.tabPanel}>
-          <BasicProfile />
+          <BasicProfile vendor={vendor} />
         </TabPanel>
         <TabPanel value={value} index={1}>
           Item Two

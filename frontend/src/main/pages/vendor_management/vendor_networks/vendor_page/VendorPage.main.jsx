@@ -110,7 +110,7 @@ function VendorPage() {
         </Grid>
       </Grid>
       <Grid item>
-        <VendorPageTab />
+        <VendorPageTab vendor={vendor} />
       </Grid>
     </Grid>
     // {location.vendor.vendor_name}

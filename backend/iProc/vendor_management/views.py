@@ -1761,3 +1761,7 @@ class DiversityClassificationList(viewsets.ModelViewSet):
     queryset=DiversityClassification.objects.all()
     serializer_class=DiversityClassificationSerializer
 
+class CertificatesAndLiscenceList(viewsets.ModelViewSet):
+    queryset=CertificatesAndLisences.objects.all()
+    serializer_class=CertAndLisencesSerializer
+
