@@ -37,6 +37,7 @@ function Po() {
         apiLink={PO_DATA}
         addNewDataHandle={addNewDataHandle}
         editDataHandle={editDataHandle}
+        withId={true}
       />
       {formState && (
         <PoDataForm

@@ -151,14 +151,8 @@ function TableData(props) {
   const dispatch = useDispatch();
   const tableStates = useSelector((state) => state.tableStates);
   console.log("tableStates", tableStates);
-  const {
-    data,
-    totalRows,
-    perPage,
-    currentPage,
-    isAllSelected,
-    query,
-  } = tableStates;
+  const { data, totalRows, perPage, currentPage, isAllSelected, query } =
+    tableStates;
 
   console.log("DATA", data);
   const {
@@ -217,6 +211,27 @@ function TableData(props) {
     }
     dispatch(updateTableData(updatedData));
   };
+
+  const singleSelectHandleName = (e) => {
+    console.log(e.target.getAttribute("id"));
+    console.log(e.target.parentNode);
+    let id = e.target.getAttribute("id");
+    if (id == null) {
+      id = e.target.parentElement.getAttribute("id");
+    }
+    let tableDataPrev = data;
+    let updatedData = [];
+
+    for (let index in tableDataPrev) {
+      let item = { ...tableDataPrev[index] };
+      if (item["name"] == id) {
+        item["isChecked"] = !item["isChecked"];
+      }
+      updatedData.push(item);
+    }
+    dispatch(updateTableData(updatedData));
+  };
+
   const objectFilter = (obj, predicate) =>
     Object.keys(obj)
       .filter((key) => predicate(obj[key]))
@@ -248,6 +263,22 @@ function TableData(props) {
 
     idArray.length > 0 ? handleClickOpen() : alert("Select Data");
   };
+
+  const handleDeleteName = () => {
+    let idArray = [];
+    for (let index in data) {
+      if (data[index]["isChecked"] == true) {
+        idArray.push(data[index]["name"]);
+      }
+    }
+    deleteApiData["idArray"] = idArray;
+
+    let payload = { apiLink, deleteApiData, fetchApiData };
+    setPayloadForDelete(payload);
+
+    idArray.length > 0 ? handleClickOpen() : alert("Select Data");
+  };
+
   const editData = () => {
     let outArray = [];
     for (let index in data) {
@@ -338,34 +369,42 @@ function TableData(props) {
               </Button>
             )}
 
-            {matches ? (
-              <Edit
-                onClick={() => editData()}
-                className={classes.actionIconEdit}
-              />
+            {withId ? (
+              matches ? (
+                <Edit
+                  onClick={() => editData()}
+                  className={classes.actionIconEdit}
+                />
+              ) : (
+                <Button
+                  color={color}
+                  variant={variant}
+                  startIcon={<Edit />}
+                  onClick={() => editData()}
+                  className={classes.actionButtonsMargin}
+                  size="small"
+                >
+                  Edit
+                </Button>
+              )
             ) : (
-              <Button
-                color={color}
-                variant={variant}
-                startIcon={<Edit />}
-                onClick={() => editData()}
-                className={classes.actionButtonsMargin}
-                size="small"
-              >
-                Edit
-              </Button>
+              ""
             )}
 
             {matches ? (
               <DeleteIcon
-                onClick={() => handleDelete()}
+                onClick={
+                  withId ? () => handleDelete() : () => handleDeleteName()
+                }
                 className={classes.actionIconDelete}
               />
             ) : (
               <Button
                 variant={variant}
                 startIcon={<DeleteIcon />}
-                onClick={() => handleDelete()}
+                onClick={
+                  withId ? () => handleDelete() : () => handleDeleteName()
+                }
                 className={classes.actionButtonDelete}
                 size="small"
               >
@@ -426,15 +465,19 @@ function TableData(props) {
                 <TableRow
                   className={classes.bodyRows}
                   hover={true}
-                  onClick={selectOption && singleSelectHandle}
-                  id={row.id}
+                  onClick={
+                    selectOption && withId
+                      ? singleSelectHandle
+                      : singleSelectHandleName
+                  }
+                  id={withId ? row.id : row.name}
                   checked={row.isChecked}
                 >
                   {selectOption && (
                     <TableCell>
                       <Checkbox
                         color={color}
-                        id={row.id}
+                        id={withId ? row.id : row.name}
                         checked={row.isChecked}
                       />
                     </TableCell>

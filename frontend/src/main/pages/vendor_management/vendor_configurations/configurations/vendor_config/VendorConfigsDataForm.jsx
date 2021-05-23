@@ -56,7 +56,7 @@ function FormPopUp(props) {
   const credentials = apiLink;
   const dispatch = useDispatch();
   let updateApidata = {
-    id: formData.id,
+    id: formData.name,
     payload: JSON.stringify(popupFormData),
   };
   popupFormData.created_by = userId;
@@ -64,7 +64,7 @@ function FormPopUp(props) {
     payload: JSON.stringify(popupFormData),
   };
   let fetchApiData = {
-    q: JSON.stringify(query),
+    query: query,
     currentPage: currentPage,
     perPage: perPage,
   };

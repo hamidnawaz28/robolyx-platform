@@ -32,6 +32,7 @@ function Invoice() {
         apiLink={MANAGE_TEMPLATES}
         addNewDataHandle={addNewDataHandle}
         editDataHandle={editDataHandle}
+        withId={true}
       />
       {formState && (
         <UploadAndMapDataForm

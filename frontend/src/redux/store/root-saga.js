@@ -40,6 +40,8 @@ import {
   onDeleteComplianceTask,
 } from "../../main/pages/vendor_management/vendor_configurations/redux/complianceTaskSaga";
 
+import { onFetchVendorsStart } from "../../main/pages/vendor_management/vendor_networks/redux/vendorNetworksSaga";
+
 export default function* rootSaga() {
   yield all([
     call(onAddStart),
@@ -71,5 +73,6 @@ export default function* rootSaga() {
     call(onDeleteReviewTemplate),
     call(onFetchComplianceTasksStart),
     call(onDeleteComplianceTask),
+    call(onFetchVendorsStart),
   ]);
 }

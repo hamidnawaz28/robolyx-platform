@@ -146,6 +146,7 @@ export function* editTableData(action) {
       fetchApiData
     );
     let id = updateApidata.id;
+
     const res = yield axios.put(
       `${SERVER_URL}${apiLink}/${id}/`,
       updateApidata.payload,

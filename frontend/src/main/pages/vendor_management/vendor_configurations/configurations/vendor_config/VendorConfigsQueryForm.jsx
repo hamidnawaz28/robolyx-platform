@@ -44,7 +44,7 @@ function CategoriesQueryForm(props) {
     dispatch(fetchTableData({ apiLink: credentials, fetchApiData }));
   };
   const resetQueryHandle = () => {
-    fetchApiData["query"] = JSON.stringify(initialState);
+    fetchApiData["query"] = initialState;
     setFormData(initialState);
     dispatch(updateFormQuery(initialState));
     dispatch(fetchTableData({ apiLink: credentials, fetchApiData }));

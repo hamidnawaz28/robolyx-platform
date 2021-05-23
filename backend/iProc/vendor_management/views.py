@@ -425,9 +425,12 @@ class VendorBasicViewSet(viewsets.ViewSet):
         query_filter = json.loads(self.request.query_params.get("searchQuery"))
         current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
-        start = per_page * current_page
-        end = per_page * current_page + per_page
+        curr = current_page-1
+        print("curr", curr)
+        start = per_page * curr
+        end = per_page * curr + per_page
         print('START END', start, end)
+
 
         all_objs = VendorBasicInfo.objects.all()
         print('QUERY FILTER', query_filter, current_page, per_page)
@@ -435,7 +438,7 @@ class VendorBasicViewSet(viewsets.ViewSet):
         response_dict = {}
         if query_filter is not None:
             vendor_basic = all_objs.filter(**query_filter)[start:end]
-            count = all_objs.count()
+            count = all_objs.filter(**query_filter).count()
         else:
             vendor_basic = all_objs[start:end]
             count = all_objs.count()
@@ -529,7 +532,7 @@ class VendorBasicViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=id):
         queryset = VendorBasicInfo.objects.all()
         vendor_basic = get_object_or_404(queryset, pk=pk)
-        serializer = VendorBasicSerializer(vendor_basic, context={"request": request})
+        serializer = VendorBasicSerializerWithDepth(vendor_basic, context={"request": request})
         return Response({'error': False, 'message': "Single Data Fetch", "data": serializer.data})
 
     def destroy(self, request, pk=id):
@@ -1757,4 +1760,8 @@ class VendorCategoriesList(viewsets.ModelViewSet):
 class DiversityClassificationList(viewsets.ModelViewSet):
     queryset=DiversityClassification.objects.all()
     serializer_class=DiversityClassificationSerializer
+
+class CertificatesAndLiscenceList(viewsets.ModelViewSet):
+    queryset=CertificatesAndLisences.objects.all()
+    serializer_class=CertAndLisencesSerializer
 
