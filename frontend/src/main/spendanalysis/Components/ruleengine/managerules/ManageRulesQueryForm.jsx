@@ -41,8 +41,7 @@ function InvoiceQueryForm(props) {
     const dispatch = useDispatch()
     const tableStates = useSelector(state => state.tableStates)
     const taxonomyCategories = useSelector(state => state.utilsData.categoriesData)
-    const implementedRulesPk = useSelector(state => state.utilsData.implementedRulesPk)
-    const draftedRulesPk = useSelector(state => state.utilsData.draftedRulesPk)
+    const { implementedRulesPk, draftedRulesPk } = useSelector(state => state.utilsData)
     const { perPage, currentPage, query } = tableStates
     const { apiLink, ruleStatus, isStatusSwitchEn } = props
     const initialState = {

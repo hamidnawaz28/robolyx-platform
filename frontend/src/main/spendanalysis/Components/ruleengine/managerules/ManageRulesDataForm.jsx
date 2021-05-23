@@ -141,7 +141,7 @@ function FormPopUp(props) {
     }
 
     let updateApidata = {
-        pk: editFormData.pk,
+        id: editFormData.id,
         payload: formData,
     }
     let postDataApi = {
@@ -179,7 +179,6 @@ function FormPopUp(props) {
         levelArray.push(index + 1)
     }
     return (
-
         <>
             <div>
                 <Dialog 

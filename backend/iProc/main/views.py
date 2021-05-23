@@ -20,7 +20,7 @@ from django.contrib.auth import get_user_model
 from .serializers import userListSerializer
 
 from .serializers import RoleSerializer,  UserProjectSerializer,  UserDataSerializer, DefaultTemplateSerializer, SavedTemplateSerializer, \
-RuleEngineSerializer, RuleEngineHistorySerializer, InvoiceDataSerializer, TaxonomyDataSerializer, ContractDataSerializer, GLOrgDataSerializer, PODataSerializer 
+RuleEngineSerializer, RuleEngineHistorySerializer, InvoiceDataSerializer, TaxonomyDataSerializer, ContractDataSerializer, GLOrgDataSerializer, PODataSerializer, ImpactRuleEngineSerializer
 
 
 def fetch_get_data(request):
@@ -311,7 +311,7 @@ class RuleEngineData(viewsets.ViewSet):
 
 class InvoiceByRule(viewsets.ViewSet):
     def list(self, request):
-        query = json.loads(request.GET.get("query"))
+        query = json.loads(request.GET.get("q"))
         project_pk = request.GET.get("project")
         project_reference_object = UserProject.objects.get(pk=project_pk)
         start, end = get_data_range(request)
@@ -328,11 +328,19 @@ class InvoiceByRule(viewsets.ViewSet):
                 query |= Q(RuleEngineReference=rule.pk)
             invoice_data_object = InvoiceData.objects.filter(query)[start:end]
             count = InvoiceData.objects.filter(query).count()
-            serialized_data = get_serialized_data(invoice_data_object, count)
-            return HttpResponse(serialized_data, content_type="text/json-comment-filtered")
+            serializer = InvoiceDataSerializer(
+                invoice_data_object, many=True, context={"request": request})
+            response_dict = {
+                                'data': serializer.data,
+                                'count': count
+                            }
+            return Response(response_dict)
         else:
-            serialized_data = get_serialized_data({}, 0)
-        return HttpResponse(serialized_data, content_type="text/json-comment-filtered")
+            response_dict = {
+                                'data': [],
+                                'count': 0
+                            }
+            return Response(response_dict)
 
 
 class OverWrittenRules(viewsets.ViewSet):
@@ -361,21 +369,12 @@ class OverWrittenRules(viewsets.ViewSet):
             response_dict = {'data': serializer.data,
                                 'count': count}
             return Response(response_dict)
-        serialized_data = {'data': {},
+        response_dict = {'data': [],
                                 'count': 0}
-        return HttpResponse(serialized_data, content_type="text/json-comment-filtered")
+        return Response(response_dict)
 
 
-class ImpactRuleEngineSerializer(ser.ModelSerializer):
-    invoice_impacted = ser.SerializerMethodField('get_impacted_invoices_count')
 
-    def get_impacted_invoices_count(self, obj):
-        ruleobj = RuleEngine.objects.get(pk=obj.pk)
-        return InvoiceData.objects.filter(RuleEngineReference=ruleobj).count()
-
-    class Meta:
-        model = RuleEngine
-        fields = ('pk', 'invoice_impacted')
 
 
 class StatisticalSummary(viewsets.ViewSet):
@@ -383,7 +382,7 @@ class StatisticalSummary(viewsets.ViewSet):
         start, end = get_data_range(request)
         project = request.GET.get("project")
         project_reference_object = UserProject.objects.get(pk=project)
-        query = json.loads(request.GET.get("query"))
+        query = json.loads(request.GET.get("q"))
         if request.method == "GET":
             query_filter = {'UserProjectReference': project_reference_object}
             for item in query:
@@ -391,16 +390,16 @@ class StatisticalSummary(viewsets.ViewSet):
                     query_filter[item] = query[item]
             # rules_object = RuleEngine.objects.filter(**query_filter)[start:end]\
             #     .annotate(IMPACTED=Count('invoicedata'))
-            rules_object = RuleEngineSerializer(RuleEngine.objects.filter(**query_filter)[start:end], many=True)
+            rules_object = ImpactRuleEngineSerializer(RuleEngine.objects.filter(**query_filter)[start:end], many=True)
             rules_json = JSONRenderer().render(rules_object.data)
             out = []
             for data in json.loads(rules_json):
-                item = {"pk": data['pk'], "fields": {}}
-                item['fields']['invoice_impacted'] = data['invoice_impacted']
+                item = {"id": data['pk']}
+                item['invoice_impacted'] = data['invoice_impacted']
                 out.append(item)
             count = RuleEngine.objects.filter(**query_filter).count()
             # query_data_serialized = serializers.serialize("json", rules_object, fields=('pk', 'IMPACTED'))
-            data_details = {'count': count, 'queryData': json.dumps(out)}
+            data_details = {'count': count, 'data': out}
             data_details = json.dumps(data_details)
             return HttpResponse(data_details, content_type="text/json-comment-filtered")
 
@@ -520,10 +519,8 @@ class RuleEngineViewSet(viewsets.ViewSet):
         return HttpResponse("Successfully added ", content_type="text/json-comment-filtered")
 
     def update(self, request, pk = id):
-        pdb.set_trace()
         request_body_parameters = json.loads(request.body)["params"]
-        payload = json.loads(request_body_parameters["payload"])
-        pk = request_body_parameters["pk"]
+        payload = request_body_parameters["payload"]
         rule_engine_object = RuleEngine.objects.get(pk=pk)
         for item in payload:
             setattr(rule_engine_object, item, payload[item])

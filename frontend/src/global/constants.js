@@ -88,10 +88,11 @@ export const DATA_ATTRIBUTES = [
   "CREATION_DATE",
 ];
 export const STATISTICAL_SUMMARY_COLUMNS = {
+  "Rule ID": "id",
   "Invoices Impacted": "invoice_impacted",
-  // "Rules Overwritten":"rulesOverwritten"
 };
 export const DATA_ATTRIBUTES_FOR_RULE_ENGINE = {
+  "RULE ID": 'id',
   CATAGORIES: "CATAGORIES",
   PRIORITY: "PRIORITY",
   FIELD_1: "FIELD_1",

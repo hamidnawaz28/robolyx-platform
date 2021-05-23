@@ -268,8 +268,11 @@ function TableData(props) {
       }
     }
     implementApiData["idArray"] = JSON.stringify(idArray);
+    let fetchApiDataCop = { ...fetchApiData };
+    fetchApiDataCop["q"] = fetchApiDataCop["query"];
+    delete fetchApiDataCop.query;
     idArray.length > 0
-      ? dispatch(implementRule(apiLink, implementApiData, fetchApiData))
+      ? dispatch(implementRule(apiLink, implementApiData, fetchApiDataCop))
       : alert("Select Data");
   };
   const changePageHandle = (e) => {
