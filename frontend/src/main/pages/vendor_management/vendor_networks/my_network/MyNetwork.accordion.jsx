@@ -43,6 +43,11 @@ const useStyles = makeStyles((theme) => ({
 	pendingIcon: {
 		color: '#8d99ae',
 	},
+	chip: {
+		height: '1.3rem',
+		fontSize: '0.7rem',
+		borderRadius: '0.3rem',
+	},
 }));
 
 export default function VendorAccordion({ vendor }) {
@@ -61,13 +66,18 @@ export default function VendorAccordion({ vendor }) {
 				label={label}
 				variant='outlined'
 				style={{ color: '#eb1808ed' }}
+				className={classes.chip}
 			/>
 		) : (
 			<Chip
 				size='small'
 				label={label}
-				color='primary'
-				style={{ marginRight: '0.5em' }}
+				style={{
+					marginRight: '0.5em',
+					borderColor: '#15616d',
+				}}
+				className={classes.chip}
+				variant='outlined'
 			/>
 		);
 
