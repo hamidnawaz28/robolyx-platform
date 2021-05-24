@@ -1761,7 +1761,23 @@ class DiversityClassificationList(viewsets.ModelViewSet):
     queryset=DiversityClassification.objects.all()
     serializer_class=DiversityClassificationSerializer
 
-class CertificatesAndLiscenceList(viewsets.ModelViewSet):
-    queryset=CertificatesAndLisences.objects.all()
-    serializer_class=CertAndLisencesSerializer
+class CertificatesAndLiscenceList(viewsets.ViewSet):
+    #authentication_classes = [JWTAuthentication]
+    #permission_classes = [IsAuthenticated]
 
+    def list(self, request):
+        vendorId = self.request.query_params.get("vendorId")
+
+        all_objs = CertificatesAndLisences.objects.all()
+        print('vendorId', vendorId)
+        response_dict = {}
+        cert_n_lisc = all_objs.filter(vendor_id__id=vendorId)
+        count = all_objs.filter(vendor_id__id=vendorId).count()
+
+        serializer = CertAndLisencesSerializer(
+            cert_n_lisc, many=True, context={"request": request})
+
+        response_dict = {'data': serializer.data,
+                             'count': count}
+
+        return Response(response_dict)

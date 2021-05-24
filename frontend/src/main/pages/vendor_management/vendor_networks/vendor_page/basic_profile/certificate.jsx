@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Certificate({ cert }) {
+  console.log(cert);
   return (
     <React.Fragment>
       <Grid

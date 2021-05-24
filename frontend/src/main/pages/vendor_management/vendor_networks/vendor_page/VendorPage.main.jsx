@@ -96,14 +96,9 @@ function VendorPage() {
               </Grid>
             </Grid>
           </Grid>
-          <Grid
-            item
-            sm={10}
-            style={{ paddingLeft: "1em" }}
-            alignContent="center"
-          >
+          <Grid item sm={10} style={{ paddingLeft: "1em" }}>
             <Typography variant="h5">{vendor && vendor.vendor_name}</Typography>
-            <Typography variant="body">
+            <Typography variant="body1">
               Vendor ID: {vendor && vendor.id}
             </Typography>
           </Grid>
