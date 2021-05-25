@@ -281,8 +281,17 @@ export default function BasicProfile({ vendor }) {
               <Grid container>
                 {certlisc.data &&
                   certlisc.data.map((cert) => (
-                    <Grid item style={{ marginRight: "0.5em" }}>
-                      <Certificate cert={cert} key={cert.id} />
+                    <Grid
+                      item
+                      style={{ paddingRight: "0.5em" }}
+                      sm={3}
+                      key={cert.id}
+                    >
+                      <Certificate
+                        cert={cert}
+                        refreshCert={refreshCert}
+                        setRefreshCert={setRefreshCert}
+                      />
                     </Grid>
                   ))}
               </Grid>

@@ -14,6 +14,7 @@ export const BUSINESS_UNIT_DATA = "basic-configs/buss_units";
 export const INVOICE_DATA = "main/invoice-data";
 export const CONTRACT_DATA = "main/contract-data";
 export const GL_DATA = "main/gl-data";
+
 export const ARC_TICKETS_DATA = "ticket/archive-tickets-list";
 export const PO_DATA = "main/po-data";
 export const MANAGE_TEMPLATES = "main/manage-templates";
@@ -24,6 +25,7 @@ export const VENDOR_TAGS_API_LINK = "vendor_management/vendor-tag";
 export const VENDOR_TRADES_API_LINK = "vendor_management/vendor-trade";
 export const VENDOR_CATEGORIES_API_LINK = "vendor_management/vendor-cat";
 export const VENDOR_DIVERSITY_API_LINK = "vendor_management/diversity-class";
+export const VENDOR_ADDRESS_API_LINK = "vendor_management/vendor-address";
 
 export const TEMPLATES_COLUMNS = {
   MappingName: "MappingName",
@@ -92,7 +94,7 @@ export const STATISTICAL_SUMMARY_COLUMNS = {
   "Invoices Impacted": "invoice_impacted",
 };
 export const DATA_ATTRIBUTES_FOR_RULE_ENGINE = {
-  "RULE ID": 'id',
+  "RULE ID": "id",
   CATAGORIES: "CATAGORIES",
   PRIORITY: "PRIORITY",
   FIELD_1: "FIELD_1",
@@ -202,6 +204,22 @@ export const GL_COLUMNS = {
   REGION: "REGION",
   DIVISION: "DIVISION",
   BUSINESS: "BUSINESS",
+};
+
+export const VEN_ADDRESS_COLUMNS = {
+  "Vendor ID": "vendor_id",
+  "Address Type": "address_type",
+  street_address: "street_address",
+  postal_code: "postal_code",
+  suburb_name: "suburb_name",
+  city: "city",
+  state: "state",
+  country: "country",
+  billing_status: "billing_status",
+  longitude: "longitude",
+  latitude: "latitude",
+  created_by: "created_by",
+  created_at: "created_at",
 };
 
 export const ARC_TICKETS_COLUMNS = {

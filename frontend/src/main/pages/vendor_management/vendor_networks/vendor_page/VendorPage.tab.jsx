@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import BasicProfile from "./basic_profile/BasicProfile.main.page";
+import AddressPage from "./address_page/AddressPage.main";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -127,7 +128,7 @@ export default function VendorPageTab({ vendor }) {
           <BasicProfile vendor={vendor} />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          Item Two
+          <AddressPage vendor={vendor} />
         </TabPanel>
         <TabPanel value={value} index={2}>
           Configurations
