@@ -11,36 +11,42 @@ import OnBoardDetailsUpdateForm from "./Form";
 import useStyles from "./styles";
 import { partialUpdateVendor } from "../../../../vendor_admin/redux/approvalActions";
 import { fetchSingleVendorStart } from "../../../redux/vendorNetworksActions";
+import CertificatesAndLiscenceForm from "./Form";
+import * as Yup from "yup";
+import axios from "axios";
+import formField from "./formFields";
+import localStorage from "../../../../../../../common/storage/localStorage";
 
 const Alert = styled(MuiAlert)(spacing);
 
-export default function MainFormik({
-  icon,
-  title,
-  buttonTitle,
-  VendorDetail,
-  id,
-  Vendor_full,
-  setOpen,
-}) {
+export default function MainFormik({ setOpen, refreshCert, setRefreshCert }) {
   const classes = useStyles();
   const [submitError, setSubmitError] = useState("");
 
-  console.log("Vendor is here ", VendorDetail);
+  const { singleVendor } = useSelector((state) => state.vendorNetworks);
+
+  const vendor_id = singleVendor.data.id;
 
   const reduxVals = {
-    category: Vendor_full.category
-      ? Vendor_full.category.map((cat) => cat.name)
-      : [],
-    diversity: Vendor_full.diversity
-      ? Vendor_full.diversity.map((cat) => cat.name)
-      : [],
-    payment_term: Vendor_full.payment_term
-      ? Vendor_full.payment_term.map((cat) => cat.name)
-      : [],
-    tags: Vendor_full.tags ? Vendor_full.tags.map((cat) => cat.name) : [],
-    trades: Vendor_full.trades ? Vendor_full.trades.map((cat) => cat.name) : [],
+    certificate_name: "",
+    registration_no: "",
+    aggregation_body: "",
+    created_by: "",
   };
+
+  let validation = [
+    Yup.object().shape({
+      [formField.certificate_name.name]: Yup.string().required(
+        `${formField.certificate_name.requiredErrorMsg}`
+      ),
+      [formField.registration_no.name]: Yup.string().required(
+        `${formField.registration_no.requiredErrorMsg}`
+      ),
+      [formField.aggregation_body.name]: Yup.string().required(
+        `${formField.aggregation_body.requiredErrorMsg}`
+      ),
+    }),
+  ];
 
   const dispatch = useDispatch();
 
@@ -59,18 +65,48 @@ export default function MainFormik({
   async function _submitForm(values, actions) {
     console.log(values);
 
-    let { category, tags, trades, diversity, payment_term } = values;
+    let { certificate_name, registration_no, aggregation_body } = values;
 
-    let post_data = values;
+    let user = localStorage.get("user");
+
+    let created_by = user.userId;
+
+    let post_data = {
+      vendor_id: vendor_id,
+      certificate_name: certificate_name,
+      registration_no: registration_no,
+      aggregation_body: aggregation_body,
+      created_by: created_by,
+    };
 
     console.log("Hello", post_data);
 
-    let id = Vendor_full.id;
+    var config = {
+      method: "post",
+      url: `http://127.0.0.1:8090/api/vendor_management/vendor-cert-lisc/`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify(post_data),
+    };
+    axios(config)
+      .then((res) => {
+        console.log(res);
 
-    let submit_data = { post_data, id, fetchApiData };
+        const { data } = res;
+        const { error, message } = JSON.stringify(data);
+        if (!error) {
+          console.log("posted data", data);
+          alert("Certificate/Liscence Added Successfully");
+          setRefreshCert(!refreshCert);
+        } else alert("Error");
+        console.log(data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
-    dispatch(partialUpdateVendor(submit_data));
-    dispatch(fetchSingleVendorStart(id));
+    //dispatch(fetchSingleVendorStart(id));
     // setSubmitError("");
     setOpen(false);
     // actions.setSubmitting(false);
@@ -87,16 +123,11 @@ export default function MainFormik({
         initialValues={reduxVals}
         onSubmit={_submitForm}
         enableReinitialize
+        validationSchema={validation[0]}
       >
         {({ isSubmitting }) => (
           <Form style={{ padding: "1.5em", width: "100%" }}>
-            <OnBoardDetailsUpdateForm
-              icon={icon}
-              title={title}
-              buttonTitle={buttonTitle}
-              VendorDetail={VendorDetail}
-              id={id}
-            />
+            <CertificatesAndLiscenceForm />
             <Divider style={{ marginTop: "1em" }} />
 
             <div className={classes.buttons}>

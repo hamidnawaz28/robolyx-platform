@@ -9,7 +9,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
 import ChangeHistoryIcon from "@material-ui/icons/ChangeHistory";
-import { fetchVendorsStart } from "../redux/vendorNetworksActions";
+import { fetchSingleVendorStart } from "../redux/vendorNetworksActions";
 import VendorPageTab from "./VendorPage.tab";
 
 const useStyles = makeStyles((theme) => ({
@@ -29,32 +29,14 @@ function VendorPage() {
   let history = useHistory();
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [vendor, setVendor] = useState({});
 
   useEffect(() => {
-    var config = {
-      method: "get",
-      url: `http://127.0.0.1:8090/api/vendor_management/vendor-basic/${id}/`,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    axios(config)
-      .then((res) => {
-        const { data } = res;
-        const { error, message } = JSON.stringify(data);
-        if (!error) {
-          console.log("data", data);
-          setVendor(data.data);
-        } else alert("Error");
-        console.log(data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    dispatch(fetchSingleVendorStart(id));
   }, []);
 
-  console.log("vendor", vendor);
+  const { singleVendor } = useSelector((state) => state.vendorNetworks);
+
+  console.log(singleVendor.data);
 
   return (
     <Grid container>
@@ -97,15 +79,17 @@ function VendorPage() {
             </Grid>
           </Grid>
           <Grid item sm={10} style={{ paddingLeft: "1em" }}>
-            <Typography variant="h5">{vendor && vendor.vendor_name}</Typography>
+            <Typography variant="h5">
+              {singleVendor.data && singleVendor.data.vendor_name}
+            </Typography>
             <Typography variant="body1">
-              Vendor ID: {vendor && vendor.id}
+              Vendor ID: {singleVendor.data && singleVendor.data.id}
             </Typography>
           </Grid>
         </Grid>
       </Grid>
       <Grid item>
-        <VendorPageTab vendor={vendor} />
+        <VendorPageTab vendor={singleVendor.data && singleVendor.data} />
       </Grid>
     </Grid>
     // {location.vendor.vendor_name}

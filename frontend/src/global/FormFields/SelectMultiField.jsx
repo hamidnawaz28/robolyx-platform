@@ -1,4 +1,5 @@
 import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import Checkbox from "@material-ui/core/Checkbox";
 import ListItemText from "@material-ui/core/ListItemText";
 import PropTypes from "prop-types";
@@ -12,12 +13,26 @@ import {
   FormHelperText,
 } from "@material-ui/core";
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "&.MuiTypography-body1": {
+      fontSize: "2px",
+    },
+    "&:focus": {
+      backgroundColor: theme.palette.primary.main,
+      "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
+        color: theme.palette.common.white,
+      },
+    },
+  },
+}));
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
   PaperProps: {
     style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      maxHeight: ITEM_HEIGHT * 3.5 + ITEM_PADDING_TOP,
       width: 100,
     },
   },
@@ -25,6 +40,7 @@ const MenuProps = {
 
 function SelectField(props) {
   const { label, data, ...rest } = props;
+  const classes = useStyles();
   const [field, meta] = useField(props);
   const { value: selectedValue } = field;
   const [touched, error] = at(meta, "touched", "error");
@@ -46,6 +62,10 @@ function SelectField(props) {
           selectedValue ? selectedValue.map((value) => value + ",") : ""
         }
         value={selectedValue ? selectedValue : ""}
+        classes={{
+          root: classes.selectEmpty,
+          select: classes.select,
+        }}
       >
         {data.map((item) => (
           <MenuItem key={item.name} value={item.name}>

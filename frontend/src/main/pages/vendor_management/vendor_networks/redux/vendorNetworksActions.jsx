@@ -24,3 +24,13 @@ export const updatePerPage = (data) => ({
   type: type.UPDATE_PER_PAGE,
   payload: data,
 });
+
+export const fetchSingleVendorStart = (data) => ({
+  type: type.FETCH_SINGLE_VENDOR_START,
+  payload: data,
+});
+
+export const fetchSingleVendorSuccess = (data) => ({
+  type: type.FETCH_SINGLE_VENDOR_SUCCESS,
+  payload: data,
+});

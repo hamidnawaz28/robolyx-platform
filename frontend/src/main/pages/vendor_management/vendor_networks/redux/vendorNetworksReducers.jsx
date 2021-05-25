@@ -7,6 +7,7 @@ const initialState = {
   currentPage: 1,
   totalRows: 0,
   searchQuery: {},
+  singleVendor: {},
 };
 export const vendorNetworksReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -36,6 +37,17 @@ export const vendorNetworksReducer = (state = initialState, action) => {
       return {
         ...state,
         perPage: action.payload,
+      };
+    case Types.FETCH_SINGLE_VENDOR_START:
+      return {
+        ...state,
+        isFetching: true,
+      };
+    case Types.FETCH_SINGLE_VENDOR_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        singleVendor: action.payload,
       };
 
     default:
