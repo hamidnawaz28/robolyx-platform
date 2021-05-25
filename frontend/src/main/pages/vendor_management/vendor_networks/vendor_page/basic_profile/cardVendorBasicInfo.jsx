@@ -37,7 +37,14 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const CardSample = ({ icon, title, buttonTitle, VendorDetail, id }) => {
+const CardSample = ({
+	icon,
+	title,
+	buttonTitle,
+	VendorDetail,
+	id,
+	Vendor_full,
+}) => {
 	const classes = useStyles();
 	const [open, setOpen] = React.useState(false);
 
@@ -105,6 +112,9 @@ const CardSample = ({ icon, title, buttonTitle, VendorDetail, id }) => {
 													title={title}
 													VendorDetail={VendorDetail}
 													id={id}
+													buttonTitle={buttonTitle}
+													Vendor_full={Vendor_full}
+													setOpen={setOpen}
 												/>
 											</div>
 										</Fade>
@@ -118,7 +128,7 @@ const CardSample = ({ icon, title, buttonTitle, VendorDetail, id }) => {
 					<Grid item style={{ paddingTop: '1em' }}>
 						{VendorDetail &&
 							VendorDetail.map((ven) => (
-								<React.Fragment>
+								<React.Fragment key={ven.name}>
 									<Chip
 										label={ven.name}
 										color='primary'
@@ -127,7 +137,6 @@ const CardSample = ({ icon, title, buttonTitle, VendorDetail, id }) => {
 											height: '1.7rem',
 											fontSize: '0.75rem',
 										}}
-										key={ven.name}
 									/>
 								</React.Fragment>
 							))}

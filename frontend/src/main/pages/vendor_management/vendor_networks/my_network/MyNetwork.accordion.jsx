@@ -48,6 +48,9 @@ const useStyles = makeStyles((theme) => ({
 		fontSize: '0.7rem',
 		borderRadius: '0.3rem',
 	},
+	vendorDetail: {
+		marginBottom: '1em',
+	},
 }));
 
 export default function VendorAccordion({ vendor }) {
@@ -251,7 +254,7 @@ export default function VendorAccordion({ vendor }) {
 				</AccordionSummary>
 				<AccordionDetails>
 					<Grid container>
-						<Grid item sm={6}>
+						<Grid item sm={6} className={classes.vendorDetail}>
 							<Typography style={{ fontWeight: 'bold' }}>Tags:</Typography>
 							{vendor.tags.length ? (
 								vendor.tags.map((tag) => (
@@ -263,7 +266,7 @@ export default function VendorAccordion({ vendor }) {
 								<ChipNew label='No Tags Applied' error={true} />
 							)}
 						</Grid>
-						<Grid item sm={6}>
+						<Grid item sm={6} className={classes.vendorDetail}>
 							<Typography style={{ fontWeight: 'bold' }}>
 								Categories:
 							</Typography>

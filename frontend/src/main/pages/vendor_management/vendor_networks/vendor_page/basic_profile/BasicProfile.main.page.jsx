@@ -162,6 +162,7 @@ export default function BasicProfile({ vendor }) {
 				title='Applied Tags'
 				buttonTitle='Apply Tags'
 				VendorDetail={vendor.tags}
+				Vendor_full={vendor}
 			/>
 			<CardSample
 				id='category'
@@ -169,6 +170,7 @@ export default function BasicProfile({ vendor }) {
 				title='Applied Categories'
 				buttonTitle='Apply Category'
 				VendorDetail={vendor.category}
+				Vendor_full={vendor}
 			/>
 
 			<CardSample
@@ -177,6 +179,7 @@ export default function BasicProfile({ vendor }) {
 				title='Applied Trades'
 				buttonTitle='Apply Trades'
 				VendorDetail={vendor.trades}
+				Vendor_full={vendor}
 			/>
 
 			<CardSample
@@ -185,6 +188,7 @@ export default function BasicProfile({ vendor }) {
 				title='Payment Terms'
 				buttonTitle='Apply Payment Term'
 				VendorDetail={vendor.payment_term}
+				Vendor_full={vendor}
 			/>
 			<CardSample
 				id='diversity'
@@ -192,6 +196,7 @@ export default function BasicProfile({ vendor }) {
 				title='Diversity Tags'
 				buttonTitle='Apply Diversity Tag'
 				VendorDetail={vendor.diversity}
+				Vendor_full={vendor}
 			/>
 
 			<Card className={classes.root}>
