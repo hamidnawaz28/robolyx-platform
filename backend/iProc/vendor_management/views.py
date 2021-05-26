@@ -712,16 +712,17 @@ class VendorAddressViewSet(viewsets.ViewSet):
 
             vendor1 = VendorAddressSerializer(vendor)
             print('vendor',vendor1.data)
+            print('id',vendor1.data["vendor_id"])
 
             for x in new_data:
                 print(new_data[x], vendor1.data[x])
                 if new_data[x] != vendor1.data[x]:
                     print(x, "has changed")
-                    new_history = VendorHistory.objects.create(vendor_id=VendorBasicInfo.objects.get(id=new_data['vendor_id']), modified_by=User.objects.get(id=new_data['created_by']), change_type='modified',pre_value=vendor1.data[x] , post_value=new_data[x],item_changed=x, model_changed='Vendor Address')
-                    new_history.save()
+                    #new_history = VendorHistory.objects.create(vendor_id=vendor1.data["vendor_id"], modified_by=vendor1.data["created_by"], change_type='modification',pre_value=vendor1.data[x] , post_value=new_data[x],item_changed=x, model_changed='Vendor Address')
+                    #new_history.save()
 
             serializer = VendorAddressSerializer(
-                vendor, data=request.data, context={"request": request})
+                vendor, data=request.data, context={"request": request}, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             dict_response = {"error": False,
@@ -1776,6 +1777,28 @@ class CertificatesAndLiscenceList(viewsets.ViewSet):
 
         serializer = CertAndLisencesSerializer(
             cert_n_lisc, many=True, context={"request": request})
+
+        response_dict = {'data': serializer.data,
+                             'count': count}
+
+        return Response(response_dict)
+
+
+class IndividualVendorAddresses(viewsets.ViewSet):
+    #authentication_classes = [JWTAuthentication]
+    #permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        vendorId = self.request.query_params.get("vendorId")
+
+        all_objs = VendorAddress.objects.all()
+        print('vendorId', vendorId)
+        response_dict = {}
+        ven_add = all_objs.filter(vendor_id__id=vendorId)
+        count = all_objs.filter(vendor_id__id=vendorId).count()
+
+        serializer = VendorAddressSerializer(
+            ven_add, many=True, context={"request": request})
 
         response_dict = {'data': serializer.data,
                              'count': count}

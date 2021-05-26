@@ -3,6 +3,7 @@ import { SERVER_URL } from "../../../../../global/constants";
 import {
   fetchVendorsSuccess,
   fetchSingleVendorSuccess,
+  fetchIndividualVendorAddressSuccess,
 } from "./vendorNetworksActions";
 import * as type from "./actionTypes";
 import { takeLatest, put } from "redux-saga/effects";
@@ -32,7 +33,7 @@ export function* onFetchVendorsStart() {
   yield takeLatest(type.FETCH_VENDORS_START, fetchVendorsData);
 }
 
-//Fetch pending vendors saga
+//Fetch individual vendors data saga
 export function* fetchSingleVendorData(action) {
   console.log("action from fetch single vendor saga", action);
   try {
@@ -52,4 +53,26 @@ export function* fetchSingleVendorData(action) {
 
 export function* onFetchSingleVendorStart() {
   yield takeLatest(type.FETCH_SINGLE_VENDOR_START, fetchSingleVendorData);
+}
+
+//Fetch individual vendors address saga
+export function* fetchVendorAddress(action) {
+  console.log("action from fetch  vendor address saga", action);
+  try {
+    const id = action.payload;
+
+    console.log("running fetch single vendor address saga", id);
+    const res = yield axios.get(
+      `${SERVER_URL}vendor_management/ven_add/?vendorId=${id}`
+    );
+    console.log("Data", res.data);
+
+    yield put(fetchIndividualVendorAddressSuccess(res.data));
+  } catch (error) {
+    alert(error);
+  }
+}
+
+export function* onFetchVendorAddress() {
+  yield takeLatest(type.FETCH_INDIVIDUAL_VEN_ADDRESS_START, fetchVendorAddress);
 }

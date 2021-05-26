@@ -25,7 +25,6 @@ export const VENDOR_TAGS_API_LINK = "vendor_management/vendor-tag";
 export const VENDOR_TRADES_API_LINK = "vendor_management/vendor-trade";
 export const VENDOR_CATEGORIES_API_LINK = "vendor_management/vendor-cat";
 export const VENDOR_DIVERSITY_API_LINK = "vendor_management/diversity-class";
-export const VENDOR_ADDRESS_API_LINK = "vendor_management/vendor-address";
 
 export const TEMPLATES_COLUMNS = {
   MappingName: "MappingName",
@@ -204,22 +203,6 @@ export const GL_COLUMNS = {
   REGION: "REGION",
   DIVISION: "DIVISION",
   BUSINESS: "BUSINESS",
-};
-
-export const VEN_ADDRESS_COLUMNS = {
-  "Vendor ID": "vendor_id",
-  "Address Type": "address_type",
-  street_address: "street_address",
-  postal_code: "postal_code",
-  suburb_name: "suburb_name",
-  city: "city",
-  state: "state",
-  country: "country",
-  billing_status: "billing_status",
-  longitude: "longitude",
-  latitude: "latitude",
-  created_by: "created_by",
-  created_at: "created_at",
 };
 
 export const ARC_TICKETS_COLUMNS = {

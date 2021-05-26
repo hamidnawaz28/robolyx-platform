@@ -34,3 +34,13 @@ export const fetchSingleVendorSuccess = (data) => ({
   type: type.FETCH_SINGLE_VENDOR_SUCCESS,
   payload: data,
 });
+
+export const fetchIndividualVendorAddressStart = (data) => ({
+  type: type.FETCH_INDIVIDUAL_VEN_ADDRESS_START,
+  payload: data,
+});
+
+export const fetchIndividualVendorAddressSuccess = (data) => ({
+  type: type.FETCH_INDIVIDUAL_VEN_ADDRESS_SUCCESS,
+  payload: data,
+});

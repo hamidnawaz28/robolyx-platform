@@ -8,6 +8,7 @@ const initialState = {
   totalRows: 0,
   searchQuery: {},
   singleVendor: {},
+  vendorAddress: {},
 };
 export const vendorNetworksReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -48,6 +49,17 @@ export const vendorNetworksReducer = (state = initialState, action) => {
         ...state,
         isFetching: false,
         singleVendor: action.payload,
+      };
+    case Types.FETCH_INDIVIDUAL_VEN_ADDRESS_START:
+      return {
+        ...state,
+        isFetching: true,
+      };
+    case Types.FETCH_INDIVIDUAL_VEN_ADDRESS_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        vendorAddress: action.payload,
       };
 
     default:
