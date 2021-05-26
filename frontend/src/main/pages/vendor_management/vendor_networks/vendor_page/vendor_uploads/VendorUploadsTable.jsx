@@ -11,7 +11,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import DeleteIcon from "@material-ui/icons/Delete";
-//import { deleteTicket } from "../../../redux/ticketActions";
+import { deleteFileUpload } from "../../redux/vendorNetworksActions";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import { downloadFile } from "../../../../../../hooks";
 
@@ -47,7 +47,7 @@ export default function FileUploadTable({ vendor_id }) {
 
   const handleDelete = ({ file_id, ticket_id }) => {
     console.log("from delete func", file_id, ticket_id);
-    //dispatch(deleteTicket({ file_id, ticket_id }));
+    dispatch(deleteFileUpload({ file_id, vendor_id }));
   };
   return (
     <TableContainer component={Paper}>
@@ -90,7 +90,7 @@ export default function FileUploadTable({ vendor_id }) {
                   <Grid container>
                     <Grid item>
                       <GetAppIcon
-                        onClick={() => downloadFile(file.ticket_file)}
+                        onClick={() => downloadFile(file.vendor_file)}
                         className={classes.delIcon}
                       />
                     </Grid>

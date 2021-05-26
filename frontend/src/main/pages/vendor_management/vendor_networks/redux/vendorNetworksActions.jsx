@@ -54,3 +54,8 @@ export const fetchFileUploadSuccess = (data) => ({
   type: type.FETCH_FILE_UPLOAD_SUCCESS,
   payload: data,
 });
+
+export const deleteFileUpload = (data) => ({
+  type: type.DELETE_VENDOR_UPLOAD,
+  payload: data,
+});
