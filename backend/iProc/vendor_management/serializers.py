@@ -86,6 +86,13 @@ class VendorFileUploadSerializer(serializers.ModelSerializer):
         model = VendorFileUpload
         fields = '__all__'
 
+class VendorFileUploadWithDepthSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = VendorFileUpload
+        fields = '__all__'
+        depth=1
+
 class NotesSerializer(serializers.ModelSerializer):
 
     class Meta:

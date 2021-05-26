@@ -8,7 +8,7 @@ DiversityClassificationSerializer, VendorBasicSerializer, CertAndLisencesSeriali
 VendorFileUploadSerializer, NotesSerializer, VendorHistorySerializer, ReviewTemplateSerializer, ReviewResponseSerializer, \
 ReviewResponseStatusSerializer, ComplianceVendorTaskSerializer, ComplianceVendorResponseSerializer, ComplianceTaskCriteriaSerializer, \
 VendorComplianceStatusSerializer, VendorComplianceHistorySerializer, PendingVendorBasicSerializer, ComplianceTaskSerializer, \
-VendorBasicSerializerWithDepth, ComplianceTaskSerializer
+VendorBasicSerializerWithDepth, ComplianceTaskSerializer, VendorFileUploadWithDepthSerializer
 from rest_framework.generics import get_object_or_404
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.contrib.auth.models import User
@@ -761,7 +761,7 @@ class VendorUploadView(APIView):
         uploads = VendorFileUpload.objects.filter(vendor_id=int(vendor_id))
         print("PRINT UPLOADS", uploads)
 
-        serializer = VendorFileUploadSerializer(uploads, many=True)
+        serializer = VendorFileUploadWithDepthSerializer(uploads, many=True)
         return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):

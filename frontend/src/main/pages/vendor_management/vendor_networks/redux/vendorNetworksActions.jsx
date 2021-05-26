@@ -44,3 +44,13 @@ export const fetchIndividualVendorAddressSuccess = (data) => ({
   type: type.FETCH_INDIVIDUAL_VEN_ADDRESS_SUCCESS,
   payload: data,
 });
+
+export const fetchFileUploadStart = (data) => ({
+  type: type.FETCH_FILE_UPLOAD_START,
+  payload: data,
+});
+
+export const fetchFileUploadSuccess = (data) => ({
+  type: type.FETCH_FILE_UPLOAD_SUCCESS,
+  payload: data,
+});

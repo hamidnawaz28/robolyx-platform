@@ -4,6 +4,7 @@ import {
   fetchVendorsSuccess,
   fetchSingleVendorSuccess,
   fetchIndividualVendorAddressSuccess,
+  fetchFileUploadSuccess,
 } from "./vendorNetworksActions";
 import * as type from "./actionTypes";
 import { takeLatest, put } from "redux-saga/effects";
@@ -75,4 +76,26 @@ export function* fetchVendorAddress(action) {
 
 export function* onFetchVendorAddress() {
   yield takeLatest(type.FETCH_INDIVIDUAL_VEN_ADDRESS_START, fetchVendorAddress);
+}
+
+//Fetch vendor uploads saga
+export function* fetchVendorUploads(action) {
+  console.log("action from fetch vendor uploads saga", action);
+  try {
+    const id = action.payload;
+
+    console.log("running fetch vendor uploads saga", id);
+    const res = yield axios.get(
+      `${SERVER_URL}vendor_management/vendor-upload/?vendor_id=${id}`
+    );
+    console.log("Data", res.data);
+
+    yield put(fetchFileUploadSuccess(res.data));
+  } catch (error) {
+    alert(error);
+  }
+}
+
+export function* onFetchVendorUploads() {
+  yield takeLatest(type.FETCH_FILE_UPLOAD_START, fetchVendorUploads);
 }

@@ -9,6 +9,7 @@ const initialState = {
   searchQuery: {},
   singleVendor: {},
   vendorAddress: {},
+  vendorUploads: [],
 };
 export const vendorNetworksReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -60,6 +61,17 @@ export const vendorNetworksReducer = (state = initialState, action) => {
         ...state,
         isFetching: false,
         vendorAddress: action.payload,
+      };
+    case Types.FETCH_FILE_UPLOAD_START:
+      return {
+        ...state,
+        isFetching: true,
+      };
+    case Types.FETCH_FILE_UPLOAD_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        vendorUploads: action.payload,
       };
 
     default:

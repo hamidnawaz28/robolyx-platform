@@ -44,6 +44,7 @@ import {
   onFetchVendorsStart,
   onFetchSingleVendorStart,
   onFetchVendorAddress,
+  onFetchVendorUploads,
 } from "../../main/pages/vendor_management/vendor_networks/redux/vendorNetworksSaga";
 
 export default function* rootSaga() {
@@ -80,5 +81,6 @@ export default function* rootSaga() {
     call(onFetchVendorsStart),
     call(onFetchSingleVendorStart),
     call(onFetchVendorAddress),
+    call(onFetchVendorUploads),
   ]);
 }
