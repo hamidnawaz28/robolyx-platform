@@ -6,6 +6,7 @@ import {
   fetchIndividualVendorAddressSuccess,
   fetchFileUploadSuccess,
   fetchFileUploadStart,
+  fetchNotesSuccess,
 } from "./vendorNetworksActions";
 import * as type from "./actionTypes";
 import { takeLatest, put } from "redux-saga/effects";
@@ -121,4 +122,26 @@ export function* deleteVendorUploads(action) {
 
 export function* onDeleteVendorUploads() {
   yield takeLatest(type.DELETE_VENDOR_UPLOAD, deleteVendorUploads);
+}
+
+//Fetch vendors notes saga
+export function* fetchVendorNotes(action) {
+  console.log("action from fetch vendors notes saga", action);
+  try {
+    const { fetchApiData } = action.payload;
+
+    console.log("running fetch single vendors notes saga");
+    const res = yield axios.get(`${SERVER_URL}vendor_management/notes/`, {
+      params: fetchApiData,
+    });
+    console.log("Data", res.data);
+
+    yield put(fetchNotesSuccess(res.data));
+  } catch (error) {
+    alert(error);
+  }
+}
+
+export function* onFetchVendorNotes() {
+  yield takeLatest(type.FETCH_NOTES_START, fetchVendorNotes);
 }

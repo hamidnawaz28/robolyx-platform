@@ -10,6 +10,7 @@ const initialState = {
   singleVendor: {},
   vendorAddress: {},
   vendorUploads: [],
+  vendorNotes: [],
 };
 export const vendorNetworksReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -72,6 +73,17 @@ export const vendorNetworksReducer = (state = initialState, action) => {
         ...state,
         isFetching: false,
         vendorUploads: action.payload,
+      };
+    case Types.FETCH_NOTES_START:
+      return {
+        ...state,
+        isFetching: true,
+      };
+    case Types.FETCH_NOTES_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        vendorNotes: action.payload,
       };
 
     default:

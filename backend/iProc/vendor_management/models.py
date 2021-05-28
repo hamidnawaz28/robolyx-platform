@@ -163,8 +163,31 @@ class VendorAddress(models.Model):
         return self.city
 
 class Notes(models.Model):
-    category = models.CharField(max_length=255)
-    priority = models.CharField(max_length=255)
+
+    category_options = (
+        ('General', 'General'),
+        ('Audits', 'Audits'),
+        ('Billing', 'Billing'),
+        ('Flags', 'Flags'),
+        ('Insurance', 'Insurance'),
+        ('Client Changes', 'Client Changes'),
+        ('Other', 'Other'),
+        ('Client Qualification', 'Client Qualification'),
+        ('Employee', 'Employee'),
+        ('Risk Ranking', 'Risk Ranking'),
+        ('Registration', 'Registration'),
+        ('Trades', 'Trades'),
+    )
+
+    priority_options = (
+        ('low', 'low'),
+        ('medium', 'medium'),
+        ('high', 'high'),
+    )
+
+    notes_file = models.FileField(blank=True, null=True, default='settings.MEDIA_ROOT/download.png')
+    category = models.CharField(max_length=50, choices=category_options, default="No",)
+    priority = models.CharField(max_length=50, choices=priority_options, default="low",)
     subject = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notes_user")

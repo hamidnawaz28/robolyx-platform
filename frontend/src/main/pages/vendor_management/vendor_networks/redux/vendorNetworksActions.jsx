@@ -59,3 +59,13 @@ export const deleteFileUpload = (data) => ({
   type: type.DELETE_VENDOR_UPLOAD,
   payload: data,
 });
+
+export const fetchNotesStart = (data) => ({
+  type: type.FETCH_NOTES_START,
+  payload: data,
+});
+
+export const fetchNotesSuccess = (data) => ({
+  type: type.FETCH_NOTES_SUCCESS,
+  payload: data,
+});

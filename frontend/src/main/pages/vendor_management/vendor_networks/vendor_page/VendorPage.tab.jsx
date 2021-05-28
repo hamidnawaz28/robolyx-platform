@@ -10,6 +10,7 @@ import Grid from "@material-ui/core/Grid";
 import BasicProfile from "./basic_profile/BasicProfile.main.page";
 import AddressPage from "./address_page/AddressPage.main";
 import VendorUploadMain from "./vendor_uploads/VendorUploadsMain";
+import VendorNotes from "./vendor_notes/VendorNotes.main";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -141,7 +142,7 @@ export default function VendorPageTab({ vendor }) {
           Configurations
         </TabPanel>
         <TabPanel value={value} index={5}>
-          Configurations
+          <VendorNotes />
         </TabPanel>
         <TabPanel value={value} index={6}>
           Configurations
