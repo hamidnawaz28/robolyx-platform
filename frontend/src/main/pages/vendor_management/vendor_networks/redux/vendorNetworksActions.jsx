@@ -1,76 +1,86 @@
-import * as type from "./actionTypes";
+import * as type from './actionTypes';
 
 export const fetchVendorsStart = (data) => ({
-  type: type.FETCH_VENDORS_START,
-  payload: data,
+	type: type.FETCH_VENDORS_START,
+	payload: data,
 });
 
 export const fetchVendorsSuccess = (data) => ({
-  type: type.FETCH_VENDORS_SUCCESS,
-  payload: data,
+	type: type.FETCH_VENDORS_SUCCESS,
+	payload: data,
 });
 
 export const updateQuery = (data) => ({
-  type: type.UPDATE_QUERY,
-  payload: data,
+	type: type.UPDATE_QUERY,
+	payload: data,
 });
 
 export const updateCurrentPage = (data) => ({
-  type: type.UPDATE_CURRENT_PAGE,
-  payload: data,
+	type: type.UPDATE_CURRENT_PAGE,
+	payload: data,
 });
 
 export const updatePerPage = (data) => ({
-  type: type.UPDATE_PER_PAGE,
-  payload: data,
+	type: type.UPDATE_PER_PAGE,
+	payload: data,
 });
 
 export const fetchSingleVendorStart = (data) => ({
-  type: type.FETCH_SINGLE_VENDOR_START,
-  payload: data,
+	type: type.FETCH_SINGLE_VENDOR_START,
+	payload: data,
 });
 
 export const fetchSingleVendorSuccess = (data) => ({
-  type: type.FETCH_SINGLE_VENDOR_SUCCESS,
-  payload: data,
+	type: type.FETCH_SINGLE_VENDOR_SUCCESS,
+	payload: data,
 });
 
 export const fetchIndividualVendorAddressStart = (data) => ({
-  type: type.FETCH_INDIVIDUAL_VEN_ADDRESS_START,
-  payload: data,
+	type: type.FETCH_INDIVIDUAL_VEN_ADDRESS_START,
+	payload: data,
 });
 
 export const fetchIndividualVendorAddressSuccess = (data) => ({
-  type: type.FETCH_INDIVIDUAL_VEN_ADDRESS_SUCCESS,
-  payload: data,
+	type: type.FETCH_INDIVIDUAL_VEN_ADDRESS_SUCCESS,
+	payload: data,
 });
 
 export const fetchFileUploadStart = (data) => ({
-  type: type.FETCH_FILE_UPLOAD_START,
-  payload: data,
+	type: type.FETCH_FILE_UPLOAD_START,
+	payload: data,
 });
 
 export const fetchFileUploadSuccess = (data) => ({
-  type: type.FETCH_FILE_UPLOAD_SUCCESS,
-  payload: data,
+	type: type.FETCH_FILE_UPLOAD_SUCCESS,
+	payload: data,
 });
 
 export const deleteFileUpload = (data) => ({
-  type: type.DELETE_VENDOR_UPLOAD,
-  payload: data,
+	type: type.DELETE_VENDOR_UPLOAD,
+	payload: data,
 });
 
 export const fetchNotesStart = (data) => ({
-  type: type.FETCH_NOTES_START,
-  payload: data,
+	type: type.FETCH_NOTES_START,
+	payload: data,
 });
 
 export const fetchNotesSuccess = (data) => ({
-  type: type.FETCH_NOTES_SUCCESS,
-  payload: data,
+	type: type.FETCH_NOTES_SUCCESS,
+	payload: data,
 });
 
 export const updateNoteQuery = (data) => ({
-  type: type.UPDATE_NOTE_QUERY,
-  payload: data,
+	type: type.UPDATE_NOTE_QUERY,
+	payload: data,
+});
+
+export const fetchReviewlistStart = (data) => ({
+	type: type.FETCH_REVIEW_LIST_START,
+	payload: data,
+});
+
+export const fetchReviewlistSuccess = (data) => ({
+	type: type.FETCH_REVIEW_LIST_SUCCESS,
+	payload: data,
 });

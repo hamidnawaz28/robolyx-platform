@@ -983,6 +983,20 @@ class VendorHistoryViewSet(viewsets.ViewSet):
         return Response(dict_response)
 
 
+class ReviewTemplateAllList(viewsets.ViewSet):
+    #authentication_classes = [JWTAuthentication]
+    #permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        all_objs = ReviewTemplate.objects.all()
+        serializer = ReviewTemplateSerializer(
+            all_objs, many=True, context={"request": request})
+
+       
+        return Response(serializer.data)
+
+    
+
 class ReviewTemplateViewSet(viewsets.ViewSet):
     #authentication_classes = [JWTAuthentication]
     #permission_classes = [IsAuthenticated]
@@ -1229,12 +1243,14 @@ class ReviewResponseStatusViewSet(viewsets.ViewSet):
         query_filter = json.loads(self.request.query_params.get("searchQuery"))
         current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
-        start = per_page * current_page
-        end = per_page * current_page + per_page
+        curr = current_page-1
+        start = per_page * curr
+        end = per_page * curr + per_page
         print('START END', start, end)
 
         all_objs = ReviewResponseStatus.objects.all()
         print('QUERY FILTER', query_filter, current_page, per_page)
+        print('all objects',all_objs)
         #query_filter = ast.literal_eval(query_filter)
         response_dict = {}
         if query_filter is not None:
@@ -1246,6 +1262,8 @@ class ReviewResponseStatusViewSet(viewsets.ViewSet):
 
         serializer = ReviewResponseStatusSerializer(
             review_respnse_status, many=True, context={"request": request})
+        
+        print('filtered Data',serializer.data)
 
         response_dict = {'data': serializer.data,
                              'count': count}
