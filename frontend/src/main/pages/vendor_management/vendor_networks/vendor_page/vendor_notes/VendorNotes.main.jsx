@@ -9,7 +9,7 @@ import Grid from "@material-ui/core/Grid";
 //   updateCurrentPage,
 // } from "../redux/vendorNetworksActions";
 import VendorNotesCard from "./VendorNotesCard";
-//import VendorNetworkQueryForm from "./MyNetworkSearchQuery";
+import VendorNotesSearch from "./VendorNotesSearch";
 import NotesDialog from "./NotesDialog";
 import Pagination from "@material-ui/lab/Pagination";
 import { fetchNotesStart } from "../../redux/vendorNetworksActions";
@@ -26,13 +26,13 @@ export default function VendorNotes() {
   let { id } = useParams();
   const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
-  const { searchQuery, currentPage, perPage, vendorNotes } = useSelector(
+  const { noteQuery, currentPage, perPage, vendorNotes } = useSelector(
     (state) => state.vendorNetworks
   );
 
   let fetchApiData = {
     vendorId: id,
-    searchQuery: JSON.stringify(searchQuery),
+    noteQuery: JSON.stringify(noteQuery),
     currentPage: currentPage,
     perPage: perPage,
   };
@@ -60,7 +60,7 @@ export default function VendorNotes() {
           </Grid>
         </Grid>
         <Grid item className={classes.searchBar}>
-          {/* <VendorNetworkQueryForm /> */}
+          <VendorNotesSearch />
         </Grid>
         <Grid item style={{ marginTop: "1em" }}>
           {vendorNotes.data &&

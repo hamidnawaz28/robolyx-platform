@@ -11,6 +11,7 @@ const initialState = {
   vendorAddress: {},
   vendorUploads: [],
   vendorNotes: [],
+  noteQuery: {},
 };
 export const vendorNetworksReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -84,6 +85,11 @@ export const vendorNetworksReducer = (state = initialState, action) => {
         ...state,
         isFetching: false,
         vendorNotes: action.payload,
+      };
+    case Types.UPDATE_NOTE_QUERY:
+      return {
+        ...state,
+        noteQuery: action.payload,
       };
 
     default:

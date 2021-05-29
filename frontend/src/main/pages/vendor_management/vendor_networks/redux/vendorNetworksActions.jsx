@@ -69,3 +69,8 @@ export const fetchNotesSuccess = (data) => ({
   type: type.FETCH_NOTES_SUCCESS,
   payload: data,
 });
+
+export const updateNoteQuery = (data) => ({
+  type: type.UPDATE_NOTE_QUERY,
+  payload: data,
+});

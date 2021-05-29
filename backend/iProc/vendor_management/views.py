@@ -719,14 +719,15 @@ class VendorAddressViewSet(viewsets.ViewSet):
                 if new_data[x] != vendor1.data[x]:
                     print(x, "has changed")
                     #new_history = VendorHistory.objects.create(vendor_id=vendor1.data["vendor_id"], modified_by=vendor1.data["created_by"], change_type='modification',pre_value=vendor1.data[x] , post_value=new_data[x],item_changed=x, model_changed='Vendor Address')
-                    #new_history.save()
+                    new_history = VendorHistory.objects.create(vendor_id=VendorBasicInfo.objects.get(id=vendor1.data['vendor_id']), modified_by=User.objects.get(id=vendor1.data['created_by']), change_type='modification',pre_value=vendor1.data[x] , post_value=new_data[x],item_changed=x, model_changed='Vendor Address',)
+                    new_history.save()
 
             serializer = VendorAddressSerializer(
-                vendor, data=request.data, context={"request": request}, partial=True)
+                    vendor, data=request.data, context={"request": request}, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             dict_response = {"error": False,
-                             "message": "Successfully Updated Vendor Address"}
+                                "message": "Successfully Updated Vendor Address"}
         except:
             dict_response = {'error': True,
                              'message': "Error During Updating Vendor Address"}
@@ -825,7 +826,7 @@ class NotesViewSet(viewsets.ViewSet):
         print('vendorId', vendorId)
         all_ven_notes = all_objs.filter(vendor_id__id=vendorId)
 
-        query_filter = json.loads(self.request.query_params.get("searchQuery"))
+        query_filter = json.loads(self.request.query_params.get("noteQuery"))
         current_page = int(self.request.query_params.get("currentPage"))
         curr_page = current_page - 1
         per_page = int(self.request.query_params.get("perPage"))
@@ -886,11 +887,11 @@ class NotesViewSet(viewsets.ViewSet):
                 print(new_data[x], note1.data[x])
                 if new_data[x] != note1.data[x]:
                     print(x, "has changed")
-                    new_history = VendorHistory.objects.create(vendor_id=VendorBasicInfo.objects.get(id=note1['vendor_id']), modified_by=User.objects.get(id=note1['created_by']), change_type='modified',pre_value=note1.data[x] , post_value=new_data[x],item_changed=x, model_changed='Notes',)
+                    new_history = VendorHistory.objects.create(vendor_id=VendorBasicInfo.objects.get(id=note1.data['vendor_id']), modified_by=User.objects.get(id=note1.data['created_by']), change_type='modification',pre_value=note1.data[x] , post_value=new_data[x],item_changed=x, model_changed='Notes',)
                     new_history.save()
 
             serializer = NotesSerializer(
-                note, data=request.data, context={"request": request}, partial=True)
+                    note, data=request.data, context={"request": request}, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             dict_response = {"error": False,
@@ -938,7 +939,7 @@ class VendorHistoryViewSet(viewsets.ViewSet):
     def create(self, request):
         try:
             serializer = VendorHistorySerializer(
-                data=request.data, context={"request": request})
+                data=request.data, context={"request": request}, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             dict_response = {"error": False,
