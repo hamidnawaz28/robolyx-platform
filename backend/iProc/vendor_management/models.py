@@ -253,7 +253,7 @@ class ReviewResponse(models.Model):
 
 class ReviewResponseStatus(models.Model):
 
-    question_options = (
+    review_status_options = (
         ('pending', 'pending'),
         ('submitted', 'submitted'),
         ('completed', 'completed'),
@@ -261,7 +261,7 @@ class ReviewResponseStatus(models.Model):
 
     vendor_id = models.ForeignKey(VendorBasicInfo, on_delete=models.CASCADE, related_name="response_status_vendor")
     review_template_id = models.ForeignKey(ReviewTemplate, on_delete=models.CASCADE, related_name="response_template_status")
-    overall_status = models.CharField(max_length=255,default='pending')
+    overall_status = models.CharField(max_length=255,choices=review_status_options,default='pending')
     overall_rating = models.CharField(max_length=255,default='0' ) 
     review_name=models.CharField(max_length=255,blank=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="review_resp_user",blank=True, null=True)

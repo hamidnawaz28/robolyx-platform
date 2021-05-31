@@ -48,6 +48,7 @@ import {
     onDeleteVendorUploads,
     onFetchVendorNotes,
     onFetchVendorReviewTemplateStart,
+    onFetchVendorReviewListStart,
 } from '../../main/pages/vendor_management/vendor_networks/redux/vendorNetworksSaga';
 
 export default function* rootSaga() {
@@ -88,5 +89,6 @@ export default function* rootSaga() {
         call(onDeleteVendorUploads),
         call(onFetchVendorNotes),
         call(onFetchVendorReviewTemplateStart),
+        call(onFetchVendorReviewListStart),
     ]);
 }

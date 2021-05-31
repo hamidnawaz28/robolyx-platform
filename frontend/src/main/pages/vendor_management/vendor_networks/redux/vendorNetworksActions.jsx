@@ -84,3 +84,18 @@ export const fetchReviewlistSuccess = (data) => ({
 	type: type.FETCH_REVIEW_LIST_SUCCESS,
 	payload: data,
 });
+
+export const fetchVenReviewlistStart = (data) => ({
+	type: type.FETCH_VEN_REVIEW_LIST_START,
+	payload: data,
+});
+
+export const fetchVenReviewlistSuccess = (data) => ({
+	type: type.FETCH_VEN_REVIEW_LIST_SUCCESS,
+	payload: data,
+});
+
+export const updateVenReviewQuery = (data) => ({
+	type: type.UPDATE_VEN_REVIEW_QUERY,
+	payload: data,
+});

@@ -19,21 +19,28 @@ import formInitialValues from './formInitialValues';
 
 import useStyles from './styles';
 import { useParams } from 'react-router-dom';
-import { fetchNotesStart } from '../../../redux/vendorNetworksActions';
+import { fetchVenReviewlistStart } from '../../../redux/vendorNetworksActions';
 
 const Alert = styled(MuiAlert)(spacing);
 const { formId, formField } = FormModel;
 
 export default function MainFormikPage({ setOpen, action, ven_note, open }) {
 	const classes = useStyles();
-	let { id } = useParams();
-	console.log('iddd', id);
+
 	const [submitError, setSubmitError] = useState('');
 	const [errorCheck, setErrorCheck] = useState();
 
-	const { noteQuery, currentPage, perPage, vendorNotes } = useSelector(
-		(state) => state.vendorNetworks
-	);
+	let { id } = useParams();
+
+	const { searchVenReview, currentPage, perPage, ven_review_templates } =
+		useSelector((state) => state.vendorNetworks);
+
+	let fetchApiData = {
+		vendorId: id,
+		searchVenReview: JSON.stringify(searchVenReview),
+		currentPage: currentPage,
+		perPage: perPage,
+	};
 
 	const dispatch = useDispatch();
 
@@ -42,8 +49,7 @@ export default function MainFormikPage({ setOpen, action, ven_note, open }) {
 	async function _submitForm(values, actions) {
 		console.log(values);
 		let post_data = values;
-		const { userId: userId } =
-			localStorage.get('user') && localStorage.get('user');
+		const { userId } = localStorage.get('user') && localStorage.get('user');
 
 		post_data.vendor_id = parseInt(id);
 		post_data.created_by = userId;
@@ -65,7 +71,7 @@ export default function MainFormikPage({ setOpen, action, ven_note, open }) {
 				if (!error) {
 					console.log('posted data', data);
 					alert('Review Template Added Successfully');
-					//dispatch(fetchNotesStart({ fetchApiData }));
+					dispatch(fetchVenReviewlistStart({ fetchApiData }));
 					setSubmitError('');
 					actions.setSubmitting(false);
 					setOpen(false);

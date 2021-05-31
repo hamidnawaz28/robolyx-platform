@@ -8,7 +8,7 @@ DiversityClassificationSerializer, VendorBasicSerializer, CertAndLisencesSeriali
 VendorFileUploadSerializer, NotesSerializer, VendorHistorySerializer, ReviewTemplateSerializer, ReviewResponseSerializer, \
 ReviewResponseStatusSerializer, ComplianceVendorTaskSerializer, ComplianceVendorResponseSerializer, ComplianceTaskCriteriaSerializer, \
 VendorComplianceStatusSerializer, VendorComplianceHistorySerializer, PendingVendorBasicSerializer, ComplianceTaskSerializer, \
-VendorBasicSerializerWithDepth, ComplianceTaskSerializer, VendorFileUploadWithDepthSerializer
+VendorBasicSerializerWithDepth, ComplianceTaskSerializer, VendorFileUploadWithDepthSerializer,ReviewResponseWithDepthSerializer
 from rest_framework.generics import get_object_or_404
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.contrib.auth.models import User
@@ -1240,27 +1240,29 @@ class ReviewResponseStatusViewSet(viewsets.ViewSet):
     #permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        query_filter = json.loads(self.request.query_params.get("searchQuery"))
+        vendorId = json.loads(self.request.query_params.get("vendorId"))
+        all_objs = ReviewResponseStatus.objects.all()
+        print('vendorId', vendorId)
+        ven_review_list = all_objs.filter(vendor_id__id=vendorId)
+        query_filter = json.loads(self.request.query_params.get("searchVenReview"))
         current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
         curr = current_page-1
         start = per_page * curr
         end = per_page * curr + per_page
         print('START END', start, end)
-
-        all_objs = ReviewResponseStatus.objects.all()
         print('QUERY FILTER', query_filter, current_page, per_page)
         print('all objects',all_objs)
         #query_filter = ast.literal_eval(query_filter)
         response_dict = {}
         if query_filter is not None:
-            review_respnse_status = all_objs.filter(**query_filter)[start:end]
-            count = all_objs.count()
+            review_respnse_status = ven_review_list.filter(**query_filter)[start:end]
+            count = ven_review_list.filter(**query_filter).count()
         else:
-            review_respnse_status = all_objs[start:end]
-            count = all_objs.count()
+            review_respnse_status = ven_review_list[start:end]
+            count = ven_review_list.count()
 
-        serializer = ReviewResponseStatusSerializer(
+        serializer = ReviewResponseWithDepthSerializer(
             review_respnse_status, many=True, context={"request": request})
         
         print('filtered Data',serializer.data)

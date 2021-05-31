@@ -13,6 +13,8 @@ const initialState = {
 	vendorNotes: [],
 	noteQuery: {},
 	review_templates: [],
+	ven_review_templates: [],
+	searchVenReview: {},
 };
 export const vendorNetworksReducer = (state = initialState, action) => {
 	switch (action.type) {
@@ -96,6 +98,16 @@ export const vendorNetworksReducer = (state = initialState, action) => {
 			return {
 				...state,
 				review_templates: action.payload,
+			};
+		case Types.FETCH_VEN_REVIEW_LIST_SUCCESS:
+			return {
+				...state,
+				ven_review_templates: action.payload,
+			};
+		case Types.UPDATE_VEN_REVIEW_QUERY:
+			return {
+				...state,
+				searchVenReview: action.payload,
 			};
 
 		default:

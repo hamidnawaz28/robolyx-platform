@@ -8,6 +8,7 @@ import {
 	fetchFileUploadStart,
 	fetchNotesSuccess,
 	fetchReviewlistSuccess,
+	fetchVenReviewlistSuccess,
 } from './vendorNetworksActions';
 import * as type from './actionTypes';
 import { takeLatest, put } from 'redux-saga/effects';
@@ -165,4 +166,30 @@ export function* fetchVendorReviewTemplateData() {
 
 export function* onFetchVendorReviewTemplateStart() {
 	yield takeLatest(type.FETCH_REVIEW_LIST_START, fetchVendorReviewTemplateData);
+}
+
+//saga to fetch vendor review templates for single vendor
+
+export function* fetchVendorReviewList(action) {
+	console.log('action from fetch vendors notes saga', action);
+	try {
+		const { fetchApiData } = action.payload;
+
+		console.log('running fetch single vendors notes saga');
+		const res = yield axios.get(
+			`${SERVER_URL}vendor_management/review-response-status/`,
+			{
+				params: fetchApiData,
+			}
+		);
+		console.log('Data', res.data);
+
+		yield put(fetchVenReviewlistSuccess(res.data));
+	} catch (error) {
+		alert(error);
+	}
+}
+
+export function* onFetchVendorReviewListStart() {
+	yield takeLatest(type.FETCH_VEN_REVIEW_LIST_START, fetchVendorReviewList);
 }

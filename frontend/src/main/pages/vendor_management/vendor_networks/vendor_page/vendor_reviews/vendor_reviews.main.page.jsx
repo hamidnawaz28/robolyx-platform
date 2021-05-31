@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import AddForm from './review_modal/MainFormikPage';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import Pagination from '@material-ui/lab/Pagination';
+import VendorReviewSearch from './ReviewSearchQuery';
+
+import {
+	fetchVenReviewlistStart,
+	updateCurrentPage,
+} from '../../redux/vendorNetworksActions';
+import VendorReviewCard from './ven_review_card';
 
 const useStyles = makeStyles((theme) => ({
 	boxborder: {
@@ -15,11 +22,34 @@ const useStyles = makeStyles((theme) => ({
 		marginBottom: '1rem',
 		borderRadius: '0.25rem',
 	},
+	boxborderSearch: {
+		border: '1px solid #e5e5e5',
+		padding: '0px',
+		marginBottom: '0.5rem',
+		borderRadius: '0.25rem',
+	},
 }));
 
 function VendorReviews() {
 	const classes = useStyles();
 	const [open, setOpen] = React.useState(false);
+	const dispatch = useDispatch();
+	let { id } = useParams();
+
+	const { searchVenReview, currentPage, perPage, ven_review_templates } =
+		useSelector((state) => state.vendorNetworks);
+
+	let fetchApiData = {
+		vendorId: id,
+		searchVenReview: JSON.stringify(searchVenReview),
+		currentPage: currentPage,
+		perPage: perPage,
+	};
+	console.log('vendors.count', ven_review_templates);
+
+	useEffect(() => {
+		dispatch(fetchVenReviewlistStart({ fetchApiData }));
+	}, []);
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -27,6 +57,13 @@ function VendorReviews() {
 
 	const handleClose = () => {
 		setOpen(false);
+	};
+
+	const handlePageChange = (event, value) => {
+		let currPage = value;
+		dispatch(updateCurrentPage(currPage));
+		fetchApiData['currentPage'] = currPage;
+		dispatch(fetchVenReviewlistStart({ fetchApiData }));
 	};
 	return (
 		<Grid container direction='column' spacing={5}>
@@ -55,21 +92,26 @@ function VendorReviews() {
 					</Grid>
 				</Grid>
 			</Grid>
-			<Grid item className={classes.boxborder}>
-				<Grid container justify='flex-end'>
-					<Grid item>
-						<Button size='small' variant='contained' color='primary'>
-							Add Review
-						</Button>
-					</Grid>
-				</Grid>
+			<Grid item className={classes.boxborderSearch} sm={12}>
+				<VendorReviewSearch />
 			</Grid>
 			<Grid item className={classes.boxborder}>
-				<Grid container justify='flex-end'>
+				{ven_review_templates.data &&
+					ven_review_templates.data.map((review_ven) => (
+						<VendorReviewCard review_ven={review_ven} />
+					))}
+			</Grid>
+			<Grid item>
+				<Grid container justify='center' className={classes.paginationComp}>
 					<Grid item>
-						<Button size='small' variant='contained' color='primary'>
-							Add Review
-						</Button>
+						<Pagination
+							count={Math.ceil(ven_review_templates.count / perPage)}
+							page={currentPage}
+							onChange={handlePageChange}
+							defaultPage={1}
+							color='primary'
+							size='small'
+						/>
 					</Grid>
 				</Grid>
 			</Grid>

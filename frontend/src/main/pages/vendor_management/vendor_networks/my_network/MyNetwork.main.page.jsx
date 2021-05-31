@@ -85,7 +85,6 @@ export default function MyNetworks() {
 						defaultPage={1}
 						color='primary'
 						size='small'
-						color='secondary'
 					/>
 				</Grid>
 			</Grid>

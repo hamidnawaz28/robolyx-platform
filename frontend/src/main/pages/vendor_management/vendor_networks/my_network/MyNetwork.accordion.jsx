@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -100,7 +100,7 @@ export default function VendorAccordion({ vendor }) {
 						<Grid item sm={4}>
 							{' '}
 							<Typography className={classes.heading} color='primary'>
-								<a
+								<Link
 									className={classes.anchor}
 									onClick={() =>
 										history.push({
@@ -110,7 +110,7 @@ export default function VendorAccordion({ vendor }) {
 									}
 								>
 									{vendor.vendor_name}
-								</a>
+								</Link>
 							</Typography>
 							<Typography variant='caption'>Vendor ID: {vendor.id}</Typography>
 						</Grid>
