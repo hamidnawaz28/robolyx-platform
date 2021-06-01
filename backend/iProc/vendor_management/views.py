@@ -859,7 +859,7 @@ class NotesViewSet(viewsets.ViewSet):
             #print(vendor_data['trades'][0])
 
             serializer = NotesSerializer(
-                data=request.data, context={"request": request})
+                    data=request.data, context={"request": request}, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
 

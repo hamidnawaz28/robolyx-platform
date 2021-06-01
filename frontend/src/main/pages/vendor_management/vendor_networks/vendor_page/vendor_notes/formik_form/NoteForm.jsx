@@ -138,11 +138,14 @@ export default function NoteForm(props) {
           />
         </Grid>
         <Grid item>
-          <FileField
-            variant="outlined"
-            name={notes_file.name}
-            fullWidth
-            size="small"
+          <input
+            id="notes_file"
+            name="notes_file"
+            type="file"
+            onChange={(event) => {
+              props.setFieldValue("notes_file", event.currentTarget.files[0]);
+            }}
+            className="form-control"
           />
         </Grid>
       </Grid>

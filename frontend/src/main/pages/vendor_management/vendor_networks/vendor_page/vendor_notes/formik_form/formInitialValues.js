@@ -8,5 +8,5 @@ export default {
   [description.name]: "",
   [category.name]: "General",
   [priority.name]: "",
-  [notes_file.name]: "",
+  [notes_file.name]: null,
 };

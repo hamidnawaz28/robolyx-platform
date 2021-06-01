@@ -12,7 +12,10 @@ import VendorNotesCard from "./VendorNotesCard";
 import VendorNotesSearch from "./VendorNotesSearch";
 import NotesDialog from "./NotesDialog";
 import Pagination from "@material-ui/lab/Pagination";
-import { fetchNotesStart } from "../../redux/vendorNetworksActions";
+import {
+  fetchNotesStart,
+  updateCurrentPage,
+} from "../../redux/vendorNetworksActions";
 
 const useStyles = makeStyles((theme) => ({
   paginationComp: {
@@ -44,9 +47,9 @@ export default function VendorNotes() {
 
   const handlePageChange = (event, value) => {
     let currPage = value;
-    //dispatch(updateCurrentPage(currPage));
+    dispatch(updateCurrentPage(currPage));
     fetchApiData["currentPage"] = currPage;
-    //dispatch(fetchVendorsStart({ fetchApiData }));
+    dispatch(fetchNotesStart({ fetchApiData }));
   };
 
   return (
