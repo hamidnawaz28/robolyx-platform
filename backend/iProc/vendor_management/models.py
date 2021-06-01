@@ -191,7 +191,7 @@ class Notes(models.Model):
     subject = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notes_user")
-    created_at = models.DateField(default=timezone.now)
+    created_at = models.DateTimeField(default=timezone.now)
     vendor_id = models.ForeignKey(VendorBasicInfo, on_delete=models.CASCADE, related_name="vendor_notes_rev")
     
     def __str__(self):

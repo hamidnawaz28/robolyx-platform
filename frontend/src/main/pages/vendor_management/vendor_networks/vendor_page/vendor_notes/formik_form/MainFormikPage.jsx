@@ -124,7 +124,7 @@ export default function MainFormikPage({ setOpen, action, ven_note, open }) {
         headers: {
           "Content-Type": "application/json",
         },
-        data: JSON.stringify(post_data),
+        data: formData,
       };
       axios(config)
         .then((res) => {

@@ -881,11 +881,12 @@ class NotesViewSet(viewsets.ViewSet):
             note = get_object_or_404(queryset, pk=pk)
 
             note1 = NotesSerializer(note)
-            print('vendor',note1.data)
+            print('vendor',note1.data['created_by'])
+            print("new_data", new_data['created_by'])
 
             for x in new_data:
                 print(new_data[x], note1.data[x])
-                if new_data[x] != note1.data[x]:
+                if str(new_data[x]) != str(note1.data[x]):
                     print(x, "has changed")
                     new_history = VendorHistory.objects.create(vendor_id=VendorBasicInfo.objects.get(id=note1.data['vendor_id']), modified_by=User.objects.get(id=note1.data['created_by']), change_type='modification',pre_value=note1.data[x] , post_value=new_data[x],item_changed=x, model_changed='Notes',)
                     new_history.save()
@@ -898,7 +899,7 @@ class NotesViewSet(viewsets.ViewSet):
                              "message": "Successfully Updated Note"}
         except:
             dict_response = {'error': True,
-                             'message': "Error During Updating Note"}
+                             'message': "Error During Saving Vendor Notes"}
         return Response(dict_response)
 
     def retrieve(self, request, pk=id):
