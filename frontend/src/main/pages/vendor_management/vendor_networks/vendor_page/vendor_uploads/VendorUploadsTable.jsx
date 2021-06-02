@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchFileUploadStart } from "../../redux/vendorNetworksActions";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import Grid from "@material-ui/core/Grid";
@@ -11,7 +10,10 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { deleteFileUpload } from "../../redux/vendorNetworksActions";
+import {
+  deleteFileUpload,
+  fetchFileUploadStart,
+} from "../../redux/vendorNetworksActions";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import { downloadFile } from "../../../../../../hooks";
 

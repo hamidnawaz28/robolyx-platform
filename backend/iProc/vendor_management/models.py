@@ -163,12 +163,35 @@ class VendorAddress(models.Model):
         return self.city
 
 class Notes(models.Model):
-    category = models.CharField(max_length=255)
-    priority = models.CharField(max_length=255)
+
+    category_options = (
+        ('General', 'General'),
+        ('Audits', 'Audits'),
+        ('Billing', 'Billing'),
+        ('Flags', 'Flags'),
+        ('Insurance', 'Insurance'),
+        ('Client Changes', 'Client Changes'),
+        ('Other', 'Other'),
+        ('Client Qualification', 'Client Qualification'),
+        ('Employee', 'Employee'),
+        ('Risk Ranking', 'Risk Ranking'),
+        ('Registration', 'Registration'),
+        ('Trades', 'Trades'),
+    )
+
+    priority_options = (
+        ('low', 'low'),
+        ('medium', 'medium'),
+        ('high', 'high'),
+    )
+
+    notes_file = models.FileField(blank=True, null=True, default='settings.MEDIA_ROOT/download.png')
+    category = models.CharField(max_length=50, choices=category_options, default="No",)
+    priority = models.CharField(max_length=50, choices=priority_options, default="low",)
     subject = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notes_user")
-    created_at = models.DateField(default=timezone.now)
+    created_at = models.DateTimeField(default=timezone.now)
     vendor_id = models.ForeignKey(VendorBasicInfo, on_delete=models.CASCADE, related_name="vendor_notes_rev")
     
     def __str__(self):
@@ -230,13 +253,21 @@ class ReviewResponse(models.Model):
 
 class ReviewResponseStatus(models.Model):
 
+    review_status_options = (
+        ('pending', 'pending'),
+        ('submitted', 'submitted'),
+        ('completed', 'completed'),
+    )
+
     vendor_id = models.ForeignKey(VendorBasicInfo, on_delete=models.CASCADE, related_name="response_status_vendor")
     review_template_id = models.ForeignKey(ReviewTemplate, on_delete=models.CASCADE, related_name="response_template_status")
-    overall_status = models.CharField(max_length=255 )
-    overall_rating = models.CharField(max_length=255 ) 
+    overall_status = models.CharField(max_length=255,choices=review_status_options,default='pending')
+    overall_rating = models.CharField(max_length=255,default='0' ) 
+    review_name=models.CharField(max_length=255,blank=True, null=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="review_resp_user",blank=True, null=True)
 
     def __str__(self):
-        return self.overall_status
+        return self.review_name
 
 class ComplianceTask(models.Model):
 

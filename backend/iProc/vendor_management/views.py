@@ -8,7 +8,7 @@ DiversityClassificationSerializer, VendorBasicSerializer, CertAndLisencesSeriali
 VendorFileUploadSerializer, NotesSerializer, VendorHistorySerializer, ReviewTemplateSerializer, ReviewResponseSerializer, \
 ReviewResponseStatusSerializer, ComplianceVendorTaskSerializer, ComplianceVendorResponseSerializer, ComplianceTaskCriteriaSerializer, \
 VendorComplianceStatusSerializer, VendorComplianceHistorySerializer, PendingVendorBasicSerializer, ComplianceTaskSerializer, \
-VendorBasicSerializerWithDepth, ComplianceTaskSerializer, VendorFileUploadWithDepthSerializer
+VendorBasicSerializerWithDepth, ComplianceTaskSerializer, VendorFileUploadWithDepthSerializer,ReviewResponseWithDepthSerializer
 from rest_framework.generics import get_object_or_404
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.contrib.auth.models import User
@@ -719,14 +719,15 @@ class VendorAddressViewSet(viewsets.ViewSet):
                 if new_data[x] != vendor1.data[x]:
                     print(x, "has changed")
                     #new_history = VendorHistory.objects.create(vendor_id=vendor1.data["vendor_id"], modified_by=vendor1.data["created_by"], change_type='modification',pre_value=vendor1.data[x] , post_value=new_data[x],item_changed=x, model_changed='Vendor Address')
-                    #new_history.save()
+                    new_history = VendorHistory.objects.create(vendor_id=VendorBasicInfo.objects.get(id=vendor1.data['vendor_id']), modified_by=User.objects.get(id=vendor1.data['created_by']), change_type='modification',pre_value=vendor1.data[x] , post_value=new_data[x],item_changed=x, model_changed='Vendor Address',)
+                    new_history.save()
 
             serializer = VendorAddressSerializer(
-                vendor, data=request.data, context={"request": request}, partial=True)
+                    vendor, data=request.data, context={"request": request}, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             dict_response = {"error": False,
-                             "message": "Successfully Updated Vendor Address"}
+                                "message": "Successfully Updated Vendor Address"}
         except:
             dict_response = {'error': True,
                              'message': "Error During Updating Vendor Address"}
@@ -820,23 +821,27 @@ class NotesViewSet(viewsets.ViewSet):
     #permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        query_filter = json.loads(self.request.query_params.get("searchQuery"))
-        current_page = int(self.request.query_params.get("currentPage"))
-        per_page = int(self.request.query_params.get("perPage"))
-        start = per_page * current_page
-        end = per_page * current_page + per_page
-        print('START END', start, end)
-
+        vendorId = json.loads(self.request.query_params.get("vendorId"))
         all_objs = Notes.objects.all()
-        print('QUERY FILTER', query_filter, current_page, per_page)
+        print('vendorId', vendorId)
+        all_ven_notes = all_objs.filter(vendor_id__id=vendorId)
+
+        query_filter = json.loads(self.request.query_params.get("noteQuery"))
+        current_page = int(self.request.query_params.get("currentPage"))
+        curr_page = current_page - 1
+        per_page = int(self.request.query_params.get("perPage"))
+        start = per_page * curr_page
+        end = per_page * curr_page + per_page
+        print('START END', start, end)
+        print('QUERY FILTER', query_filter, curr_page, per_page)
 
         response_dict = {}
         if query_filter is not None:
-            vendor_notes = all_objs.filter(**query_filter)[start:end]
-            count = all_objs.count()
+            vendor_notes = all_ven_notes.filter(**query_filter)[start:end]
+            count = all_ven_notes.filter(**query_filter).count()
         else:
-            vendor_notes = all_objs[start:end]
-            count = all_objs.count()
+            vendor_notes = all_ven_notes[start:end]
+            count = all_ven_notes.count()
 
         serializer = NotesSerializer(
             vendor_notes, many=True, context={"request": request})
@@ -854,7 +859,7 @@ class NotesViewSet(viewsets.ViewSet):
             #print(vendor_data['trades'][0])
 
             serializer = NotesSerializer(
-                data=request.data, context={"request": request})
+                    data=request.data, context={"request": request}, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
 
@@ -876,24 +881,25 @@ class NotesViewSet(viewsets.ViewSet):
             note = get_object_or_404(queryset, pk=pk)
 
             note1 = NotesSerializer(note)
-            print('vendor',note1.data)
+            print('vendor',note1.data['created_by'])
+            print("new_data", new_data['created_by'])
 
             for x in new_data:
                 print(new_data[x], note1.data[x])
-                if new_data[x] != note1.data[x]:
+                if str(new_data[x]) != str(note1.data[x]):
                     print(x, "has changed")
-                    new_history = VendorHistory.objects.create(vendor_id=VendorBasicInfo.objects.get(id=new_data['vendor_id']), modified_by=User.objects.get(id=new_data['created_by']), change_type='modified',pre_value=note1.data[x] , post_value=new_data[x],item_changed=x, model_changed='Notes',)
+                    new_history = VendorHistory.objects.create(vendor_id=VendorBasicInfo.objects.get(id=note1.data['vendor_id']), modified_by=User.objects.get(id=note1.data['created_by']), change_type='modification',pre_value=note1.data[x] , post_value=new_data[x],item_changed=x, model_changed='Notes',)
                     new_history.save()
 
             serializer = NotesSerializer(
-                note, data=request.data, context={"request": request})
+                    note, data=request.data, context={"request": request}, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             dict_response = {"error": False,
                              "message": "Successfully Updated Note"}
         except:
             dict_response = {'error': True,
-                             'message': "Error During Updating Note"}
+                             'message': "Error During Saving Vendor Notes"}
         return Response(dict_response)
 
     def retrieve(self, request, pk=id):
@@ -934,7 +940,7 @@ class VendorHistoryViewSet(viewsets.ViewSet):
     def create(self, request):
         try:
             serializer = VendorHistorySerializer(
-                data=request.data, context={"request": request})
+                data=request.data, context={"request": request}, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             dict_response = {"error": False,
@@ -977,6 +983,20 @@ class VendorHistoryViewSet(viewsets.ViewSet):
                              'message': "Error During Deleting Vendor History"}
         return Response(dict_response)
 
+
+class ReviewTemplateAllList(viewsets.ViewSet):
+    #authentication_classes = [JWTAuthentication]
+    #permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        all_objs = ReviewTemplate.objects.all()
+        serializer = ReviewTemplateSerializer(
+            all_objs, many=True, context={"request": request})
+
+       
+        return Response(serializer.data)
+
+    
 
 class ReviewTemplateViewSet(viewsets.ViewSet):
     #authentication_classes = [JWTAuthentication]
@@ -1221,26 +1241,32 @@ class ReviewResponseStatusViewSet(viewsets.ViewSet):
     #permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        query_filter = json.loads(self.request.query_params.get("searchQuery"))
+        vendorId = json.loads(self.request.query_params.get("vendorId"))
+        all_objs = ReviewResponseStatus.objects.all()
+        print('vendorId', vendorId)
+        ven_review_list = all_objs.filter(vendor_id__id=vendorId)
+        query_filter = json.loads(self.request.query_params.get("searchVenReview"))
         current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
-        start = per_page * current_page
-        end = per_page * current_page + per_page
+        curr = current_page-1
+        start = per_page * curr
+        end = per_page * curr + per_page
         print('START END', start, end)
-
-        all_objs = ReviewResponseStatus.objects.all()
         print('QUERY FILTER', query_filter, current_page, per_page)
+        print('all objects',all_objs)
         #query_filter = ast.literal_eval(query_filter)
         response_dict = {}
         if query_filter is not None:
-            review_respnse_status = all_objs.filter(**query_filter)[start:end]
-            count = all_objs.count()
+            review_respnse_status = ven_review_list.filter(**query_filter)[start:end]
+            count = ven_review_list.filter(**query_filter).count()
         else:
-            review_respnse_status = all_objs[start:end]
-            count = all_objs.count()
+            review_respnse_status = ven_review_list[start:end]
+            count = ven_review_list.count()
 
-        serializer = ReviewResponseStatusSerializer(
+        serializer = ReviewResponseWithDepthSerializer(
             review_respnse_status, many=True, context={"request": request})
+        
+        print('filtered Data',serializer.data)
 
         response_dict = {'data': serializer.data,
                              'count': count}

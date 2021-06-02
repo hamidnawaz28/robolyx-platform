@@ -122,6 +122,17 @@ class ReviewResponseStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReviewResponseStatus
         fields = '__all__'
+    
+
+class ReviewResponseWithDepthSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = ReviewResponseStatus
+        fields = '__all__'
+        depth=1
+    
+
+
 
 class ComplianceVendorTaskSerializer(serializers.ModelSerializer):
 

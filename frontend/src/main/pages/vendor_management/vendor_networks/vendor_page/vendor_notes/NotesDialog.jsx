@@ -12,7 +12,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function AddressDialog({ action, ven_add }) {
+export default function NotesDialog({ action, ven_note }) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -45,7 +45,7 @@ export default function AddressDialog({ action, ven_add }) {
           <MainFormikForm
             setOpen={setOpen}
             open={open}
-            vendorAddress={ven_add && ven_add}
+            ven_note={ven_note && ven_note}
             action={action}
           />
         </DialogContent>
