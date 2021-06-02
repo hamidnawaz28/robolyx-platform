@@ -40,6 +40,7 @@
     "formik": "^2.2.5",
     "google-map-react": "1.1.7",
     "history": "^5.0.0",
+    "js-file": "^0.4.6-a",
     "js-file-download": "^0.4.12",
     "jss": "10.4.0",
     "material-ui-dropzone": "2.5.0",

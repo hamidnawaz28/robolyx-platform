@@ -18,11 +18,13 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from .serializers import userListSerializer
-
+import pandas as pd
+import time
+import os
+from django.db import IntegrityError,transaction
 from .serializers import RoleSerializer,  UserProjectSerializer,  UserDataSerializer, DefaultTemplateSerializer, SavedTemplateSerializer, \
-RuleEngineSerializer, RuleEngineHistorySerializer, InvoiceDataSerializer, TaxonomyDataSerializer, ContractDataSerializer, GLOrgDataSerializer, PODataSerializer, ImpactRuleEngineSerializer
-
-
+RuleEngineSerializer, RuleEngineHistorySerializer, InvoiceDataSerializer, TaxonomyDataSerializer, ContractDataSerializer, GLOrgDataSerializer, PODataSerializer, ImpactRuleEngineSerializer,FileUploadSerializer
+from main.tasks import add_data 
 def fetch_get_data(request):
     query = json.loads(request.GET.get("query"))
     start, end = get_data_range(request)
@@ -169,7 +171,78 @@ class ManageTemplates(viewsets.ViewSet):
                             }   
         return Response(dict_response)
 
+class FileUpload(viewsets.ViewSet):
 
+    
+    def create(self, request):
+        error_row = ''
+        try:
+            data = request.data
+            file_obj= data['file']
+            project = data['project']
+            default_template_pk = data['defaultTemplate']
+            saved_template_pk = data['savedTemplate']
+            saved_template_obj = SavedTemplate.objects.get(pk=saved_template_pk)
+            default_template_obj = DefaultTemplate.objects.get(pk=default_template_pk)
+            default_table_name = default_template_obj.TableName
+            saved_mapping = json.loads(saved_template_obj.MappedItems)
+            file_obj.name = str(int(time.time())) +'_'+ file_obj.name
+            file_name = file_obj.name
+            path = os.path.abspath(os.getcwd())
+            file_payload  = {"UserProjectReference":data['project'], "FILE": file_obj, "STATUS":'Uploading'}
+            serializer = FileUploadSerializer(
+                data=file_payload, context={"request": request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            df = pd.read_csv(path+'/media/files/'+file_obj.name, encoding = "ISO-8859-1")
+            df_columns = df.columns.tolist()
+            out_arr = []
+            out_index = []
+            for sen_key in saved_mapping:
+                for type_key in saved_mapping[sen_key]:
+                    for item in saved_mapping[sen_key][type_key]:
+                        item_value = saved_mapping[sen_key][type_key][item]
+                        if item_value in df_columns:
+                            index = df_columns.index(item_value)
+                            df_columns[index] = item
+                            out_index.append(index)
+            df.columns = df_columns
+            df = df.iloc[:, out_index]
+            df_json = json.loads(json.dumps(list(df.T.to_dict().values())))
+            table = DefaultTemplate.objects.get(pk=default_template_pk)
+            table_name = table.TableName
+            print("==========1==========")
+
+            add_data()
+            print("==========3==========")
+
+            # with transaction.atomic():
+            #     for payload_index in range(len(df_json)):
+            #         error_row = payload_index+1
+            #         payload =  df_json[payload_index]
+            #         # if(payload_index==len(df_json)-1):
+            #         #     payload['UserProjectReference']=1
+            #         # else:
+            #         add_data()
+            #         payload['UserProjectReference']= UserProject.objects.get(pk=project)
+            #         if table_name == 'invoice' or table_name == 'invoiceWOD':
+            #             new_object = InvoiceData.objects.create(**payload)
+            #         elif table_name == 'taxonomy':
+            #             new_object = TaxonomyData.objects.create(**payload)
+            #         elif table_name=='Contract':
+            #             new_object = ContractData.objects.create(**payload)
+            #         elif table_name=='GLOrg':
+            #             new_object = GLOrgData.objects.create(**payload)
+            #         elif table_name=='PurchaseOrder':
+            #             new_object = POData.objects.create(**payload)
+            dict_response = {"error": False,
+                            "message": "Saved successfully"}
+        except Exception as err:
+            print('Error--------'+str(err))
+            dict_response = {'error': True,
+                                'message': "Error---"+str(err)}
+        return Response(dict_response)
+            
 class FileImport(viewsets.ViewSet):
     def create(self, request):
         request_body_parameters = json.loads(request.body)

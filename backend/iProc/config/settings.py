@@ -140,14 +140,18 @@ EMAIL_USE_TLS = True
 DATABASES = {
     'default': {
         "ENGINE": 'django.db.backends.postgresql_psycopg2',
-        "NAME": 'iproc10',
+        "NAME": 'iproc11',
         "USER": 'postgres',
         "PASSWORD": 'admin',
         "HOST": '127.0.0.1',
         "PORT": '5432'
     }
 }
-
+REDIS_HOST = 'localhost'
+REDIS_PORT = '6379'
+BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600} 
+CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',

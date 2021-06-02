@@ -12,7 +12,8 @@ import {
 
 const Progess = () => {
   const progressStatus = useSelector((state) => state.updateProgressStatus);
-  const { status } = progressStatus;
+  const { status, percentage } = progressStatus;
+  console.log('percentage------>',percentage)
   return (
     <div>
       <Dialog
@@ -23,7 +24,7 @@ const Progess = () => {
         maxWidth="lg"
       >
         <Box style={{ width: "200px" }} pb={2} pt={2} ml={2} mr={2}>
-          <LinearProgress />
+          <LinearProgress variant="determinate" value={percentage} />
         </Box>
       </Dialog>
     </div>

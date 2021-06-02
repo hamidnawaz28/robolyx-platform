@@ -1,7 +1,9 @@
 export const SERVER_URL = "http://localhost:8090/api/";
 export const USER_DATA = "user-data";
 export const VENDOR_REQUEST = "vendor_management/vendor-req";
-export const FILE_IMPORT = "main/file-import";
+export const FILE_IMPORT = "main/file-import"
+export const FILE_UPLOAD = "main/file-upload";
+
 export const UTILS = "main/utils";
 export const RULE_ENGINE = "main/rule-engine";
 export const TEST_AND_IMPLEMENT_RULE = "main/test-and-implement-rule";

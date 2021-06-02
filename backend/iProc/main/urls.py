@@ -11,6 +11,7 @@ router.register('contract-data', views.ContractDataViewSet, basename="Contract D
 router.register('default-templates', views.DefaultTemplateViewSet, basename='Default Templates'),
 router.register('saved-templates', views.SavedTemplateViewSet, basename='Saved Templates'),
 router.register('file-import', views.FileImport, basename='Invoice And Taxonomy Data'),
+router.register('file-upload', views.FileUpload, basename='File Upload'),
 router.register('utils', views.UtilsViewSet, basename="Utils"),
 router.register('find-email-or-user-name', views.FindUserViewSet, basename='find email or user'),
 router.register('rule-engine-data', views.RuleEngineData, basename='Rule Engine Data'),

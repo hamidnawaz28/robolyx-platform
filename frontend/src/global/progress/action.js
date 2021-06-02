@@ -1,6 +1,7 @@
-export const setProgressStatus=(data)=>(
+export const setProgressStatus=(data, percentage)=>(
     {
         type: "UPDATE_PROGRESS_STATUS",
-        payload: data
+        payload: data,
+        percentage
     }
 );

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Grid, Typography, Box, Button } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { shadows } from "@material-ui/system";
@@ -9,6 +9,7 @@ import {
   fetchDefaultTemplates,
   fetchSavedTemplates,
   uploadFileData,
+  uploadFile
 } from "./upload/actions";
 import IconButton from "@material-ui/core/IconButton";
 import PageviewIcon from "@material-ui/icons/Pageview";
@@ -37,6 +38,7 @@ const getCol = (matrix, col) => {
 function Upload() {
   const dispatch = useDispatch();
   const uploadData = useSelector((state) => state.uploadDataStates);
+  const [fileObject, setFileObject] = useState({})
   const {
     defaultTemplates,
     selectedDefaultTemplate,
@@ -77,13 +79,16 @@ function Upload() {
   };
 
   const uploadFileHandle = (e) => {
+    
     try {
+      setFileObject(e.target.files[0])
       dispatch(setAttachFileName(e.target.files[0].name));
-      readXlsxFile(e.target.files[0]).then((data) => {
-        let allData = data.slice(1, -1);
-        dispatch(setAttachFileHeader(data[0]));
-        dispatch(setAttachFileData(allData));
-      });
+      // readXlsxFile(e.target.files[0]).then((data) => {
+      //   debugger
+      //   let allData = data.slice(1, -1);
+      //   dispatch(setAttachFileHeader(data[0]));
+      //   dispatch(setAttachFileData(allData));
+      // });
     } catch (err) {
       dispatch(setAttachFileName(attachFileName));
     }
@@ -92,9 +97,9 @@ function Upload() {
   const uploadDatahandle = () => {
     if (
       selectedSavedTemplate == "" ||
-      selectedDefaultTemplateData == "" ||
-      attachFileData.length == 0 ||
-      attachFileHeader.length == 0
+      selectedDefaultTemplateData == "" 
+      // attachFileData.length == 0 ||
+      // attachFileHeader.length == 0
     ) {
       if (selectedSavedTemplate == "") {
         alert("!Select a Mapped Templete");
@@ -102,40 +107,40 @@ function Upload() {
       if (selectedDefaultTemplateData == "") {
         alert("!Select a Default Templete");
       }
-      if (attachFileHeader.length == 0) {
-        alert("!Upload A File");
-      }
+      // if (attachFileHeader.length == 0) {
+      //   alert("!Upload A File");
+      // }
     } else {
-      let columnsName = [];
-      let columnsData = [];
-      let sensitivityTypes = Object.keys(selectedSavedTemplateData);
-      sensitivityTypes.forEach((sensitivityType) => {
-        let dataTypes = Object.keys(selectedSavedTemplateData[sensitivityType]);
-        dataTypes.forEach((dataType) => {
-          let allColumnsKeys = Object.keys(
-            selectedSavedTemplateData[sensitivityType][dataType]
-          );
-          allColumnsKeys.forEach((dbColumn) => {
-            let fileColumn =
-              selectedSavedTemplateData[sensitivityType][dataType][dbColumn];
-            let indexInFileColumns = attachFileHeader.indexOf(fileColumn);
-            if (indexInFileColumns != -1) {
-              let tcol = getCol(attachFileData, indexInFileColumns);
-              columnsName.push(dbColumn);
-              columnsData.push(tcol);
-            }
-          });
-        });
-      });
-      const uploadApiData = {
-        project: "1",
-        columnsName,
-        columnsData,
-        table: selectedDefaultTemplate,
-      };
-      dispatch(uploadFileData(uploadApiData));
+      // let columnsName = [];
+      // let columnsData = [];
+      // let sensitivityTypes = Object.keys(selectedSavedTemplateData);
+      // sensitivityTypes.forEach((sensitivityType) => {
+      //   let dataTypes = Object.keys(selectedSavedTemplateData[sensitivityType]);
+      //   dataTypes.forEach((dataType) => {
+      //     let allColumnsKeys = Object.keys(
+      //       selectedSavedTemplateData[sensitivityType][dataType]
+      //     );
+      //     allColumnsKeys.forEach((dbColumn) => {
+      //       let fileColumn =
+      //         selectedSavedTemplateData[sensitivityType][dataType][dbColumn];
+      //       let indexInFileColumns = attachFileHeader.indexOf(fileColumn);
+      //       if (indexInFileColumns != -1) {
+      //         let tcol = getCol(attachFileData, indexInFileColumns);
+      //         columnsName.push(dbColumn);
+      //         columnsData.push(tcol);
+      //       }
+      //     });
+      //   });
+      // });
+      var formData = new FormData();
+      formData.append("file", fileObject);
+      formData.append('project',1)
+      formData.append('defaultTemplate',selectedDefaultTemplate)
+      formData.append('savedTemplate', selectedSavedTemplate)
+      dispatch(uploadFile(formData));
     }
   };
+  console.log("fileObject-------",fileObject)
   useEffect(() => {
     dispatch(fetchDefaultTemplates());
   }, []);

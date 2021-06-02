@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import InvoiceData, Role, UserProject, \
       UserData, TaxonomyData, RuleEngine, RuleEngineHistory, \
-      ContractData, GLOrgData, POData,  DefaultTemplate, SavedTemplate
+      ContractData, GLOrgData, POData,  DefaultTemplate, SavedTemplate, FileUpload
 
 
 class InvoiceDataAdmin(admin.ModelAdmin):
@@ -39,3 +39,4 @@ admin.site.register(UserProject)
 admin.site.register(UserData)
 admin.site.register(RuleEngine)
 admin.site.register(RuleEngineHistory)
+admin.site.register(FileUpload)

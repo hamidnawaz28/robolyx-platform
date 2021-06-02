@@ -15,6 +15,7 @@ import {
   DEFAULT_TEMPLETES,
   SAVED_TEMPLETES,
   FILE_IMPORT,
+  FILE_UPLOAD
 } from "../../../../../global/constants";
 const fetchDefaultTemplates = () => {
   return (dispatch) => {
@@ -74,4 +75,28 @@ const uploadFileData = (postApiData) => {
       });
   };
 };
-export { fetchDefaultTemplates, fetchSavedTemplates, uploadFileData };
+const uploadFile = (postApiData) => {
+  return (dispatch) => {
+    dispatch(setProgressStatus(true));
+    axios
+      .post(`${SERVER_URL}${FILE_UPLOAD}/`, postApiData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+          onUploadProgress: progressEvent => {
+            const { total, loaded, timeStamp } = progressEvent
+            let done = (loaded/total)*100
+            dispatch(setProgressStatus(true, done));
+          }
+      }).then((res)=>{
+        dispatch(setProgressStatus(false, 100));
+        alert(res.data.message);
+        // dispatch(resetUploadStates());
+      })
+      .catch(err=>{
+        dispatch(setProgressStatus(false, 100));
+        alert(err);
+      })
+  };
+};
+export { fetchDefaultTemplates, fetchSavedTemplates, uploadFileData, uploadFile };

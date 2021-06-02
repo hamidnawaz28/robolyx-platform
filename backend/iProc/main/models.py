@@ -293,3 +293,8 @@ class POData(models.Model):
 
     DATE_ENTERED = models.DateField(auto_now_add=True)
     UserProjectReference = models.ForeignKey(UserProject, on_delete=models.PROTECT, blank=True, null=True)
+class FileUpload(models.Model):
+    STATUS = models.CharField(max_length=30,blank=True,null=True)
+    UPLOADED_DATE = models.DateField(auto_now_add=True)
+    UserProjectReference = models.ForeignKey(UserProject, on_delete=models.PROTECT, blank=True, null=True)
+    FILE = models.FileField(upload_to='files')

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Role,  UserProject,  UserData, DefaultTemplate, SavedTemplate, \
-RuleEngine, RuleEngineHistory, InvoiceData, TaxonomyData, ContractData, GLOrgData, POData 
+RuleEngine, RuleEngineHistory, InvoiceData, TaxonomyData, ContractData, GLOrgData, POData, FileUpload
 
 class userListSerializer(serializers.ModelSerializer):
     extra_kwargs = {'password': {'write_only': True}} 
@@ -14,7 +14,10 @@ class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role
         fields = '__all__'
-
+class FileUploadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FileUpload
+        fields = '__all__'
 class UserProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
