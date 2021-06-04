@@ -194,28 +194,14 @@ class FileUpload(viewsets.ViewSet):
                 data=file_payload, context={"request": request})
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            df = pd.read_csv(path+'/media/files/'+file_obj.name, encoding = "ISO-8859-1")
-            df_columns = df.columns.tolist()
-            out_arr = []
-            out_index = []
-            for sen_key in saved_mapping:
-                for type_key in saved_mapping[sen_key]:
-                    for item in saved_mapping[sen_key][type_key]:
-                        item_value = saved_mapping[sen_key][type_key][item]
-                        if item_value in df_columns:
-                            index = df_columns.index(item_value)
-                            df_columns[index] = item
-                            out_index.append(index)
-            df.columns = df_columns
-            df = df.iloc[:, out_index]
-            df_json = json.loads(json.dumps(list(df.T.to_dict().values())))
-            table = DefaultTemplate.objects.get(pk=default_template_pk)
-            table_name = table.TableName
-            print("==========1==========")
-
-            add_data()
-            print("==========3==========")
-
+            
+            print("---------1---------")
+            # add_data.delay(path,file_obj.name,default_template_pk,saved_mapping, project  )
+            add_data(path,file_obj.name,default_template_pk,saved_mapping, project  )
+            print("---------2---------")
+            # df_json = json.loads(json.dumps(list(df.T.to_dict().values())))
+            # table = DefaultTemplate.objects.get(pk=default_template_pk)
+            # table_name = table.TableName
             # with transaction.atomic():
             #     for payload_index in range(len(df_json)):
             #         error_row = payload_index+1
@@ -236,7 +222,7 @@ class FileUpload(viewsets.ViewSet):
             #         elif table_name=='PurchaseOrder':
             #             new_object = POData.objects.create(**payload)
             dict_response = {"error": False,
-                            "message": "Saved successfully"}
+                            "message": "File commited for processing"}
         except Exception as err:
             print('Error--------'+str(err))
             dict_response = {'error': True,
