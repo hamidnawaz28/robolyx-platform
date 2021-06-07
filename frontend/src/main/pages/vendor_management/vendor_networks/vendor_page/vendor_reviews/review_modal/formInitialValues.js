@@ -1,11 +1,11 @@
-import FormModel from './FormModel';
+import FormModel from "./FormModel";
 const {
-	formField: { review_name, review_template_id },
+  formField: { review_name, review_template },
 } = FormModel;
 
 const formInitialValues = {
-	[review_name.name]: '',
-	[review_template_id.name]: '',
+  [review_name.name]: "",
+  [review_template.name]: "",
 };
 
 export default formInitialValues;

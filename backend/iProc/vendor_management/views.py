@@ -426,14 +426,14 @@ class VendorBasicViewSet(viewsets.ViewSet):
         current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
         curr = current_page-1
-        print("curr", curr)
+        #print("curr", curr)
         start = per_page * curr
         end = per_page * curr + per_page
-        print('START END', start, end)
+        #print('START END', start, end)
 
 
         all_objs = VendorBasicInfo.objects.all()
-        print('QUERY FILTER', query_filter, current_page, per_page)
+        #print('QUERY FILTER', query_filter, current_page, per_page)
 
         response_dict = {}
         if query_filter is not None:
@@ -454,13 +454,13 @@ class VendorBasicViewSet(viewsets.ViewSet):
     def create(self, request):
         try:
             vendor_data = request.data
-            print(' ADDED DATA')
-            print('vendor_data',vendor_data)
+            #print(' ADDED DATA')
+            #print('vendor_data',vendor_data)
             new_vendor = VendorBasicInfo.objects.create(vendor_name=vendor_data['vendor_name'], contact_name=vendor_data['contact_name'],contact_email=vendor_data['contact_email'], contact_phone=vendor_data['contact_phone'], designation=vendor_data['designation'], department=vendor_data['department'], created_by=User.objects.get(id=vendor_data['created_by']),  )
             new_vendor.save()
 
             serializer = VendorBasicSerializer(new_vendor)
-            print('Vendor Serializer', serializer.data['id'])
+            #print('Vendor Serializer', serializer.data['id'])
 
             newvendorid=VendorBasicInfo.objects.get(id=serializer.data['id'])
             serializer1 = VendorBasicSerializer(newvendorid)
@@ -481,10 +481,10 @@ class VendorBasicViewSet(viewsets.ViewSet):
             vendor = get_object_or_404(queryset, pk=pk)
 
             vendor1 = VendorBasicSerializer(vendor)
-            print('vendor',vendor1.data)
+            #print('vendor',vendor1.data)
 
             for x in new_data:
-                print(new_data[x], vendor1.data[x])
+                #print(new_data[x], vendor1.data[x])
                 if new_data[x] != vendor1.data[x]:
                     print(x, "has changed")
                     new_history = VendorHistory.objects.create(vendor_id=VendorBasicInfo.objects.get(id=pk), modified_by=User.objects.get(id=new_data['created_by']), change_type='modified',pre_value=vendor1.data[x] , post_value=new_data[x],item_changed=x)
@@ -823,7 +823,7 @@ class NotesViewSet(viewsets.ViewSet):
     def list(self, request):
         vendorId = json.loads(self.request.query_params.get("vendorId"))
         all_objs = Notes.objects.all()
-        print('vendorId', vendorId)
+        #print('vendorId', vendorId)
         all_ven_notes = all_objs.filter(vendor_id__id=vendorId)
 
         query_filter = json.loads(self.request.query_params.get("noteQuery"))
@@ -832,8 +832,8 @@ class NotesViewSet(viewsets.ViewSet):
         per_page = int(self.request.query_params.get("perPage"))
         start = per_page * curr_page
         end = per_page * curr_page + per_page
-        print('START END', start, end)
-        print('QUERY FILTER', query_filter, curr_page, per_page)
+        #print('START END', start, end)
+        #print('QUERY FILTER', query_filter, curr_page, per_page)
 
         response_dict = {}
         if query_filter is not None:
@@ -881,11 +881,11 @@ class NotesViewSet(viewsets.ViewSet):
             note = get_object_or_404(queryset, pk=pk)
 
             note1 = NotesSerializer(note)
-            print('vendor',note1.data['created_by'])
-            print("new_data", new_data['created_by'])
+            #print('vendor',note1.data['created_by'])
+            #print("new_data", new_data['created_by'])
 
             for x in new_data:
-                print(new_data[x], note1.data[x])
+                #print(new_data[x], note1.data[x])
                 if str(new_data[x]) != str(note1.data[x]):
                     print(x, "has changed")
                     new_history = VendorHistory.objects.create(vendor_id=VendorBasicInfo.objects.get(id=note1.data['vendor_id']), modified_by=User.objects.get(id=note1.data['created_by']), change_type='modification',pre_value=note1.data[x] , post_value=new_data[x],item_changed=x, model_changed='Notes',)
@@ -1287,24 +1287,20 @@ class ReviewResponseStatusViewSet(viewsets.ViewSet):
         return Response(dict_response)
 
     def update(self, request, pk=id):
-        try:
-            queryset = ReviewResponseStatus.objects.all()
-            review_response_status = get_object_or_404(queryset, pk=pk)
-            serializer = ReviewResponseStatusSerializer(
-                review_response_status, data=request.data, context={"request": request})
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            dict_response = {"error": False,
+        queryset = ReviewResponseStatus.objects.all()
+        review_response_status = get_object_or_404(queryset, pk=pk)
+        serializer = ReviewResponseStatusSerializer(
+        review_response_status, data=request.data, context={"request": request}, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        dict_response = {"error": False,
                              "message": "Successfully Updated Review Response Status"}
-        except:
-            dict_response = {'error': True,
-                             'message': "Error During Updating Review Response Status"}
         return Response(dict_response)
 
     def retrieve(self, request, pk=id):
         queryset = ReviewResponseStatus.objects.all()
         review_response_status = get_object_or_404(queryset, pk=pk)
-        serializer = ReviewResponseStatusSerializer(review_response_status, context={"request": request})
+        serializer = ReviewResponseWithDepthSerializer(review_response_status, context={"request": request})
         return Response({'error': False, 'message': "Single Data Fetch", "data": serializer.data})
 
     def destroy(self, request, pk=id):

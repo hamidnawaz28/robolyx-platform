@@ -87,15 +87,18 @@ function AddReviewTemplate() {
 
               questions: [
                 {
-                  question_text: "Please enter Question Text here",
-                  question_type: "Radio",
+                  name: "checkbox_0_4356478543",
+                  question_text: "Please write question text here",
+                  question_type: "Checkbox",
                   options: [{ optionText: "Option1 Text" }],
                   answer: false,
                   answerkey: "",
                   checkbox_answerkey: [false],
                   points: 0,
                   open: false,
-                  required: false,
+                  validationProps: {
+                    required: "This is a mandatory field",
+                  },
                 },
               ],
             },

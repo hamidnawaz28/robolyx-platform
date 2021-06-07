@@ -10,8 +10,5 @@ export default [
     [review_name.name]: Yup.string().required(
       `${review_name.requiredErrorMsg}`
     ),
-    [review_template_id.name]: Yup.string().required(
-      `${review_template_id.requiredErrorMsg}`
-    ),
   }),
 ];

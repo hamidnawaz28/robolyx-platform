@@ -197,7 +197,7 @@ class FileUpload(viewsets.ViewSet):
             
             print("---------1---------")
             # add_data.delay(path,file_obj.name,default_template_pk,saved_mapping, project  )
-            add_data.delay(path,file_obj.name,default_template_pk,saved_mapping, project  )
+            add_data(path,file_obj.name,default_template_pk,saved_mapping, project  )
             print("---------2---------")
             # df_json = json.loads(json.dumps(list(df.T.to_dict().values())))
             # table = DefaultTemplate.objects.get(pk=default_template_pk)

@@ -6,8 +6,8 @@ export default {
       label: "Review Name*",
       requiredErrorMsg: "Review Name is required",
     },
-    review_template_id: {
-      name: "review_template_id",
+    review_template: {
+      name: "review_template",
       label: "Review Template*",
       requiredErrorMsg: "Review Template is required",
     },

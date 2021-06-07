@@ -11,7 +11,7 @@ def add_data(path, file_name, default_template_pk, saved_mapping, project ):
     try:        
         df = pd.read_csv(path+'/media/files/'+file_name, encoding = "ISO-8859-1")
         df_columns = df.columns.tolist()
-        out_arr = []
+        #out_arr = []
         out_index = []
         for sen_key in saved_mapping:
             for type_key in saved_mapping[sen_key]:
