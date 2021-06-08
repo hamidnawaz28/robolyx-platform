@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { makeStyles } from "@material-ui/core/styles";
 
-import ReviewQuestion from "../../../../../global/ReviewQuestion.component";
+import ComplianceQuestionTemplate from "../../../../../global/ComplianceQuestionTemplate";
 import { Typography } from "@material-ui/core";
 import SaveIcon from "@material-ui/icons/Save";
 import Button from "@material-ui/core/Button";
@@ -255,7 +255,7 @@ function AddComplianceTask() {
         </Grid>
       </Grid>
 
-      <ReviewQuestion
+      <ComplianceQuestionTemplate
         sections={sections}
         setSections={setSections}
         method="complianceTask"

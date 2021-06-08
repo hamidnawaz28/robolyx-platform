@@ -178,6 +178,7 @@ function ReviewQuestion({ sections, setSections, method }) {
         section_name: "Section Name",
         section_desp: "section Description",
         section_id: "sec86432769",
+        submitted: false,
 
         questions: [
           {
@@ -293,6 +294,7 @@ function ReviewQuestion({ sections, setSections, method }) {
       section_name: "Section Name",
       section_desp: "section Description",
       section_id: secId,
+      submitted: false,
 
       questions: [
         {

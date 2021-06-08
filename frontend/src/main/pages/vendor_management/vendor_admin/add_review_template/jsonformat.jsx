@@ -5,6 +5,7 @@ const form_structure = {
       section_name: "Section Name",
       section_desp: "Section Description",
       section_id: "sec86432769",
+      submitted: false,
 
       questions: [
         {

@@ -1199,7 +1199,7 @@ class ReviewResponseViewSet(viewsets.ViewSet):
                              "message": "Review Response saved successfully"}
         except:
             dict_response = {'error': True,
-                             'message': "Error During Saving Review Response"}
+                             'message': "Error During Saving Review Response Status"}
         return Response(dict_response)
 
     def update(self, request, pk=id):

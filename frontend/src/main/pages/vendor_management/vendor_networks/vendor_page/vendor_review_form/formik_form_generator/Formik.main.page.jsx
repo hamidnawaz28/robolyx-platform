@@ -9,25 +9,26 @@ import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import { fetchVenReviewlistStart } from "../../../redux/vendorNetworksActions";
+import StarsIcon from "@material-ui/icons/Stars";
 
 const useStyles = makeStyles((theme) => ({
   secHeading: {
-    fontSize: "2.5em",
+    fontSize: "2em",
     fontWeight: "70",
     marginBottom: "1em",
   },
   ques: {
-    fontSize: "1.2em",
+    fontSize: "1em",
     fontWeight: "70",
-    marginBottom: "0.3em",
+    marginBottom: "0.7em",
     margin: "1em 0",
   },
   txtFld: {
-    width: "100%",
-    padding: "1em",
+    width: "50%",
+    padding: "0.5em",
   },
-  selectFld: {
-    width: "100%",
+  qno: {
+    fontWeight: "600",
   },
 }));
 
@@ -50,7 +51,7 @@ const formSchemaGenerator = (questions) => {
   return formSchema;
 };
 
-function FormikMain({ section, sectionName }) {
+function FormikMain({ section, sectionName, value, setValue, isCompleted }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   let { id, vendorId } = useParams();
@@ -74,6 +75,8 @@ function FormikMain({ section, sectionName }) {
     ven_review_templates.data.filter((temp) => temp.id == id);
 
   console.log("section", section, vendorTemp[0].review_template);
+
+  let maxTabs = vendorTemp && vendorTemp[0].review_template.length - 1;
 
   useEffect(() => {
     if (formSchema && formData) {
@@ -120,10 +123,16 @@ function FormikMain({ section, sectionName }) {
       return (
         <Grid item sm={12}>
           <Typography variant="h6" className={classes.ques}>
-            <span>Q No. {props.question_no}: </span>
-            <label htmlFor={props.question_text}>{props.question_text}</label>
+            <span className={classes.qno}>Q No. {props.question_no}: </span>
+            <label className={classes.qno} htmlFor={props.question_text}>
+              {props.question_text}
+            </label>
           </Typography>
-          <TextField {...props} className={classes.txtFld} />
+          <TextField
+            {...props}
+            className={classes.txtFld}
+            disabled={isCompleted ? true : false}
+          />
           <Divider style={{ margin: "1em 0" }} />
         </Grid>
       );
@@ -133,10 +142,16 @@ function FormikMain({ section, sectionName }) {
       return (
         <Grid item sm={12}>
           <Typography variant="h6" className={classes.ques}>
-            <span>Q No. {props.question_no}: </span>
-            <label htmlFor={props.question_text}>{props.question_text}</label>
+            <span className={classes.qno}>Q No. {props.question_no}: </span>
+            <label className={classes.qno} htmlFor={props.question_text}>
+              {props.question_text}
+            </label>
           </Typography>
-          <SelectField {...props} className={classes.selectFld} />
+          <SelectField
+            {...props}
+            className={classes.selectFld}
+            isCompleted={isCompleted}
+          />
           <Divider style={{ margin: "1em 0" }} />
         </Grid>
       );
@@ -157,15 +172,18 @@ function FormikMain({ section, sectionName }) {
             console.log("this is key", key);
             if (key == ques.name) {
               console.log("Matched", ques);
-              let ques1 = { ...ques, selectedAnswer: values[key] };
+              let ques1 = {
+                ...ques,
+                selectedAnswer: values[key],
+              };
               console.log("updated ques", ques1);
               updated_q.push(ques1);
               return ques1;
             }
           });
         });
-        let sec_temp1 = { ...sec_temp, questions: updated_q };
-        console.log("updated_question", updated_q);
+        let sec_temp1 = { ...sec_temp, questions: updated_q, submitted: true };
+        console.log("updated_question", sec_temp1);
         //console.log("quwa", sec_temp1);
 
         return sec_temp1;
@@ -176,6 +194,7 @@ function FormikMain({ section, sectionName }) {
     console.log(newTemp);
 
     let post_data = { review_template: newTemp };
+
     var config = {
       method: "put",
       url: `http://127.0.0.1:8090/api/vendor_management/review-response-status/${id}/`,
@@ -184,6 +203,7 @@ function FormikMain({ section, sectionName }) {
       },
       data: post_data,
     };
+
     axios(config)
       .then((res) => {
         console.log(res);
@@ -194,6 +214,8 @@ function FormikMain({ section, sectionName }) {
           console.log("posted data", data);
           alert("Added Successfully");
           dispatch(fetchVenReviewlistStart({ fetchApiData }));
+          let val = value == maxTabs ? value : value + 1;
+          setValue(val);
           //setRefreshCert(!refreshCert);
         } else alert("Error");
         console.log(data);
@@ -210,6 +232,7 @@ function FormikMain({ section, sectionName }) {
       <Typography variant="body1" className={classes.secHeading}>
         {sectionName}
       </Typography>
+
       <Form
         enableReinitialize
         initialValues={formData && formData}
@@ -221,7 +244,7 @@ function FormikMain({ section, sectionName }) {
             <div key={key}>{getFormElement(key, formSchema[key])}</div>
           ))}
         </Grid>
-        <SubmitButton title="Submit" />
+        <SubmitButton title="Save" />
       </Form>
     </>
   );

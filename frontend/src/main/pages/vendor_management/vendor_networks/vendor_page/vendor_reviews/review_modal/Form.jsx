@@ -25,7 +25,7 @@ export default function Form(props) {
 
   const reviewTempData = reviewTemplates.map((temp) => ({
     label: temp.name,
-    value: temp.JSON_fields,
+    value: temp,
   }));
   console.log("Review Template Names", reviewTempData);
 

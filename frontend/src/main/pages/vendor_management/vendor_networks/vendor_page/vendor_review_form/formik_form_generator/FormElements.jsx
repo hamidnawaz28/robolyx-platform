@@ -10,6 +10,7 @@ import {
   useField,
   useFormik,
 } from "formik";
+import Button from "@material-ui/core/Button";
 
 export function Form(props) {
   return (
@@ -27,9 +28,11 @@ export function TextField(props) {
     <>
       <Field
         className="form-control"
+        as="textarea"
         type="text"
         name={name}
         id={name}
+        rows={3}
         placeholder={placeholder || ""}
         {...rest}
       />
@@ -42,10 +45,16 @@ export function TextField(props) {
 }
 
 export function SelectField(props) {
-  const { name, label, options } = props;
+  const { name, label, options, isCompleted } = props;
   return (
     <>
-      <Field as="select" id={name} name={name} sty>
+      <Field
+        as="select"
+        id={name}
+        name={name}
+        style={{ width: "50%", padding: "0.5em" }}
+        disabled={isCompleted ? true : false}
+      >
         <option value="">Choose...</option>
         {options.map((optn, index) => (
           <option
@@ -67,8 +76,14 @@ export function SubmitButton(props) {
   const { isSubmitting } = useFormikContext();
 
   return (
-    <button type="submit" {...rest} disabled={isSubmitting}>
+    <Button
+      variant="contained"
+      color="primary"
+      type="submit"
+      {...rest}
+      disabled={isSubmitting}
+    >
       {title}
-    </button>
+    </Button>
   );
 }

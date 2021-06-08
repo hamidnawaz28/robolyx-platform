@@ -232,25 +232,6 @@ class ReviewTemplate(models.Model):
     def __str__(self):
         return self.name
 
-class ReviewResponse(models.Model):
-
-    question_options = (
-        ('text', 'text'),
-        ('rating', 'rating'),
-    )
-
-    vendor_id = models.ForeignKey(VendorBasicInfo, on_delete=models.CASCADE, related_name="vendor_review_user")
-    template_id = models.ForeignKey(ReviewTemplate, on_delete=models.CASCADE, related_name="review_response_template")
-    section_name = models.CharField(max_length=255 )
-    question_no = models.CharField(max_length=255 )
-    question_text = models.TextField()
-    answer = models.TextField()
-    question_type = models.CharField(max_length=50, choices=question_options, default="text",)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="review_response_user")
-
-    def __str__(self):
-        return self.section_name
-
 class ReviewResponseStatus(models.Model):
 
     review_status_options = (
@@ -265,9 +246,31 @@ class ReviewResponseStatus(models.Model):
     overall_rating = models.CharField(max_length=255,default='0' ) 
     review_name=models.CharField(max_length=255,blank=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="review_resp_user",blank=True, null=True)
+    review_type = models.CharField(max_length=255 ) 
 
     def __str__(self):
         return self.review_name
+
+
+class ReviewResponse(models.Model):
+
+    question_options = (
+        ('Text', 'Text'),
+        ('Dropdown', 'Dropdown'),
+    )
+
+    vendor_id = models.ForeignKey(VendorBasicInfo, on_delete=models.CASCADE, related_name="vendor_review_user")
+    template_id = models.ForeignKey(ReviewResponseStatus, on_delete=models.CASCADE, related_name="review_response_template",)
+    section_name = models.CharField(max_length=255 )
+    question_no = models.CharField(max_length=255 )
+    question_text = models.TextField()
+    answer = models.TextField()
+    question_type = models.CharField(max_length=50, choices=question_options, default="Text",)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="review_response_user")
+
+    def __str__(self):
+        return self.section_name
+
 
 class ComplianceTask(models.Model):
 
