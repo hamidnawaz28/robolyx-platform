@@ -10,7 +10,7 @@ export default [
     [review_name.name]: Yup.string().required(
       `${review_name.requiredErrorMsg}`
     ),
-    [review_template.name]: Yup.string().required(
+    [review_template.name]: Yup.object().required(
       `${review_template.requiredErrorMsg}`
     ),
   }),
