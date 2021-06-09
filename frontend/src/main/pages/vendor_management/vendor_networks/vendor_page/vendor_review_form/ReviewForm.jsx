@@ -139,7 +139,8 @@ function ReviewForm() {
           if (currentQues.question_type == "Dropdown")
             prev += parseInt(currentQues.selectedAnswer);
           return prev;
-        }, 0) / sec.questions.length
+        }, 0) /
+        sec.questions.filter((ques) => ques.question_type == "Dropdown").length
     );
 
   let finalRating =
@@ -147,7 +148,8 @@ function ReviewForm() {
     overall_rating.reduce((a, b) => parseInt(a) + parseInt(b), 0) /
       overall_rating.length;
 
-  console.log("overall_rating", overall_rating, finalRating);
+  console.log("finalRating", finalRating);
+  console.log("overall_rating", overall_rating);
 
   const handleSubmit = () => {
     vendorTemp[0].review_template.map((sec) => {
@@ -265,9 +267,9 @@ function ReviewForm() {
               <Grid item>Performance Review Rating</Grid>
               <Grid item>
                 <Rating
-                  name="disabled"
+                  name="readonly"
                   value={finalRating && finalRating}
-                  disabled
+                  readOnly
                 />
               </Grid>
             </Grid>

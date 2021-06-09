@@ -10,6 +10,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchVenReviewlistStart } from "../../redux/vendorNetworksActions";
 import { useParams, Link, useHistory } from "react-router-dom";
+import Rating from "@material-ui/lab/Rating";
 
 const useStyles = makeStyles({
   root: {
@@ -88,11 +89,15 @@ export default function VendorReviewCard({ review_ven }) {
       });
   };
 
+  let overall_rating = review_ven.overall_rating;
+
+  console.log("overall_rating", overall_rating);
+
   return (
     <Card className={classes.root} variant="outlined">
       <CardContent style={{ padding: "0px" }}>
         <Grid container style={{ padding: "1em" }}>
-          <Grid item sm={4}>
+          <Grid item sm={3}>
             <Grid container direction="column">
               <Grid item style={{ fontWeight: "bold" }}>
                 <Link
@@ -109,14 +114,14 @@ export default function VendorReviewCard({ review_ven }) {
               <Grid item>Review ID: {review_ven.id}</Grid>
             </Grid>
           </Grid>
-          <Grid item sm={4}>
+          <Grid item sm={3}>
             <Grid container direction="column">
               <Grid item>Overall Rating : {review_ven.overall_rating}</Grid>
               <Grid item>Created By: {review_ven.created_by.username}</Grid>
             </Grid>
           </Grid>
 
-          <Grid item sm={3}>
+          <Grid item sm={2}>
             {review_ven.overall_status === "completed" ? (
               <Chip
                 label={review_ven.overall_status}
@@ -145,6 +150,9 @@ export default function VendorReviewCard({ review_ven }) {
                 }}
               />
             )}
+          </Grid>
+          <Grid item sm={3}>
+            <Rating name="read-only" value={overall_rating} readOnly />
           </Grid>
           <Grid item sm={1}>
             <DeleteForeverIcon
