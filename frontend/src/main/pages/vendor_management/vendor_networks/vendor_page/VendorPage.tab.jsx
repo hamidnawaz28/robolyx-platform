@@ -14,6 +14,7 @@ import VendorNotes from "./vendor_notes/VendorNotes.main";
 import VendorReviews from "./vendor_reviews/vendor_reviews.main.page";
 import { updateCurrentPage } from "../redux/vendorNetworksActions";
 import { useDispatch, useSelector } from "react-redux";
+import VendorCompliance from "./vendor_compliance/VendorCompliance.main.page";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -138,7 +139,7 @@ export default function VendorPageTab({ vendor }) {
           <AddressPage vendor={vendor} />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          Configurations
+          <VendorCompliance />
         </TabPanel>
         <TabPanel value={value} index={3}>
           <VendorUploadMain />

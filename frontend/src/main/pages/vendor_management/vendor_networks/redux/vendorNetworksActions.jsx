@@ -99,3 +99,18 @@ export const updateVenReviewQuery = (data) => ({
   type: type.UPDATE_VEN_REVIEW_QUERY,
   payload: data,
 });
+
+export const fetchVenComplianceListStart = (data) => ({
+  type: type.FETCH_VEN_COMPLIANCE_LIST_START,
+  payload: data,
+});
+
+export const fetchVenComplianceListSuccess = (data) => ({
+  type: type.FETCH_VEN_COMPLIANCE_LIST_SUCCESS,
+  payload: data,
+});
+
+export const updateVenComplianceQuery = (data) => ({
+  type: type.UPDATE_VEN_COMPLIANCE_QUERY,
+  payload: data,
+});

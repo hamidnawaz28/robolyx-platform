@@ -8,7 +8,8 @@ DiversityClassificationSerializer, VendorBasicSerializer, CertAndLisencesSeriali
 VendorFileUploadSerializer, NotesSerializer, VendorHistorySerializer, ReviewTemplateSerializer, ReviewResponseSerializer, \
 ReviewResponseStatusSerializer, ComplianceVendorTaskSerializer, ComplianceVendorResponseSerializer, ComplianceTaskCriteriaSerializer, \
 VendorComplianceStatusSerializer, VendorComplianceHistorySerializer, PendingVendorBasicSerializer, ComplianceTaskSerializer, \
-VendorBasicSerializerWithDepth, ComplianceTaskSerializer, VendorFileUploadWithDepthSerializer,ReviewResponseWithDepthSerializer
+VendorBasicSerializerWithDepth, ComplianceTaskSerializer, VendorFileUploadWithDepthSerializer,ReviewResponseWithDepthSerializer, \
+ComplianceVendorTaskSerializerWithDepth
 from rest_framework.generics import get_object_or_404
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.contrib.auth.models import User
@@ -1320,25 +1321,29 @@ class ComplianceVendorTaskViewSet(viewsets.ViewSet):
     #permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        query_filter = json.loads(self.request.query_params.get("searchQuery"))
+        vendorId = json.loads(self.request.query_params.get("vendorId"))
+        all_objs = ComplianceVendorTask.objects.all()
+        print('vendorId', vendorId)
+        ven_comp_list = all_objs.filter(vendor_id__id=vendorId)
+        query_filter = json.loads(self.request.query_params.get("complianceQuery"))
         current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
-        start = per_page * current_page
-        end = per_page * current_page + per_page
+        curr = current_page-1
+        print("curr", curr)
+        start = per_page * curr
+        end = per_page * curr + per_page
         print('START END', start, end)
-
-        all_objs = ComplianceVendorTask.objects.all()
         print('QUERY FILTER', query_filter, current_page, per_page)
-        #query_filter = ast.literal_eval(query_filter)
+        
         response_dict = {}
         if query_filter is not None:
-            compliance_ven_tasks = all_objs.filter(**query_filter)[start:end]
-            count = all_objs.count()
+            compliance_ven_tasks = ven_comp_list.filter(**query_filter)[start:end]
+            count = ven_comp_list.filter(**query_filter).count()
         else:
-            compliance_ven_tasks = all_objs[start:end]
-            count = all_objs.count()
+            compliance_ven_tasks = ven_comp_list[start:end]
+            count = ven_comp_list.count()
 
-        serializer = ComplianceVendorTaskSerializer(
+        serializer = ComplianceVendorTaskSerializerWithDepth(
             compliance_ven_tasks, many=True, context={"request": request})
 
         response_dict = {'data': serializer.data,
@@ -1400,10 +1405,12 @@ class ComplianceVendorResponseViewSet(viewsets.ViewSet):
         query_filter = json.loads(self.request.query_params.get("searchQuery"))
         current_page = int(self.request.query_params.get("currentPage"))
         per_page = int(self.request.query_params.get("perPage"))
-        start = per_page * current_page
-        end = per_page * current_page + per_page
+        curr = current_page-1
+        print("curr", curr)
+        start = per_page * curr
+        end = per_page * curr + per_page
         print('START END', start, end)
-
+        
         all_objs = ComplianceVendorResponse.objects.all()
         print('QUERY FILTER', query_filter, current_page, per_page)
         #query_filter = ast.literal_eval(query_filter)

@@ -140,6 +140,13 @@ class ComplianceVendorTaskSerializer(serializers.ModelSerializer):
         model = ComplianceVendorTask
         fields = '__all__'
 
+class ComplianceVendorTaskSerializerWithDepth(serializers.ModelSerializer):
+
+    class Meta:
+        model = ComplianceVendorTask
+        fields = '__all__'
+        depth=1
+
 class ComplianceVendorResponseSerializer(serializers.ModelSerializer):
 
     class Meta:

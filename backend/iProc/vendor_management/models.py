@@ -314,6 +314,7 @@ class ComplianceVendorTask(models.Model):
         ('done', 'done'),
         ('pending', 'pending'),
         ('overdue', 'overdue'),
+        ('submitted', 'submitted'),
     )
 
     priority_options = (
@@ -335,14 +336,18 @@ class ComplianceVendorTask(models.Model):
         ('forced-non-compliant', 'forced-non-compliant'),
     )
 
-    compliance_template_id = models.ForeignKey(ReviewTemplate, on_delete=models.CASCADE, related_name="compliance_vendortask_user")
+    compliance_template = models.JSONField()
+    compliance_form_name = models.CharField(max_length=255, blank=True, null=True, )
     priority = models.CharField(max_length=50, choices=priority_options, default="low",)
     req_status = models.CharField(max_length=50, choices=req_status_options, default="optional",)
     completion_status = models.CharField(max_length=50, choices=completion_options, default="text",)
     vendor_id = models.ForeignKey(VendorBasicInfo, on_delete=models.CASCADE, related_name="compliance_task_vendor")
     created_at = models.DateField(default=timezone.now)
     deadline = models.DateField()
+    last_updated = models.DateField(blank=True, null=True,)
     compliance_status = models.CharField(max_length=50, choices=compliance_options, default="non-compliant",)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="compliance_vendor_user",)
+    form_type = models.CharField(max_length=255,)
 
     def __str__(self):
         return self.req_status
@@ -355,7 +360,7 @@ class ComplianceVendorResponse(models.Model):
     )
 
     vendor_id = models.ForeignKey(VendorBasicInfo, on_delete=models.CASCADE, related_name="comp_vendor_response")
-    compliance_template_id = models.ForeignKey(ReviewTemplate, on_delete=models.CASCADE, related_name="comp_vendor_response_template")
+    compliance_template_id = models.ForeignKey(ComplianceVendorTask, on_delete=models.CASCADE, related_name="comp_vendor_response_template")
     section_name = models.CharField(max_length=255 )
     question_no = models.CharField(max_length=255 )
     question_text = models.TextField()
