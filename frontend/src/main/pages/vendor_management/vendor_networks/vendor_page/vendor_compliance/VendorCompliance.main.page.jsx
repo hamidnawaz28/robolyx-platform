@@ -4,11 +4,11 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
-//import AddForm from "./review_modal/MainFormikPage";
+import AddForm from "./compliance_modal/MainFormikPage";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
-// import VendorReviewSearch from "./ReviewSearchQuery";
+import ComplianceSearchForm from "./ComplianceSearchForm";
 
 import {
   fetchVenComplianceListStart,
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
   boxborderSearch: {
     border: "1px solid #e5e5e5",
-    padding: "0px",
+    padding: "5px",
     marginBottom: "0.5rem",
     borderRadius: "0.25rem",
   },
@@ -66,6 +66,29 @@ function VendorCompliance() {
     fetchApiData["currentPage"] = currPage;
     dispatch(fetchVenComplianceListStart({ fetchApiData }));
   };
+
+  let overdueCompliance =
+    ven_compliance_list.data &&
+    ven_compliance_list.data.filter(
+      (comp) => comp.completion_status == "overdue"
+    );
+
+  let pendingCompliance =
+    ven_compliance_list.data &&
+    ven_compliance_list.data.filter(
+      (comp) => comp.completion_status == "pending"
+    );
+
+  let submittedCompliance =
+    ven_compliance_list.data &&
+    ven_compliance_list.data.filter(
+      (comp) => comp.completion_status == "submitted"
+    );
+
+  let completedCompliance =
+    ven_compliance_list.data &&
+    ven_compliance_list.data.filter((comp) => comp.completion_status == "done");
+
   return (
     <Grid container direction="column">
       <Grid item className={classes.boxborder} sm={12}>
@@ -88,84 +111,91 @@ function VendorCompliance() {
               <DialogTitle id="alert-dialog-title">
                 {"Add New Performance Review"}
               </DialogTitle>
-              {/* <AddForm setOpen={setOpen} /> */}
+              <AddForm setOpen={setOpen} />
             </Dialog>
           </Grid>
         </Grid>
       </Grid>
       <Grid item className={classes.boxborderSearch} sm={12}>
-        {/* <VendorReviewSearch /> */}
+        <ComplianceSearchForm />
       </Grid>
-      <Grid item className={classes.boxborder}>
-        <Typography variant="h6" style={{ marginBottom: "0.5em" }}>
-          Overdue Tasks
-        </Typography>
-        {ven_compliance_list.data &&
-        ven_compliance_list.data.filter(
-          (comp) => comp.completion_status == "overdue"
-        ).length ? (
-          ven_compliance_list.data
-            .filter((comp) => comp.completion_status == "overdue")
-            .map((ven_compliance) => (
+      <Grid item>
+        <Grid container>
+          <Typography variant="h6" style={{ marginBottom: "0.5em" }}>
+            Overdue Tasks
+          </Typography>
+
+          {overdueCompliance && overdueCompliance.length ? (
+            overdueCompliance.map((ven_compliance) => (
               <VendorComplianceCard ven_compliance={ven_compliance} />
             ))
-        ) : (
-          <Typography variant="caption">There are no matching items</Typography>
-        )}
+          ) : (
+            <Grid item sm={12} style={{ marginBottom: "1em" }}>
+              <Typography variant="caption">
+                There are no matching items
+              </Typography>
+            </Grid>
+          )}
+        </Grid>
       </Grid>
-      <Grid item className={classes.boxborder} sm={12}>
-        <Typography variant="h6" style={{ marginBottom: "0.5em" }}>
-          Task Awaiting Supplier Submission
-        </Typography>
-
+      <Grid item>
         <Grid container>
-          {ven_compliance_list.data &&
-            ven_compliance_list.data
-              .filter((comp) => comp.completion_status == "pending")
-              .map((ven_compliance) => (
-                <>
-                  <Grid item sm={12}>
-                    <VendorComplianceCard ven_compliance={ven_compliance} />
-                  </Grid>
-                </>
-              ))}
+          <Typography variant="h6" style={{ marginBottom: "0.5em" }}>
+            Task Awaiting Supplier Submission
+          </Typography>
+
+          {pendingCompliance && pendingCompliance.length ? (
+            pendingCompliance.map((ven_compliance) => (
+              <VendorComplianceCard ven_compliance={ven_compliance} />
+            ))
+          ) : (
+            <Grid item sm={12} style={{ marginBottom: "1em" }}>
+              <Typography variant="caption">
+                There are no matching items
+              </Typography>
+            </Grid>
+          )}
         </Grid>
       </Grid>
 
-      <Grid item className={classes.boxborder} sm={12}>
-        <Typography variant="h6" style={{ marginBottom: "0.5em" }}>
-          Task Awaiting Verification
-        </Typography>
-        {ven_compliance_list.data &&
-        ven_compliance_list.data.filter(
-          (comp) => comp.completion_status == "submitted"
-        ).length ? (
-          ven_compliance_list.data
-            .filter((comp) => comp.completion_status == "submitted")
-            .map((ven_compliance) => (
+      <Grid item sm={12}>
+        <Grid container>
+          <Typography variant="h6" style={{ marginBottom: "0.5em" }}>
+            Task Awaiting Verification
+          </Typography>
+
+          {submittedCompliance && submittedCompliance.length ? (
+            submittedCompliance.map((ven_compliance) => (
               <VendorComplianceCard ven_compliance={ven_compliance} />
             ))
-        ) : (
-          <Typography variant="caption">There are no matching items</Typography>
-        )}
+          ) : (
+            <Grid item sm={12} style={{ marginBottom: "1em" }}>
+              <Typography variant="caption">
+                There are no matching items
+              </Typography>
+            </Grid>
+          )}
+        </Grid>
       </Grid>
 
-      <Grid item className={classes.boxborder} sm={12}>
-        <Typography variant="h6" style={{ marginBottom: "0.5em" }}>
-          Completed
-        </Typography>
-        {ven_compliance_list.data &&
-        ven_compliance_list.data.filter(
-          (comp) => comp.completion_status == "done"
-        ).length ? (
-          ven_compliance_list.data
-            .filter((comp) => comp.completion_status == "done")
-            .map((ven_compliance) => (
+      <Grid item sm={12}>
+        <Grid container>
+          <Typography variant="h6" style={{ marginBottom: "0.5em" }}>
+            Completed
+          </Typography>
+
+          {completedCompliance && completedCompliance.length ? (
+            completedCompliance.map((ven_compliance) => (
               <VendorComplianceCard ven_compliance={ven_compliance} />
             ))
-        ) : (
-          <Typography variant="caption">There are no matching items</Typography>
-        )}
+          ) : (
+            <Grid item sm={12} style={{ marginBottom: "1em" }}>
+              <Typography variant="caption">
+                There are no matching items
+              </Typography>
+            </Grid>
+          )}
+        </Grid>
       </Grid>
 
       <Grid item sm={12}>

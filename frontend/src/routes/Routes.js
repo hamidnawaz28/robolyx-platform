@@ -15,6 +15,7 @@ import EditComplianceTask from "../main/pages/vendor_management/vendor_configura
 import VendorPage from "../main/pages/vendor_management/vendor_networks/vendor_page/VendorPage.main";
 import localStorage from "../common/storage/localStorage";
 import ReviewForm from "../main/pages/vendor_management/vendor_networks/vendor_page/vendor_review_form/ReviewForm";
+import ComplianceForm from "../main/pages/vendor_management/vendor_networks/vendor_page/compliance_form/ComplianceForm";
 
 const childProtectedRoutes = (Layout, routes) =>
   routes.map(({ children, path, component: Component }, index) =>
@@ -136,6 +137,15 @@ const Routes = () => (
         render={() => (
           <DashboardLayout>
             <ReviewForm />
+          </DashboardLayout>
+        )}
+      />
+      <Route
+        exact
+        path="/vendor-management/vendor/:vendorId/compliance-form/:id/"
+        render={() => (
+          <DashboardLayout>
+            <ComplianceForm />
           </DashboardLayout>
         )}
       />

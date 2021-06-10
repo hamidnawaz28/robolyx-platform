@@ -114,3 +114,13 @@ export const updateVenComplianceQuery = (data) => ({
   type: type.UPDATE_VEN_COMPLIANCE_QUERY,
   payload: data,
 });
+
+export const fetchCompLististStart = (data) => ({
+  type: type.FETCH_COMP_LIST_START,
+  payload: data,
+});
+
+export const fetchCompLististSuccess = (data) => ({
+  type: type.FETCH_COMP_LIST_SUCCESS,
+  payload: data,
+});

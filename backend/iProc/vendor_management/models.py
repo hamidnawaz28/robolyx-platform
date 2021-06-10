@@ -334,20 +334,26 @@ class ComplianceVendorTask(models.Model):
         ('non-compliant', 'non-compliant'),
         ('forced-compliant', 'forced-compliant'),
         ('forced-non-compliant', 'forced-non-compliant'),
+        ('conditional-compliant', 'conditional-compliant'),
+    )
+
+    form_type_options = (
+        ('auto_answer', 'auto_answer'),
+        ('to_be_reviewed', 'to_be_reviewed')
     )
 
     compliance_template = models.JSONField()
     compliance_form_name = models.CharField(max_length=255, blank=True, null=True, )
     priority = models.CharField(max_length=50, choices=priority_options, default="low",)
     req_status = models.CharField(max_length=50, choices=req_status_options, default="optional",)
-    completion_status = models.CharField(max_length=50, choices=completion_options, default="text",)
+    completion_status = models.CharField(max_length=50, choices=completion_options, default="pending",)
     vendor_id = models.ForeignKey(VendorBasicInfo, on_delete=models.CASCADE, related_name="compliance_task_vendor")
     created_at = models.DateField(default=timezone.now)
     deadline = models.DateField()
     last_updated = models.DateField(blank=True, null=True,)
-    compliance_status = models.CharField(max_length=50, choices=compliance_options, default="non-compliant",)
+    compliance_status = models.CharField(max_length=50, choices=compliance_options, default="conditional-compliant",)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="compliance_vendor_user",)
-    form_type = models.CharField(max_length=255,)
+    form_type = models.CharField(max_length=255, choices=form_type_options, default="to_be_reviewed",)
 
     def __str__(self):
         return self.req_status

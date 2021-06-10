@@ -10,6 +10,7 @@ import {
   fetchReviewlistSuccess,
   fetchVenReviewlistSuccess,
   fetchVenComplianceListSuccess,
+  fetchCompLististSuccess,
 } from "./vendorNetworksActions";
 import * as type from "./actionTypes";
 import { takeLatest, put } from "redux-saga/effects";
@@ -222,4 +223,25 @@ export function* onFetchVendorComplianceListStart() {
     type.FETCH_VEN_COMPLIANCE_LIST_START,
     fetchVendorComplianceList
   );
+}
+
+//saga to fetch comp list
+
+export function* fetchCompList(action) {
+  console.log("action from fetch vendors notes saga", action);
+  try {
+    console.log("running fetch single vendors notes saga");
+    const res = yield axios.get(
+      `${SERVER_URL}vendor_management/compliance-task-list/`
+    );
+    console.log("Data", res.data);
+
+    yield put(fetchCompLististSuccess(res.data));
+  } catch (error) {
+    alert(error);
+  }
+}
+
+export function* onFetchCompListStart() {
+  yield takeLatest(type.FETCH_COMP_LIST_START, fetchCompList);
 }

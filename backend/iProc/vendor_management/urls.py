@@ -5,7 +5,7 @@ VendorBasicViewSet, CertificatesAndLisencesViewSet, VendorAddressViewSet, Vendor
 VendorHistoryViewSet, ReviewTemplateViewSet, ReviewResponseViewSet, ReviewResponseStatusViewSet, ComplianceVendorTaskViewSet, \
 ComplianceVendorResponseViewSet, ComplianceTaskCriteriaViewSet, VendorComplianceStatusViewSet, VendorComplianceHistoryViewSet, \
 ApprovedVendorsViewSet, PendingVendorsViewSet, VendorTagsList, VendorTradesList, VendorCategoriesList, DiversityClassificationList, \
-ComplianceTaskViewSet, CertificatesAndLiscenceList, IndividualVendorAddresses,ReviewTemplateAllList
+ComplianceTaskViewSet, CertificatesAndLiscenceList, IndividualVendorAddresses,ReviewTemplateAllList, ComplianceTaskList
 
 router=routers.DefaultRouter()
 router.register("vendor-req", VendorRequestViewSet, basename='vendor-req')
@@ -36,7 +36,7 @@ router.register("vendor-diversity-list", DiversityClassificationList, basename='
 router.register("compliance-task", ComplianceTaskViewSet, basename='compliance-task')
 router.register("cert-lisc-list", CertificatesAndLiscenceList, basename='cert-lisc-list')
 router.register('ven_add', IndividualVendorAddresses, basename='ven_add')
-
+router.register("compliance-task-list", ComplianceTaskList, basename='compliance-task-list')
 
 
 urlpatterns = [

@@ -1354,7 +1354,7 @@ class ComplianceVendorTaskViewSet(viewsets.ViewSet):
     def create(self, request):
         try:
             serializer = ComplianceVendorTaskSerializer(
-                data=request.data, context={"request": request})
+                data=request.data, context={"request": request}, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             dict_response = {"error": False,
@@ -1828,6 +1828,23 @@ class IndividualVendorAddresses(viewsets.ViewSet):
 
         serializer = VendorAddressSerializer(
             ven_add, many=True, context={"request": request})
+
+        response_dict = {'data': serializer.data,
+                             'count': count}
+
+        return Response(response_dict)
+
+class ComplianceTaskList(viewsets.ViewSet):
+    #authentication_classes = [JWTAuthentication]
+    #permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        all_objs = ComplianceTask.objects.all()
+        response_dict = {}
+        count = all_objs.count()
+
+        serializer = ComplianceTaskSerializer(
+            all_objs, many=True, context={"request": request})
 
         response_dict = {'data': serializer.data,
                              'count': count}
