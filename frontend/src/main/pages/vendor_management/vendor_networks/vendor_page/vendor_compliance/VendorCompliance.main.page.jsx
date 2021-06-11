@@ -19,14 +19,14 @@ import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   boxborder: {
-    border: "1px solid #e5e5e5",
+    border: "1px solid #ced4da",
     marginBottom: "1rem",
     borderRadius: "0.25rem",
   },
   boxborderSearch: {
-    border: "1px solid #e5e5e5",
+    border: "1px solid #ced4da",
     padding: "5px",
-    marginBottom: "0.5rem",
+    marginBottom: "1.5rem",
     borderRadius: "0.25rem",
   },
 }));
@@ -91,8 +91,8 @@ function VendorCompliance() {
 
   return (
     <Grid container direction="column">
-      <Grid item className={classes.boxborder} sm={12}>
-        <Grid container justify="flex-end">
+      <Grid item sm={12}>
+        <Grid container justify="flex-end" style={{ marginBottom: "1em" }}>
           <Grid item>
             <Button
               variant="contained"
@@ -121,7 +121,11 @@ function VendorCompliance() {
       </Grid>
       <Grid item>
         <Grid container>
-          <Typography variant="h6" style={{ marginBottom: "0.5em" }}>
+          <Typography
+            variant="h6"
+            style={{ marginBottom: "0.5em" }}
+            color="primary"
+          >
             Overdue Tasks
           </Typography>
 
@@ -140,7 +144,11 @@ function VendorCompliance() {
       </Grid>
       <Grid item>
         <Grid container>
-          <Typography variant="h6" style={{ marginBottom: "0.5em" }}>
+          <Typography
+            variant="h6"
+            style={{ marginBottom: "0.5em" }}
+            color="primary"
+          >
             Task Awaiting Supplier Submission
           </Typography>
 
@@ -160,7 +168,11 @@ function VendorCompliance() {
 
       <Grid item sm={12}>
         <Grid container>
-          <Typography variant="h6" style={{ marginBottom: "0.5em" }}>
+          <Typography
+            variant="h6"
+            style={{ marginBottom: "0.5em", fontWeight: "600" }}
+            color="primary"
+          >
             Task Awaiting Verification
           </Typography>
 
@@ -180,7 +192,11 @@ function VendorCompliance() {
 
       <Grid item sm={12}>
         <Grid container>
-          <Typography variant="h6" style={{ marginBottom: "0.5em" }}>
+          <Typography
+            variant="h6"
+            style={{ marginBottom: "0.5em" }}
+            color="primary"
+          >
             Completed
           </Typography>
 

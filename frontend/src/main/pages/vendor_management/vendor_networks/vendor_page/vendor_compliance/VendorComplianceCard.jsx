@@ -21,7 +21,7 @@ import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
 const useStyles = makeStyles({
   root: {
     marginBottom: "1em",
-    border: "1px solid #e5e5e5",
+    border: "1px solid #ced4da",
     marginBottom: "1rem",
     borderRadius: "0.25rem",
   },
