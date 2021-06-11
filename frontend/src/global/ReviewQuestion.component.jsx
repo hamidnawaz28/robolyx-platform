@@ -927,6 +927,7 @@ function ReviewQuestion({ sections, setSections, method }) {
                                                   ques.options[p].optionText
                                                 }
                                                 fullWidth
+                                                disabled
                                                 onChange={(e) => {
                                                   handleOptionValue(
                                                     e.target.value,

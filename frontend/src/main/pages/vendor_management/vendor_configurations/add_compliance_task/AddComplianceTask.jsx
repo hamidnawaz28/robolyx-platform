@@ -124,9 +124,12 @@ function AddComplianceTask() {
             {
               section_name: "Section Name",
               section_desp: "section Description",
+              section_id: "sec86432769",
+              submitted: false,
 
               questions: [
                 {
+                  name: "0_4356478543",
                   question_text: "Please enter Question Text here",
                   question_type: "Radio",
                   options: [{ optionText: "Option1 Text" }],
@@ -136,6 +139,7 @@ function AddComplianceTask() {
                   points: 0,
                   open: false,
                   required: false,
+                  selectedAnswer: "",
                 },
               ],
             },

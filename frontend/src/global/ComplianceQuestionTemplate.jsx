@@ -185,6 +185,8 @@ function ComplianceQuestionTemplate({ sections, setSections, method }) {
       {
         section_name: "Section Name",
         section_desp: "section Description",
+        section_id: "sec86432769",
+        submitted: false,
 
         questions: [
           {
@@ -201,6 +203,7 @@ function ComplianceQuestionTemplate({ sections, setSections, method }) {
               required: "",
             },
             required: false,
+            selectedAnswer: "",
           },
         ],
       },
@@ -285,6 +288,7 @@ function ComplianceQuestionTemplate({ sections, setSections, method }) {
         required: "",
       },
       required: false,
+      selectedAnswer: "",
     });
     setSections(sections_temp);
     method === "update"
@@ -299,9 +303,14 @@ function ComplianceQuestionTemplate({ sections, setSections, method }) {
   function addSectionField() {
     let sections_temp = [...sections];
 
+    let randomNum = Math.floor(Math.random() * 100000000);
+    let secId = "sec" + randomNum;
+
     sections_temp.push({
       section_name: "Section Name",
       section_desp: "section Description",
+      section_id: secId,
+      submitted: false,
 
       questions: [
         {
@@ -318,6 +327,7 @@ function ComplianceQuestionTemplate({ sections, setSections, method }) {
             required: "",
           },
           required: false,
+          selectedAnswer: "",
         },
       ],
     });
@@ -483,14 +493,6 @@ function ComplianceQuestionTemplate({ sections, setSections, method }) {
     var sec = [...sections];
 
     sec[i].questions[k].required = !sec[i].questions[k].required;
-
-    if (sec[i].questions[k].required == true) {
-      sec[i].questions[k]["validationProps"] = {
-        required: "This is a mandatory field",
-      };
-    } else if (sec[i].questions[k].required == false) {
-      delete sec[i].questions[k].validationProps;
-    }
 
     console.log("question from required", sec[i].questions[k]);
 
