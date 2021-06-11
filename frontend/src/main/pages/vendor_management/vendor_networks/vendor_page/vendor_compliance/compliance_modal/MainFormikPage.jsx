@@ -19,7 +19,7 @@ import formInitialValues from "./formInitialValues";
 
 import useStyles from "./styles";
 import { useParams } from "react-router-dom";
-import { fetchVenReviewlistStart } from "../../../redux/vendorNetworksActions";
+import { fetchVenComplianceListStart } from "../../../redux/vendorNetworksActions";
 
 const Alert = styled(MuiAlert)(spacing);
 const { formId, formField } = FormModel;
@@ -32,12 +32,12 @@ export default function MainFormikPage({ setOpen, action, ven_note, open }) {
 
   let { id } = useParams();
 
-  const { searchVenReview, currentPage, perPage, ven_review_templates } =
+  const { complianceQuery, currentPage, perPage, ven_compliance_list } =
     useSelector((state) => state.vendorNetworks);
 
   let fetchApiData = {
     vendorId: id,
-    searchVenReview: JSON.stringify(searchVenReview),
+    complianceQuery: JSON.stringify(complianceQuery),
     currentPage: currentPage,
     perPage: perPage,
   };
@@ -79,7 +79,7 @@ export default function MainFormikPage({ setOpen, action, ven_note, open }) {
         if (!error) {
           console.log("posted data", data);
           alert("Compliance Task Added Successfully");
-          //dispatch(fetchVenReviewlistStart({ fetchApiData }));
+          dispatch(fetchVenComplianceListStart({ fetchApiData }));
           setSubmitError("");
           actions.setSubmitting(false);
           setOpen(false);
