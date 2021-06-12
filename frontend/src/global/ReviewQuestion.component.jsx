@@ -938,16 +938,6 @@ function ReviewQuestion({ sections, setSections, method }) {
                                                 }}
                                               ></TextField>
                                             </Grid>
-                                            <Grid item sm={1} xs={2}>
-                                              <IconButton
-                                                aria-label="delete"
-                                                onClick={() => {
-                                                  removeOption(i, k, p);
-                                                }}
-                                              >
-                                                <CloseIcon />
-                                              </IconButton>
-                                            </Grid>
                                           </Grid>
                                         ))
                                       )}

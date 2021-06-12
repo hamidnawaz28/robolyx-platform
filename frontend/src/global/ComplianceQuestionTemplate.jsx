@@ -146,7 +146,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ComplianceQuestionTemplate({ sections, setSections, method }) {
+function ComplianceQuestionTemplate({
+  sections,
+  setSections,
+  method,
+  formType,
+}) {
   const classes = useStyles();
   const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const matchesXs = useMediaQuery((theme) => theme.breakpoints.down("xs"));
@@ -192,11 +197,12 @@ function ComplianceQuestionTemplate({ sections, setSections, method }) {
           {
             name: "0_4356478543",
             question_text: "Please write question text here",
-            question_type: "Checkbox",
+            question_type: "Radio",
             options: [{ optionText: "Option1 Text" }],
             answer: false,
             answerkey: "",
-            checkbox_answerkey: [false],
+            checkbox_selected: [false],
+            checkbox_answerkey: [],
             points: 0,
             open: false,
             validationProps: {
@@ -256,6 +262,9 @@ function ComplianceQuestionTemplate({ sections, setSections, method }) {
   function addQuestionType(i, k, type) {
     let sections_temp = [...sections];
     sections_temp[i].questions[k].question_type = type;
+    sections_temp[i].questions[k].answerkey = "";
+    sections_temp[i].questions[k].checkbox_answerkey = [];
+    sections_temp[i].questions[k].checkbox_selected.fill(false);
     setSections(sections_temp);
     method === "update"
       ? localStorage.set("section_edit", sections_temp)
@@ -277,11 +286,12 @@ function ComplianceQuestionTemplate({ sections, setSections, method }) {
     sections_temp[i].questions.push({
       name: quesName,
       question_text: "Please write question text here",
-      question_type: "Checkbox",
+      question_type: "Radio",
       options: [{ optionText: "Option1 Text" }],
       answer: false,
       answerkey: "",
-      checkbox_answerkey: [false],
+      checkbox_selected: [false],
+      checkbox_answerkey: [],
       points: 0,
       open: false,
       validationProps: {
@@ -316,11 +326,12 @@ function ComplianceQuestionTemplate({ sections, setSections, method }) {
         {
           name: "checkbox_0_4356478543",
           question_text: "Please write question text here",
-          question_type: "Checkbox",
+          question_type: "Radio",
           options: [{ optionText: "Option1 Text" }],
           answer: false,
           answerkey: "",
-          checkbox_answerkey: [false],
+          checkbox_selected: [false],
+          checkbox_answerkey: [],
           points: 0,
           open: false,
           validationProps: {
@@ -388,7 +399,7 @@ function ComplianceQuestionTemplate({ sections, setSections, method }) {
         optionText:
           "Option " + (sections_temp[i].questions[k].options.length + 1),
       });
-      sections_temp[i].questions[k].checkbox_answerkey.push(false);
+      sections_temp[i].questions[k].checkbox_selected.push(false);
     } else {
       alert("Max 5 options are allowed");
     }
@@ -405,6 +416,24 @@ function ComplianceQuestionTemplate({ sections, setSections, method }) {
 
   function addAnswer(i, k) {
     let sections_temp = [...sections];
+    sections_temp[i].questions[k].answer =
+      !sections_temp[i].questions[k].answer;
+    setSections(sections_temp);
+    method === "update"
+      ? localStorage.set("section_edit", sections_temp)
+      : method === "complianceTask"
+      ? localStorage.set("compliance_task", sections_temp)
+      : method === "update-compliance-task"
+      ? localStorage.set("comp_task_temp", sections_temp)
+      : localStorage.set("section", sections_temp);
+  }
+
+  function resetAnswers(i, k) {
+    let sections_temp = [...sections];
+    sections_temp[i].questions[k].answerkey = "";
+    sections_temp[i].questions[k].checkbox_answerkey = [];
+    sections_temp[i].questions[k].checkbox_selected.fill(false);
+
     sections_temp[i].questions[k].answer =
       !sections_temp[i].questions[k].answer;
     setSections(sections_temp);
@@ -510,7 +539,7 @@ function ComplianceQuestionTemplate({ sections, setSections, method }) {
     var sections_temp = [...sections];
     if (sections_temp[i].questions[k].options.length > 1) {
       sections_temp[i].questions[k].options.splice(p, 1);
-      sections_temp[i].questions[k].checkbox_answerkey.splice(p, 1);
+      sections_temp[i].questions[k].checkbox_selected.splice(p, 1);
       setSections(sections_temp);
       method === "update"
         ? localStorage.set("section_edit", sections_temp)
@@ -526,9 +555,13 @@ function ComplianceQuestionTemplate({ sections, setSections, method }) {
     let sections_temp = [...sections];
     if (sections_temp[i].questions[k].question_type === "Checkbox") {
       sections_temp[i].questions[k].answerkey = "";
-      sections_temp[i].questions[k].checkbox_answerkey = sections_temp[
+      sections_temp[i].questions[k].checkbox_selected = sections_temp[
         i
-      ].questions[k].checkbox_answerkey.map((v, i) => (i === p ? !v : v));
+      ].questions[k].checkbox_selected.map((v, i) => (i === p ? !v : v));
+
+      sections_temp[i].questions[k].checkbox_answerkey.push(ans);
+
+      //checkbox_answerkey: [],
     } else {
       sections_temp[i].questions[k].answerkey = "";
       sections_temp[i].questions[k].answerkey = ans;
@@ -727,14 +760,35 @@ function ComplianceQuestionTemplate({ sections, setSections, method }) {
                                           spacing={2}
                                         >
                                           <Grid item>
-                                            <Typography
-                                              className={
-                                                classes.Accordion_summ_Ques
-                                              }
+                                            <Grid
+                                              container
+                                              justify="space-between"
                                             >
-                                              {matches ? "" : "Question #"}{" "}
-                                              {k + 1}. {ques.question_text}
-                                            </Typography>
+                                              <Grid item>
+                                                <Typography
+                                                  className={
+                                                    classes.Accordion_summ_Ques
+                                                  }
+                                                >
+                                                  {matches ? "" : "Question #"}{" "}
+                                                  {k + 1}. {ques.question_text}
+                                                </Typography>
+                                              </Grid>
+                                              <Grid item>
+                                                {ques.answerkey == "" &&
+                                                ques.checkbox_answerkey ==
+                                                  [] ? (
+                                                  <Typography
+                                                    variant="caption"
+                                                    style={{ color: "red" }}
+                                                  >
+                                                    Correct Answer Not Selected
+                                                  </Typography>
+                                                ) : (
+                                                  ""
+                                                )}
+                                              </Grid>
+                                            </Grid>
                                           </Grid>
                                           {ques.question_type === "Text" ? (
                                             <Grid
@@ -933,172 +987,275 @@ function ComplianceQuestionTemplate({ sections, setSections, method }) {
                                               paddingTop: matches ? 0 : 20,
                                             }}
                                           >
-                                            <Select
-                                              className="select"
-                                              style={{
-                                                color: "#5f6368",
-                                                fontSize: "13px",
-                                              }}
-                                              value={ques.question_type}
-                                            >
-                                              {/* <MenuItem value="radio" className="menuitem" >
+                                            {formType == "to_be_reviewed" ? (
+                                              <Select
+                                                className="select"
+                                                style={{
+                                                  color: "#5f6368",
+                                                  fontSize: "13px",
+                                                }}
+                                                value={ques.question_type}
+                                              >
+                                                {/* <MenuItem value="radio" className="menuitem" >
 														 <ShortTextIcon style={{marginRight:"10px"}} /> <span style={{marginBottom:"10px"}}>Short Paragraph</span></MenuItem>
 														 */}
-                                              <MenuItem
-                                                id="text"
-                                                value="Text"
-                                                onClick={() => {
-                                                  addQuestionType(i, k, "Text");
-                                                }}
-                                              >
-                                                <Grid
-                                                  container
-                                                  alignItems="center"
-                                                >
-                                                  <Grid item>
-                                                    <SubjectIcon
-                                                      style={{
-                                                        marginRight: "10px",
-                                                      }}
-                                                    />
-                                                  </Grid>
-                                                  <Grid item>Paragraph</Grid>
-                                                </Grid>
-                                              </MenuItem>
-
-                                              <MenuItem
-                                                id="file_upload"
-                                                value="File Upload"
-                                                onClick={() => {
-                                                  addQuestionType(
-                                                    i,
-                                                    k,
-                                                    "File Upload"
-                                                  );
-                                                }}
-                                              >
-                                                <Grid
-                                                  container
-                                                  alignItems="center"
-                                                >
-                                                  <Grid item>
-                                                    <BackupIcon
-                                                      style={{
-                                                        marginRight: "10px",
-                                                      }}
-                                                    />
-                                                  </Grid>
-                                                  <Grid item>File Upload</Grid>
-                                                </Grid>
-                                              </MenuItem>
-
-                                              <MenuItem
-                                                id="date"
-                                                value="Date"
-                                                onClick={() => {
-                                                  addQuestionType(i, k, "Date");
-                                                }}
-                                              >
-                                                <Grid
-                                                  container
-                                                  alignItems="center"
-                                                >
-                                                  <Grid item>
-                                                    <EventIcon
-                                                      style={{
-                                                        marginRight: "10px",
-                                                      }}
-                                                    />
-                                                  </Grid>
-
-                                                  <Grid item>Date</Grid>
-                                                </Grid>
-                                              </MenuItem>
-
-                                              {/* <MenuItem id="checkbox"><RadioButtonCheckedIcon checked style={{marginRight:"10px", color:"#70757a"}}/> Multiple Choice</MenuItem> */}
-                                              <MenuItem
-                                                id="Checkbox"
-                                                value="Checkbox"
-                                                onClick={() => {
-                                                  addQuestionType(
-                                                    i,
-                                                    k,
-                                                    "Checkbox"
-                                                  );
-                                                }}
-                                              >
-                                                <Grid
-                                                  container
-                                                  alignItems="center"
-                                                >
-                                                  <Grid item>
-                                                    <CheckBoxIcon
-                                                      style={{
-                                                        marginRight: "10px",
-                                                        color: "#70757a",
-                                                      }}
-                                                      checked
-                                                    />
-                                                  </Grid>
-                                                  <Grid item>Checkboxes</Grid>
-                                                </Grid>
-                                              </MenuItem>
-                                              <MenuItem
-                                                id="dropdown"
-                                                value="Dropdown"
-                                                onClick={() => {
-                                                  addQuestionType(
-                                                    i,
-                                                    k,
-                                                    "Dropdown"
-                                                  );
-                                                }}
-                                              >
-                                                <Grid
-                                                  container
-                                                  alignItems="center"
-                                                >
-                                                  <Grid item>
-                                                    <ArrowDropDownCircleIcon
-                                                      style={{
-                                                        marginRight: "10px",
-                                                        color: "#70757a",
-                                                      }}
-                                                      checked
-                                                    />
-                                                  </Grid>
-                                                  <Grid item>Dropdown</Grid>
-                                                </Grid>
-                                              </MenuItem>
-
-                                              <MenuItem
-                                                id="Radio"
-                                                value="Radio"
-                                                onClick={() => {
-                                                  addQuestionType(
-                                                    i,
-                                                    k,
-                                                    "Radio"
-                                                  );
-                                                }}
-                                              >
-                                                <Radio
-                                                  style={{
-                                                    marginRight: "10px",
-                                                    color: "#70757a",
+                                                <MenuItem
+                                                  id="text"
+                                                  value="Text"
+                                                  onClick={() => {
+                                                    addQuestionType(
+                                                      i,
+                                                      k,
+                                                      "Text"
+                                                    );
                                                   }}
-                                                  checked
-                                                />
-                                                Multiple Choice
-                                              </MenuItem>
-                                              {/* <MenuItem value="40"> <BackupIcon style={{marginRight:"10px"}} /> File Upload</MenuItem>
+                                                >
+                                                  <Grid
+                                                    container
+                                                    alignItems="center"
+                                                  >
+                                                    <Grid item>
+                                                      <SubjectIcon
+                                                        style={{
+                                                          marginRight: "10px",
+                                                        }}
+                                                      />
+                                                    </Grid>
+                                                    <Grid item>Paragraph</Grid>
+                                                  </Grid>
+                                                </MenuItem>
+
+                                                <MenuItem
+                                                  id="file_upload"
+                                                  value="File Upload"
+                                                  onClick={() => {
+                                                    addQuestionType(
+                                                      i,
+                                                      k,
+                                                      "File Upload"
+                                                    );
+                                                  }}
+                                                >
+                                                  <Grid
+                                                    container
+                                                    alignItems="center"
+                                                  >
+                                                    <Grid item>
+                                                      <BackupIcon
+                                                        style={{
+                                                          marginRight: "10px",
+                                                        }}
+                                                      />
+                                                    </Grid>
+                                                    <Grid item>
+                                                      File Upload
+                                                    </Grid>
+                                                  </Grid>
+                                                </MenuItem>
+
+                                                <MenuItem
+                                                  id="date"
+                                                  value="Date"
+                                                  onClick={() => {
+                                                    addQuestionType(
+                                                      i,
+                                                      k,
+                                                      "Date"
+                                                    );
+                                                  }}
+                                                >
+                                                  <Grid
+                                                    container
+                                                    alignItems="center"
+                                                  >
+                                                    <Grid item>
+                                                      <EventIcon
+                                                        style={{
+                                                          marginRight: "10px",
+                                                        }}
+                                                      />
+                                                    </Grid>
+
+                                                    <Grid item>Date</Grid>
+                                                  </Grid>
+                                                </MenuItem>
+
+                                                {/* <MenuItem id="checkbox"><RadioButtonCheckedIcon checked style={{marginRight:"10px", color:"#70757a"}}/> Multiple Choice</MenuItem> */}
+                                                <MenuItem
+                                                  id="Checkbox"
+                                                  value="Checkbox"
+                                                  onClick={() => {
+                                                    addQuestionType(
+                                                      i,
+                                                      k,
+                                                      "Checkbox"
+                                                    );
+                                                  }}
+                                                >
+                                                  <Grid
+                                                    container
+                                                    alignItems="center"
+                                                  >
+                                                    <Grid item>
+                                                      <CheckBoxIcon
+                                                        style={{
+                                                          marginRight: "10px",
+                                                          color: "#70757a",
+                                                        }}
+                                                        checked
+                                                      />
+                                                    </Grid>
+                                                    <Grid item>Checkboxes</Grid>
+                                                  </Grid>
+                                                </MenuItem>
+                                                <MenuItem
+                                                  id="dropdown"
+                                                  value="Dropdown"
+                                                  onClick={() => {
+                                                    addQuestionType(
+                                                      i,
+                                                      k,
+                                                      "Dropdown"
+                                                    );
+                                                  }}
+                                                >
+                                                  <Grid
+                                                    container
+                                                    alignItems="center"
+                                                  >
+                                                    <Grid item>
+                                                      <ArrowDropDownCircleIcon
+                                                        style={{
+                                                          marginRight: "10px",
+                                                          color: "#70757a",
+                                                        }}
+                                                        checked
+                                                      />
+                                                    </Grid>
+                                                    <Grid item>Dropdown</Grid>
+                                                  </Grid>
+                                                </MenuItem>
+
+                                                <MenuItem
+                                                  id="Radio"
+                                                  value="Radio"
+                                                  onClick={() => {
+                                                    addQuestionType(
+                                                      i,
+                                                      k,
+                                                      "Radio"
+                                                    );
+                                                  }}
+                                                >
+                                                  <Radio
+                                                    style={{
+                                                      marginRight: "10px",
+                                                      color: "#70757a",
+                                                    }}
+                                                    checked
+                                                  />
+                                                  Multiple Choice
+                                                </MenuItem>
+                                                {/* <MenuItem value="40"> <BackupIcon style={{marginRight:"10px"}} /> File Upload</MenuItem>
                                     <MenuItem value="50"> <LinearScaleIcon style={{marginRight:"10px"}} /> Linear Scale</MenuItem>
                                     <MenuItem value="60"> <AppsIcon style={{marginRight:"10px"}} /> Tick-box grid</MenuItem>*/}
 
-                                              {/* <MenuItem value="aate"  onClick= {(e)=>{setType(e.target.id)}}> <EventIcon style={{marginRight:"10px"}} /> Date</MenuItem>
+                                                {/* <MenuItem value="aate"  onClick= {(e)=>{setType(e.target.id)}}> <EventIcon style={{marginRight:"10px"}} /> Date</MenuItem>
                                     <MenuItem value="date"  onClick= {(e)=>{setType(e.target.id)}}> <ScheduleIcon style={{marginRight:"10px"}} /> Time</MenuItem>
 					                                  */}
-                                            </Select>
+                                              </Select>
+                                            ) : (
+                                              <Select
+                                                className="select"
+                                                style={{
+                                                  color: "#5f6368",
+                                                  fontSize: "13px",
+                                                }}
+                                                value={ques.question_type}
+                                              >
+                                                <MenuItem
+                                                  id="date"
+                                                  value="Date"
+                                                  onClick={() => {
+                                                    addQuestionType(
+                                                      i,
+                                                      k,
+                                                      "Date"
+                                                    );
+                                                  }}
+                                                >
+                                                  <Grid
+                                                    container
+                                                    alignItems="center"
+                                                  >
+                                                    <Grid item>
+                                                      <EventIcon
+                                                        style={{
+                                                          marginRight: "10px",
+                                                        }}
+                                                      />
+                                                    </Grid>
+
+                                                    <Grid item>Date</Grid>
+                                                  </Grid>
+                                                </MenuItem>
+                                                <MenuItem
+                                                  id="dropdown"
+                                                  value="Dropdown"
+                                                  onClick={() => {
+                                                    addQuestionType(
+                                                      i,
+                                                      k,
+                                                      "Dropdown"
+                                                    );
+                                                  }}
+                                                >
+                                                  <Grid
+                                                    container
+                                                    alignItems="center"
+                                                  >
+                                                    <Grid item>
+                                                      <ArrowDropDownCircleIcon
+                                                        style={{
+                                                          marginRight: "10px",
+                                                          color: "#70757a",
+                                                        }}
+                                                        checked
+                                                      />
+                                                    </Grid>
+                                                    <Grid item>Dropdown</Grid>
+                                                  </Grid>
+                                                </MenuItem>
+
+                                                <MenuItem
+                                                  id="Radio"
+                                                  value="Radio"
+                                                  onClick={() => {
+                                                    addQuestionType(
+                                                      i,
+                                                      k,
+                                                      "Radio"
+                                                    );
+                                                  }}
+                                                >
+                                                  <Radio
+                                                    style={{
+                                                      marginRight: "10px",
+                                                      color: "#70757a",
+                                                    }}
+                                                    checked
+                                                  />
+                                                  Multiple Choice
+                                                </MenuItem>
+                                                {/* <MenuItem value="40"> <BackupIcon style={{marginRight:"10px"}} /> File Upload</MenuItem>
+                                    <MenuItem value="50"> <LinearScaleIcon style={{marginRight:"10px"}} /> Linear Scale</MenuItem>
+                                    <MenuItem value="60"> <AppsIcon style={{marginRight:"10px"}} /> Tick-box grid</MenuItem>*/}
+
+                                                {/* <MenuItem value="aate"  onClick= {(e)=>{setType(e.target.id)}}> <EventIcon style={{marginRight:"10px"}} /> Date</MenuItem>
+                                    <MenuItem value="date"  onClick= {(e)=>{setType(e.target.id)}}> <ScheduleIcon style={{marginRight:"10px"}} /> Time</MenuItem>
+					                                  */}
+                                              </Select>
+                                            )}
                                           </Grid>
                                         </Grid>
                                       </Grid>
@@ -1217,7 +1374,7 @@ function ComplianceQuestionTemplate({ sections, setSections, method }) {
                                                     name="checkedB"
                                                     color="primary"
                                                     checked={
-                                                      ques.checkbox_answerkey[p]
+                                                      ques.checkbox_selected[p]
                                                     }
                                                     required={ques.type}
                                                     disabled
@@ -1304,27 +1461,53 @@ function ComplianceQuestionTemplate({ sections, setSections, method }) {
                                           style={{ marginTop: "1em" }}
                                         >
                                           <Grid item sm={8} xs={12}>
-                                            <Button
-                                              size="small"
-                                              onClick={() => {
-                                                addAnswer(i, k);
-                                              }}
-                                              style={{
-                                                textTransform: "none",
-                                                color: "#4285f4",
-                                                fontSize: "13px",
-                                                fontWeight: "600",
-                                              }}
+                                            <Grid
+                                              container
+                                              spacing={2}
+                                              direction="column"
                                             >
-                                              <CropRotateIcon
-                                                style={{
-                                                  border: "2px solid #4285f4",
-                                                  padding: "2px",
-                                                  marginRight: "8px",
-                                                }}
-                                              />
-                                              Answer key
-                                            </Button>
+                                              <Grid item>
+                                                <Button
+                                                  size="small"
+                                                  onClick={() => {
+                                                    addAnswer(i, k);
+                                                  }}
+                                                  style={{
+                                                    textTransform: "none",
+                                                    color: "#4285f4",
+                                                    fontSize: "13px",
+                                                    fontWeight: "600",
+                                                  }}
+                                                >
+                                                  <CropRotateIcon
+                                                    style={{
+                                                      border:
+                                                        "2px solid #4285f4",
+                                                      padding: "2px",
+                                                      marginRight: "8px",
+                                                    }}
+                                                  />
+                                                  Answer key
+                                                </Button>
+                                              </Grid>
+                                              <Grid item>
+                                                {ques.answerkey == "" &&
+                                                ques.checkbox_answerkey
+                                                  .length == 0 ? (
+                                                  <Typography
+                                                    variant="caption"
+                                                    style={{
+                                                      color: "red",
+                                                      lineHeight: "0",
+                                                    }}
+                                                  >
+                                                    Please Select Correct Answer
+                                                  </Typography>
+                                                ) : (
+                                                  ""
+                                                )}
+                                              </Grid>
+                                            </Grid>
                                           </Grid>
                                           <Grid item>
                                             <IconButton
@@ -1407,6 +1590,7 @@ function ComplianceQuestionTemplate({ sections, setSections, method }) {
                                               type="number"
                                               variant="outlined"
                                               size="small"
+                                              label="Question Marks"
                                               className="points"
                                               min="0"
                                               step="1"
@@ -1611,7 +1795,7 @@ function ComplianceQuestionTemplate({ sections, setSections, method }) {
                                                           }
                                                           checked={
                                                             ques
-                                                              .checkbox_answerkey[
+                                                              .checkbox_selected[
                                                               p
                                                             ]
                                                           }
@@ -1646,7 +1830,23 @@ function ComplianceQuestionTemplate({ sections, setSections, method }) {
                                             doneAnswer(i, k);
                                           }}
                                         >
-                                          Done
+                                          Save Correct Answer
+                                        </Button>
+                                        <Button
+                                          variant="outlined"
+                                          color="primary"
+                                          style={{
+                                            textTransform: "none",
+                                            color: "#4285f4",
+                                            fontSize: "12px",
+                                            marginTop: "12px",
+                                            fontWeight: "600",
+                                          }}
+                                          onClick={() => {
+                                            resetAnswers(i, k);
+                                          }}
+                                        >
+                                          Back
                                         </Button>
                                       </Grid>
                                     </Grid>

@@ -85,6 +85,14 @@ function AddComplianceTask() {
   function handleSaveTemplate() {
     let form_questions = localStorage.get("compliance_task");
 
+    let unselectedAns = 0;
+
+    form_questions.map((sec) =>
+      sec.questions.map((q) => (q.answerkey == "" ? (unselectedAns += 1) : ""))
+    );
+
+    console.log("unselectedAns", unselectedAns);
+
     let user = localStorage.get("user");
     let created_by = user.userId;
     let form_name = formName;
@@ -102,56 +110,57 @@ function AddComplianceTask() {
 
     console.log("Sec and user here", post_data);
 
-    var config = {
-      method: "post",
-      url: "http://127.0.0.1:8090/api/vendor_management/compliance-task/",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: post_data,
-      //data: JSON.stringify(data),
-    };
-    axios(config)
-      .then((res) => {
-        const { data } = res;
-        const { error, message } = JSON.stringify(data);
-        if (!error) {
-          alert("Compliance Task Submitted Successfully");
+    // var config = {
+    //   method: "post",
+    //   url: "http://127.0.0.1:8090/api/vendor_management/compliance-task/",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   data: post_data,
+    //   //data: JSON.stringify(data),
+    // };
+    // axios(config)
+    //   .then((res) => {
+    //     const { data } = res;
+    //     const { error, message } = JSON.stringify(data);
+    //     if (!error) {
+    //       alert("Compliance Task Submitted Successfully");
 
-          localStorage.remove("compliance_task");
-          //localStorage.set('section', form_structure.sections);
-          setSections([
-            {
-              section_name: "Section Name",
-              section_desp: "section Description",
-              section_id: "sec86432769",
-              submitted: false,
+    //       localStorage.remove("compliance_task");
+    //       //localStorage.set('section', form_structure.sections);
+    //       setSections([
+    //         {
+    //           section_name: "Section Name",
+    //           section_desp: "section Description",
+    //           section_id: "sec86432769",
+    //           submitted: false,
 
-              questions: [
-                {
-                  name: "0_4356478543",
-                  question_text: "Please enter Question Text here",
-                  question_type: "Radio",
-                  options: [{ optionText: "Option1 Text" }],
-                  answer: false,
-                  answerkey: "",
-                  checkbox_answerkey: [false],
-                  points: 0,
-                  open: false,
-                  required: false,
-                  selectedAnswer: "",
-                },
-              ],
-            },
-          ]);
-          setFormName("untitled Form");
-        } else alert("Error");
-        console.log(data);
-        localStorage.set("compliance_task", form_structure.sections);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    //           questions: [
+    //             {
+    //               name: "0_4356478543",
+    //               question_text: "Please enter Question Text here",
+    //               question_type: "Radio",
+    //               options: [{ optionText: "Option1 Text" }],
+    //               answer: false,
+    //               answerkey: "",
+    //               checkbox_selected: [false],
+    //              checkbox_answerkey: [],
+    //               points: 0,
+    //               open: false,
+    //               required: false,
+    //               selectedAnswer: "",
+    //             },
+    //           ],
+    //         },
+    //       ]);
+    //       setFormName("untitled Form");
+    //     } else alert("Error");
+    //     console.log(data);
+    //     localStorage.set("compliance_task", form_structure.sections);
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
   }
 
   return (
@@ -263,6 +272,7 @@ function AddComplianceTask() {
         sections={sections}
         setSections={setSections}
         method="complianceTask"
+        formType={formType}
       />
     </Grid>
   );
