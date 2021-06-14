@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import moment from "moment";
 // Icons
 
 import CropOriginalIcon from "@material-ui/icons/CropOriginal";
@@ -446,6 +446,21 @@ function ComplianceQuestionTemplate({
       : localStorage.set("section", sections_temp);
   }
 
+  function handleBack(i, k) {
+    let sections_temp = [...sections];
+
+    sections_temp[i].questions[k].answer =
+      !sections_temp[i].questions[k].answer;
+    setSections(sections_temp);
+    method === "update"
+      ? localStorage.set("section_edit", sections_temp)
+      : method === "complianceTask"
+      ? localStorage.set("compliance_task", sections_temp)
+      : method === "update-compliance-task"
+      ? localStorage.set("comp_task_temp", sections_temp)
+      : localStorage.set("section", sections_temp);
+  }
+
   function expandCloseAll(i) {
     let sec = [...sections];
     for (let j = 0; j < sec[i].questions.length; j++) {
@@ -487,12 +502,13 @@ function ComplianceQuestionTemplate({
     let sec = [...sections];
 
     sec[i].questions[k].answer = !sec[i].questions[k].answer;
+    if (sec[i].questions[k].question_type == "Text") {
+      sec[i].questions[k].answerkey = txtAns;
+    }
 
     setSections(sec);
-    setSections(sec);
-    method === "update"
-      ? localStorage.set("section_edit", sec)
-      : method === "complianceTask"
+
+    method === "complianceTask"
       ? localStorage.set("compliance_task", sec)
       : method === "update-compliance-task"
       ? localStorage.set("comp_task_temp", sec)
@@ -632,6 +648,49 @@ function ComplianceQuestionTemplate({
     result[parseInt(droppableId)].questions.splice(endIndex, 0, removed);
     return result;
   };
+
+  const [selectedDate, setSelectedDate] = React.useState(new Date());
+
+  // const handleDateChange = (date) => (date, i, k) => {
+  //   console.log("I am called", date);
+  //   let sections_temp = [...sections];
+  //   sections_temp[i].questions[k].answerkey = date;
+
+  //   let sec = [...sections];
+
+  //   sec[i].questions[k].answerkey = date;
+
+  //   setSections(sec);
+
+  //   method === "complianceTask"
+  //     ? localStorage.set("compliance_task", sec)
+  //     : method === "update-compliance-task"
+  //     ? localStorage.set("comp_task_temp", sec)
+  //     : localStorage.set("section", sec);
+  // };
+
+  const handleDateChange = (date, i, k) => {
+    console.log("DATE", date, i, k);
+
+    let sections_temp = [...sections];
+    sections_temp[i].questions[k].answerkey = date;
+
+    setSections(sections_temp);
+
+    method === "complianceTask"
+      ? localStorage.set("compliance_task", sections_temp)
+      : method === "update-compliance-task"
+      ? localStorage.set("comp_task_temp", sections_temp)
+      : localStorage.set("section", sections_temp);
+  };
+
+  const [txtAns, setTxtAns] = React.useState("");
+
+  const handleChangeTxtAns = (event) => {
+    setTxtAns(event.target.value);
+  };
+
+  console.log("selectedDate", selectedDate);
 
   function questionsUI() {
     return sections.map((section, i) => (
@@ -776,13 +835,18 @@ function ComplianceQuestionTemplate({
                                               </Grid>
                                               <Grid item>
                                                 {ques.answerkey == "" &&
-                                                ques.checkbox_answerkey ==
-                                                  [] ? (
+                                                ques.checkbox_answerkey
+                                                  .length == 0 &&
+                                                ques.question_type !=
+                                                  "File Upload" ? (
                                                   <Typography
                                                     variant="caption"
-                                                    style={{ color: "red" }}
+                                                    style={{
+                                                      color: "red",
+                                                      lineHeight: "0",
+                                                    }}
                                                   >
-                                                    Correct Answer Not Selected
+                                                    Please Select Correct Answer
                                                   </Typography>
                                                 ) : (
                                                   ""
@@ -1341,6 +1405,7 @@ function ComplianceQuestionTemplate({
                                                   margin="normal"
                                                   id="date-picker-inline"
                                                   label="Select a date"
+                                                  disabled
                                                   KeyboardButtonProps={{
                                                     "aria-label": "change date",
                                                   }}
@@ -1355,19 +1420,26 @@ function ComplianceQuestionTemplate({
                                                 {ques.question_type ===
                                                 "Radio" ? (
                                                   <Radio
-                                                    value={ques.answerkey}
                                                     name={ques.type}
                                                     required={ques.type}
                                                     disabled
                                                   />
                                                 ) : ques.question_type ===
                                                   "Dropdown" ? (
-                                                  <Radio
+                                                  <RadioGroup
+                                                    name="radio-button"
                                                     value={ques.answerkey}
-                                                    name={ques.type}
-                                                    required={ques.type}
-                                                    disabled
-                                                  />
+                                                    checked={ques.answerkey}
+                                                  >
+                                                    <FormControlLabel
+                                                      required={ques.required}
+                                                      value={
+                                                        ques.options[p]
+                                                          .optionText
+                                                      }
+                                                      control={<Radio />}
+                                                    />
+                                                  </RadioGroup>
                                                 ) : ques.question_type ===
                                                   "Checkbox" ? (
                                                   <Checkbox
@@ -1493,7 +1565,9 @@ function ComplianceQuestionTemplate({
                                               <Grid item>
                                                 {ques.answerkey == "" &&
                                                 ques.checkbox_answerkey
-                                                  .length == 0 ? (
+                                                  .length == 0 &&
+                                                ques.question_type !=
+                                                  "File Upload" ? (
                                                   <Typography
                                                     variant="caption"
                                                     style={{
@@ -1630,10 +1704,13 @@ function ComplianceQuestionTemplate({
                                                   disableUnderline: "true",
                                                   className: classes.text_input,
                                                 }}
-                                                placeholder="Long-Answer Text"
-                                                value="Long-Answer Text"
+                                                placeholder={
+                                                  ques.answerkey != ""
+                                                    ? ques.answerkey
+                                                    : ""
+                                                }
                                                 fullWidth
-                                                disabled
+                                                onChange={handleChangeTxtAns}
                                               ></TextField>
                                             </Grid>
                                           </Grid>
@@ -1644,26 +1721,29 @@ function ComplianceQuestionTemplate({
                                             alignContent="center"
                                             style={{ marginTop: "1em" }}
                                           >
-                                            <Grid
-                                              item
-                                              style={{ paddingLeft: "1em" }}
-                                            >
-                                              <EventIcon
-                                                style={{ marginRight: "10px" }}
-                                              />
-                                            </Grid>
                                             <Grid item sm={11}>
-                                              <TextField
-                                                type="text"
-                                                InputProps={{
-                                                  disableUnderline: "true",
-                                                  className: classes.text_input,
-                                                }}
-                                                placeholder="Write Date Here"
-                                                value="Write Date Here"
-                                                fullWidth
-                                                disabled
-                                              ></TextField>
+                                              <MuiPickersUtilsProvider
+                                                utils={DateFnsUtils}
+                                              >
+                                                <KeyboardDatePicker
+                                                  variant="inline"
+                                                  format="MM/dd/yyyy"
+                                                  margin="normal"
+                                                  id="date-picker-inline"
+                                                  label="Enter Date"
+                                                  emptyLabel="custom label"
+                                                  value={
+                                                    ques.answerkey ||
+                                                    "01/10/2020"
+                                                  }
+                                                  onChange={(date) =>
+                                                    handleDateChange(date, i, k)
+                                                  }
+                                                  KeyboardButtonProps={{
+                                                    "aria-label": "change date",
+                                                  }}
+                                                />
+                                              </MuiPickersUtilsProvider>
                                             </Grid>
                                           </Grid>
                                         ) : ques.question_type ===
@@ -1689,8 +1769,8 @@ function ComplianceQuestionTemplate({
                                                   disableUnderline: "true",
                                                   className: classes.text_input,
                                                 }}
-                                                placeholder="Write Date Here"
-                                                value="Write Date Here"
+                                                placeholder="Upload a File"
+                                                value="Upload a File"
                                                 fullWidth
                                                 disabled
                                               ></TextField>
@@ -1734,7 +1814,10 @@ function ComplianceQuestionTemplate({
                                                           onChange={
                                                             handleRadioChange
                                                           }
-                                                          value={radioValue}
+                                                          value={ques.answerkey}
+                                                          checked={
+                                                            ques.answerkey
+                                                          }
                                                         >
                                                           <FormControlLabel
                                                             required={
@@ -1758,7 +1841,10 @@ function ComplianceQuestionTemplate({
                                                           onChange={
                                                             handleRadioChange
                                                           }
-                                                          value={radioValue}
+                                                          value={ques.answerkey}
+                                                          checked={
+                                                            ques.answerkey
+                                                          }
                                                         >
                                                           <FormControlLabel
                                                             required={
@@ -1816,38 +1902,62 @@ function ComplianceQuestionTemplate({
                                         )}
                                       </Grid>
                                       <Grid item>
-                                        <Button
-                                          variant="outlined"
-                                          color="primary"
-                                          style={{
-                                            textTransform: "none",
-                                            color: "#4285f4",
-                                            fontSize: "12px",
-                                            marginTop: "12px",
-                                            fontWeight: "600",
-                                          }}
-                                          onClick={() => {
-                                            doneAnswer(i, k);
-                                          }}
-                                        >
-                                          Save Correct Answer
-                                        </Button>
-                                        <Button
-                                          variant="outlined"
-                                          color="primary"
-                                          style={{
-                                            textTransform: "none",
-                                            color: "#4285f4",
-                                            fontSize: "12px",
-                                            marginTop: "12px",
-                                            fontWeight: "600",
-                                          }}
-                                          onClick={() => {
-                                            resetAnswers(i, k);
-                                          }}
-                                        >
-                                          Back
-                                        </Button>
+                                        <Grid container spacing={2}>
+                                          <Grid item>
+                                            <Button
+                                              variant="outlined"
+                                              color="primary"
+                                              style={{
+                                                textTransform: "none",
+                                                color: "#4285f4",
+                                                fontSize: "12px",
+                                                marginTop: "12px",
+                                                fontWeight: "600",
+                                              }}
+                                              onClick={() => {
+                                                doneAnswer(i, k);
+                                              }}
+                                            >
+                                              Save Correct Answer
+                                            </Button>
+                                          </Grid>
+                                          <Grid item>
+                                            <Button
+                                              variant="outlined"
+                                              color="primary"
+                                              style={{
+                                                textTransform: "none",
+                                                color: "#4285f4",
+                                                fontSize: "12px",
+                                                marginTop: "12px",
+                                                fontWeight: "600",
+                                              }}
+                                              onClick={() => {
+                                                resetAnswers(i, k);
+                                              }}
+                                            >
+                                              Reset Answer
+                                            </Button>
+                                          </Grid>
+                                          <Grid item>
+                                            <Button
+                                              variant="outlined"
+                                              color="primary"
+                                              style={{
+                                                textTransform: "none",
+                                                color: "#4285f4",
+                                                fontSize: "12px",
+                                                marginTop: "12px",
+                                                fontWeight: "600",
+                                              }}
+                                              onClick={() => {
+                                                handleBack(i, k);
+                                              }}
+                                            >
+                                              Back
+                                            </Button>
+                                          </Grid>
+                                        </Grid>
                                       </Grid>
                                     </Grid>
                                   </AccordionDetails>
