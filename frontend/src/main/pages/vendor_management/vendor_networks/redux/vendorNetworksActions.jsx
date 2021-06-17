@@ -124,3 +124,13 @@ export const fetchCompLististSuccess = (data) => ({
   type: type.FETCH_COMP_LIST_SUCCESS,
   payload: data,
 });
+
+export const fetchSingleCompTaskStart = (data) => ({
+  type: type.FETCH_SINGLE_COMP_TASK_START,
+  payload: data,
+});
+
+export const fetchSingleCompTaskSuccess = (data) => ({
+  type: type.FETCH_SINGLE_COMP_TASK_SUCCESS,
+  payload: data,
+});

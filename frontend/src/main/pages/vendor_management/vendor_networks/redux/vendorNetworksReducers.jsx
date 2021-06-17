@@ -18,6 +18,7 @@ const initialState = {
   ven_compliance_list: [],
   complianceQuery: {},
   comp_task_list: [],
+  single_comp_task: [],
 };
 export const vendorNetworksReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -126,6 +127,12 @@ export const vendorNetworksReducer = (state = initialState, action) => {
       return {
         ...state,
         comp_task_list: action.payload,
+      };
+
+    case Types.FETCH_SINGLE_COMP_TASK_SUCCESS:
+      return {
+        ...state,
+        single_comp_task: action.payload,
       };
 
     default:

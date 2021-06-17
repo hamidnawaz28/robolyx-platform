@@ -649,8 +649,6 @@ function ComplianceQuestionTemplate({
     return result;
   };
 
-  const [selectedDate, setSelectedDate] = React.useState(new Date());
-
   // const handleDateChange = (date) => (date, i, k) => {
   //   console.log("I am called", date);
   //   let sections_temp = [...sections];
@@ -673,7 +671,12 @@ function ComplianceQuestionTemplate({
     console.log("DATE", date, i, k);
 
     let sections_temp = [...sections];
-    sections_temp[i].questions[k].answerkey = date;
+
+    var dateStr = moment(date).format("YYYY-MM-DD");
+
+    console.log("dateStr", dateStr);
+
+    sections_temp[i].questions[k].answerkey = dateStr;
 
     setSections(sections_temp);
 
@@ -689,8 +692,6 @@ function ComplianceQuestionTemplate({
   const handleChangeTxtAns = (event) => {
     setTxtAns(event.target.value);
   };
-
-  console.log("selectedDate", selectedDate);
 
   function questionsUI() {
     return sections.map((section, i) => (

@@ -51,6 +51,7 @@ import {
   onFetchVendorReviewListStart,
   onFetchVendorComplianceListStart,
   onFetchCompListStart,
+  onFetchSingleCompTask,
 } from "../../main/pages/vendor_management/vendor_networks/redux/vendorNetworksSaga";
 
 export default function* rootSaga() {
@@ -94,5 +95,6 @@ export default function* rootSaga() {
     call(onFetchVendorReviewListStart),
     call(onFetchVendorComplianceListStart),
     call(onFetchCompListStart),
+    call(onFetchSingleCompTask),
   ]);
 }

@@ -6,6 +6,7 @@ const form_structure = {
       section_desp: "Section Description",
       section_id: "sec86432769",
       submitted: false,
+      isSecCompliant: false,
 
       questions: [
         {
@@ -21,6 +22,7 @@ const form_structure = {
           required: false,
           selectedAnswer: "",
           checkbox_answerkey: [],
+          isCompliant: false,
         },
       ],
     },

@@ -11,6 +11,7 @@ import {
   fetchVenReviewlistSuccess,
   fetchVenComplianceListSuccess,
   fetchCompLististSuccess,
+  fetchSingleCompTaskSuccess,
 } from "./vendorNetworksActions";
 import * as type from "./actionTypes";
 import { takeLatest, put } from "redux-saga/effects";
@@ -244,4 +245,26 @@ export function* fetchCompList(action) {
 
 export function* onFetchCompListStart() {
   yield takeLatest(type.FETCH_COMP_LIST_START, fetchCompList);
+}
+
+//saga to fetch single comp task
+
+export function* fetchSingleCompTask(action) {
+  console.log("action from fetch single comp saga", action);
+  try {
+    const { vendorId, tempId } = action.payload;
+
+    const res = yield axios.get(
+      `${SERVER_URL}vendor_management/single-comp-task/?vendorId=${vendorId}&tempId=${tempId}`
+    );
+    console.log("Data", res.data);
+
+    yield put(fetchSingleCompTaskSuccess(res.data));
+  } catch (error) {
+    alert(error);
+  }
+}
+
+export function* onFetchSingleCompTask() {
+  yield takeLatest(type.FETCH_SINGLE_COMP_TASK_START, fetchSingleCompTask);
 }

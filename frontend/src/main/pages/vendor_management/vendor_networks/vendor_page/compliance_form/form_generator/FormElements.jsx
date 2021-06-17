@@ -169,6 +169,7 @@ export function FileUploadField(props) {
         name={name}
         id={name}
         placeholder={placeholder || ""}
+        value={undefined}
         {...rest}
       />
       <ErrorMessage

@@ -1369,7 +1369,7 @@ class ComplianceVendorTaskViewSet(viewsets.ViewSet):
             queryset = ComplianceVendorTask.objects.all()
             compliance_ven_tasks = get_object_or_404(queryset, pk=pk)
             serializer = ComplianceVendorTaskSerializer(
-                compliance_ven_tasks, data=request.data, context={"request": request})
+                compliance_ven_tasks, data=request.data, context={"request": request}, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             dict_response = {"error": False,
@@ -1433,7 +1433,7 @@ class ComplianceVendorResponseViewSet(viewsets.ViewSet):
     def create(self, request):
         try:
             serializer = ComplianceVendorResponseSerializer(
-                data=request.data, context={"request": request})
+                data=request.data, context={"request": request}, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             dict_response = {"error": False,
@@ -1850,3 +1850,20 @@ class ComplianceTaskList(viewsets.ViewSet):
                              'count': count}
 
         return Response(response_dict)
+
+
+class SingleComplianceTaskFetchView(viewsets.ViewSet):
+    #authentication_classes = [JWTAuthentication]
+    #permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        vendorId = json.loads(self.request.query_params.get("vendorId"))
+        tempId = json.loads(self.request.query_params.get("tempId"))
+        all_objs = ComplianceVendorTask.objects.all()
+        print('vendorId', vendorId, tempId)
+        ven_comp_list = all_objs.filter(vendor_id__id=vendorId, id=tempId)
+
+        serializer = ComplianceVendorTaskSerializerWithDepth(
+            ven_comp_list, many=True, context={"request": request})
+
+        return Response(serializer.data)

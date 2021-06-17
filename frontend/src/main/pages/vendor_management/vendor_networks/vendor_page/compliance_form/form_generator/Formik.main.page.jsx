@@ -17,7 +17,7 @@ import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
-import { fetchVenReviewlistStart } from "../../../redux/vendorNetworksActions";
+import { fetchSingleCompTaskStart } from "../../../redux/vendorNetworksActions";
 import StarsIcon from "@material-ui/icons/Stars";
 
 const useStyles = makeStyles((theme) => ({
@@ -69,23 +69,12 @@ function FormikMain({ section, sectionName, value, setValue, isCompleted }) {
 
   let formSchema = formSchemaGenerator(section.questions);
 
-  const { searchVenReview, currentPage, perPage, ven_review_templates } =
-    useSelector((state) => state.vendorNetworks);
+  const { single_comp_task } = useSelector((state) => state.vendorNetworks);
 
-  let fetchApiData = {
-    vendorId: vendorId,
-    searchVenReview: JSON.stringify(searchVenReview),
-    currentPage: currentPage,
-    perPage: perPage,
-  };
+  console.log("section", section);
 
-  let vendorTemp =
-    ven_review_templates.data &&
-    ven_review_templates.data.filter((temp) => temp.id == id);
-
-  console.log("section", section, vendorTemp);
-
-  //let maxTabs = vendorTemp && vendorTemp[0].review_template.length - 1;
+  let maxTabs =
+    single_comp_task[0] && single_comp_task[0].compliance_template.length - 1;
 
   useEffect(() => {
     if (formSchema && formData) {
@@ -262,66 +251,63 @@ function FormikMain({ section, sectionName, value, setValue, isCompleted }) {
   const onSubmit = (values, { setSubmitting, resetForm, setStatus }) => {
     alert(JSON.stringify(values));
 
-    // let newTemp = vendorTemp[0].review_template.map((sec) => {
-    // 	if (sec.section_id == section.section_id) {
-    // 		let sec_temp = { ...sec };
-    // 		let updated_q = [];
-    // 		let updated_question = sec_temp.questions.map((ques) => {
-    // 			Object.keys(values).forEach(function (key) {
-    // 				console.log('this is key', key);
-    // 				if (key == ques.name) {
-    // 					console.log('Matched', ques);
-    // 					let ques1 = {
-    // 						...ques,
-    // 						selectedAnswer: values[key],
-    // 					};
-    // 					console.log('updated ques', ques1);
-    // 					updated_q.push(ques1);
-    // 					return ques1;
-    // 				}
-    // 			});
-    // 		});
-    // 		let sec_temp1 = { ...sec_temp, questions: updated_q, submitted: true };
-    // 		console.log('updated_question', sec_temp1);
-    // 		//console.log("quwa", sec_temp1);
-
-    // 		return sec_temp1;
-    // 	} else {
-    // 		return sec;
-    // 	}
-    // });
-    // console.log(newTemp);
-
-    // let post_data = { review_template: newTemp };
-
-    // var config = {
-    // 	method: 'put',
-    // 	url: `http://127.0.0.1:8090/api/vendor_management/review-response-status/${id}/`,
-    // 	headers: {
-    // 		'Content-Type': 'application/json',
-    // 	},
-    // 	data: post_data,
-    // };
-
-    // axios(config)
-    // 	.then((res) => {
-    // 		console.log(res);
-
-    // 		const { data } = res;
-    // 		const { error, message } = JSON.stringify(data);
-    // 		if (!error) {
-    // 			console.log('posted data', data);
-    // 			alert('Added Successfully');
-    // 			dispatch(fetchVenReviewlistStart({ fetchApiData }));
-    // 			//	let val = value == maxTabs ? value : value + 1;
-    // 			//	setValue(val);
-    // 			//setRefreshCert(!refreshCert);
-    // 		} else alert('Error');
-    // 		console.log(data);
-    // 	})
-    // 	.catch(function (error) {
-    // 		console.log(error);
-    // 	});
+    let newTemp = single_comp_task[0].compliance_template.map((sec) => {
+      console.log("Hello", sec);
+      if (sec.section_id == section.section_id) {
+        let sec_temp = { ...sec };
+        let updated_q = [];
+        let updated_question = sec_temp.questions.map((ques) => {
+          Object.keys(values).forEach(function (key) {
+            console.log("this is key", key);
+            if (key == ques.name) {
+              console.log("Matched", ques);
+              let ques1 = {
+                ...ques,
+                selectedAnswer: values[key],
+              };
+              console.log("updated ques", ques1);
+              updated_q.push(ques1);
+              return ques1;
+            }
+          });
+        });
+        let sec_temp1 = { ...sec_temp, questions: updated_q, submitted: true };
+        console.log("updated_question", sec_temp1);
+        //console.log("quwa", sec_temp1);
+        return sec_temp1;
+      } else {
+        return sec;
+      }
+    });
+    console.log(newTemp);
+    let post_data = { compliance_template: newTemp };
+    var config = {
+      method: "put",
+      url: `http://127.0.0.1:8090/api/vendor_management/comp-vendor-task/${id}/`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: post_data,
+    };
+    axios(config)
+      .then((res) => {
+        console.log(res);
+        const { data } = res;
+        const { error, message } = JSON.stringify(data);
+        if (!error) {
+          console.log("posted data", data);
+          alert("Added Successfully");
+          dispatch(
+            fetchSingleCompTaskStart({ vendorId: vendorId, tempId: id })
+          );
+          let val = value == maxTabs ? value : value + 1;
+          setValue(val);
+        } else alert("Error");
+        console.log(data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
     setSubmitting(false);
   };

@@ -361,8 +361,12 @@ class ComplianceVendorTask(models.Model):
 class ComplianceVendorResponse(models.Model):
 
     question_options = (
-        ('text', 'text'),
-        ('rating', 'rating'),
+        ('Text', 'Text'),
+        ('Date', 'Date'),
+        ('Dropdown', 'Dropdown'),
+        ('Radio', 'Radio'),
+        ('Checkbox', 'Checkbox'),
+        ('File Upload', 'File Upload'),
     )
 
     vendor_id = models.ForeignKey(VendorBasicInfo, on_delete=models.CASCADE, related_name="comp_vendor_response")
@@ -371,7 +375,7 @@ class ComplianceVendorResponse(models.Model):
     question_no = models.CharField(max_length=255 )
     question_text = models.TextField()
     answer = models.TextField()
-    question_type = models.CharField(max_length=50, choices=question_options, default="text",)
+    question_type = models.CharField(max_length=50, choices=question_options, default="Text",)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comp_vendor_response_user")
 
     def __str__(self):
